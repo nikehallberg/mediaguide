@@ -20,7 +20,7 @@ export const movies = [
     {
         title: 'The Truman Show', 
         image: Movie2, 
-        genre: 'Drama, Comedy', 
+        genre: 'Drama, Comedy, Satire', 
         about: "Truman is completely unaware that his entire life, from the moment he was born, is staged, captured by hidden cameras and broadcast as a TV show all over the world.",  
         review: 'review2'
     },

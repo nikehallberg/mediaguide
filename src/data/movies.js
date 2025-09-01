@@ -42,7 +42,7 @@ export const movies = [
         title: 'The Bobs Burgers Movie', 
         image: Movie5, 
         genre: 'Animated, Comedy, Drama', 
-        about: "A burst water pipe creates a massive sinkhole right in front of Bob's Burgers, blocking the entrance indefinitely, Bob and Linda struggle to keep the business afloat, while the kids try to solve a mystery that could save the family restaurant.",  
+        about: "A massive sinkhole right in front of the restaurant blocks the entrance making Bob and Linda struggle to keep the business afloat, while the kids try to solve a mystery that could save the family restaurant.",  
         review: 'review5'
     },
     {
@@ -77,7 +77,7 @@ export const movies = [
         title: "Jennifer's Body", 
         image: Movie10, 
         genre: 'Horror, Comedy', 
-        about: "Jennifer, a gorgeous, seductive cheerleader takes evil to a whole new level after she’s possessed by a sinister demon. Now it’s up to her best friend to stop Jennifer’s reign of terror before it’s too late.",  
+        about: "A gorgeous, seductive cheerleader takes evil to a whole new level after she’s possessed by a sinister demon. Now it’s up to her best friend to stop her reign of terror before it’s too late.",  
         review: 'review10'
     }
 ];

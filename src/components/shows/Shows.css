@@ -1,5 +1,5 @@
 .shows-container {
-    margin: 7rem;
+    margin: 0 7rem;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 3rem;
@@ -7,8 +7,8 @@
 
 .show-card {
     height: 20rem;
-    width: 100%; 
-    max-width: 100%;
+    /* width: 100%;  */
+    max-width: 20rem;
     /* perspective: 1000px; */
     cursor: pointer;
     background: none;

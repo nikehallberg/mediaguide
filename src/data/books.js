@@ -23,7 +23,7 @@ export const books = [
     {
         title: 'The Shining', 
         image: Book2, 
-        genre: 'Horror, Gothic novel', 
+        genre: 'Horror, Mystery', 
         about: "Writer Jack takes his son Danny and wife Wendy to work at a remote hotel. However, Jack suffers from writer's block and the longer the family is at the hotel, the more he breaks down.",
         review: 'review2' 
     },
@@ -31,77 +31,77 @@ export const books = [
         title: 'You', 
         image: Book3, 
         genre: 'Thriller, Romance', 
-        about: 'Joe Goldberg, a charming and seemingly normal bookstore manager becomes obsessed with his girlfriends and often resorts to extreme measures to control their lives and eliminate any threat to the relationship.',
+        about: 'A charming and seemingly normal bookstore manager becomes obsessed with his girlfriends and often resorts to extreme measures to control their lives and eliminate any threat to the relationship.',
         review: 'review3' 
     },
     {      
         title: 'It', 
         image: Book4, 
         genre: 'Horror, Thriller, Fantasy', 
-        about: 'When children mysteriously disappear from the small town of Derry, seven friends begin to investigate, only to be confronted by their own inner demons in the form of an evil clown named Pennywise.',
+        about: 'When children mysteriously disappear from the small town of Derry, seven friends begin to investigate, facing their own inner demons in the form of an evil clown named Pennywise.',
         review: 'review4'
     },
     {
         title: 'One Of Us Is Lying', 
         image: Book5,
         genre: 'Young Adult, Mystery', 
-        about: 'Five Bayview High School students are in detention when one of the students, Simon, suddenly dies while the teacher is out of the room. After claims that this incident was no accident, the four remaining students in the detention all become suspects.', 
+        about: 'Five students are in detention when one of the students suddenly dies while the teacher is out. After claims that this was no accident, the four remaining students in detention become suspects.', 
         review: 'review5'
     },
     {
         title: "Harry Potter and the Sorcerer's Stone", 
         image: Book6, 
         genre: 'Fantasy, Fiction, Young Adult',
-        about: 'about6', 
+        about: "Harry Potter, an orphaned boy with magical talents, begins studies at Hogwarts, a school for wizardry. Harry meets Hermione and Ron and unravels the mystery surrounding his parents' deaths.", 
         review: 'review6'
     },
     {
         title: 'Harry Potter and the Chamber of Secrets', 
         image: Book7, 
         genre: 'Fantasy, Fiction, Young Adult',
-        about: 'about7', 
+        about: 'The summer holidays are finally over and the orphaned little boy Harry Potter returns to Hogwarts School of Wizardry, where another year of adventure and witchcraft awaits.', 
         review: 'review7'
     },
     {
         title: 'Harry Potter and the Prisoner of Azkaban', 
         image: Book8, 
         genre: 'Fantasy, Fiction, Young Adult',
-        about: 'about8', 
+        about: "It's Harry Potter's third year at Hogwarts and he and his friends are confronted by Sirius Black, an escaped prisoner with strong ties to Harry's past.", 
         review: 'review8'
     },
     {
         title: 'Harry Potter and the Goblet of Fire', 
         image: Book9, 
         genre: 'Fantasy, Fiction, Young Adult',
-        about: 'about5', 
+        about: "In Harry's fourth year at Hogwarts, the school prepares a match between the three leading schools. But when the Goblet of Fire has chosen three players, it also chooses a fourth: Harry.", 
         review: 'review5'
     },
     {
         title: 'Harry Potter and the Order of the Phoenix', 
         image: Book10,
         genre: 'Fantasy, Fiction, Young Adult', 
-        about: 'about5', 
+        about: 'The new Defense Against the Dark Arts teacher has some bureaucratic methods that leave Hogwarts weak against an evil conspiracy. Harry then begins teaching a group of students how to defend themselves.', 
         review: 'review5'
     },
     {
         title: 'Harry Potter and the Half-Blood Prince', 
         image: Book11,
         genre: 'Fantasy, Fiction, Young Adult', 
-        about: 'about5', 
+        about: 'Dumbledore does his best to prepare Harry for his final battle against Voldemort, while the Death Eaters wreak havoc in both the Muggle and wizarding worlds -- and a great tragedy is about to occur.', 
         review: 'review5'
     },
     {
         title: 'Harry Potter and the Deathly Hallows', 
         image: Book12,
         genre: 'Fantasy, Fiction, Young Adult', 
-        about: 'about5', 
+        about: 'The evil wizard Voldemort has hidden Horcruxes in secret places and managed to make himself immortal. Harry Potter must find and destroy the Horcruxes to make Voldemort mortal again.', 
         review: 'review5'
     },
     {
         title: 'Harry Potter and the Cursed Child', 
         image: Book13,
         genre: 'Fantasy, Fiction, Young Adult', 
-        about: 'about5', 
+        about: "Follow a resentful Albus Potter and best friend, Scorpius Malfoy, as they try to prevent Cedric Diggory's death but instead create an alternate timeline where Voldemort triumphs", 
         review: 'review5'
     },
 ];

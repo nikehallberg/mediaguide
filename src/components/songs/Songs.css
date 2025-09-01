@@ -1,5 +1,5 @@
 .songs-container {
-    margin: 7rem;
+    margin: 0 7rem;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 3rem;

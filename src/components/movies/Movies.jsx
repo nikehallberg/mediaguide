@@ -24,9 +24,6 @@ const Movies = () => {
 };
   return (
     <div className="movies-page">
-      <div className="movies-header">
-        <h1>Movies</h1>
-      </div>
       <div className="genre-btn-container">
               <button onClick={() => setSelectedGenre(null)}>All</button>
               {genres1.map((genre) => (

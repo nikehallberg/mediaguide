@@ -21,10 +21,10 @@ const Navbar = () => {
           <NavLink to="/movies">Movies</NavLink>
         </li>
         <li>
-          <NavLink to="/songs">Songs</NavLink>
+          <NavLink to="/shows">Shows</NavLink>
         </li>
         <li>
-          <NavLink to="/shows">Shows</NavLink>
+          <NavLink to="/songs">Songs</NavLink>
         </li>
       </ul>
     </nav>

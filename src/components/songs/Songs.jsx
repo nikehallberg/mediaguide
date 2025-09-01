@@ -12,7 +12,7 @@ function getGenres(selectedGenre) {
 }
 
 const Songs = () => {
-  const [flipped, setFlipped] = useState(Array(songs.length).fill(false));
+  const [flipped, setFlipped] = useState({});
   const [selectedGenre, setSelectedGenre] = useState(null)
   const filteredSongs = getGenres(selectedGenre)
 

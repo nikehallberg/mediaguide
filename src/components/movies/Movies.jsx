@@ -11,7 +11,7 @@ function getGenres(selectedGenre) {
   }
 }
 const Movies = () => {
-  const [flipped, setFlipped] = useState(Array(movies.length).fill(false));
+  const [flipped, setFlipped] = useState({});
   const [selectedGenre, setSelectedGenre] = useState(null)
   const filteredMovies = getGenres(selectedGenre)
 

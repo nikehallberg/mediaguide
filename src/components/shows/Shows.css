@@ -1,0 +1,73 @@
+.shows-container {
+    margin: 7rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+}
+
+.show-card {
+    height: 20rem;
+    width: 100%; 
+    max-width: 100%;
+    /* perspective: 1000px; */
+    cursor: pointer;
+    background: none;
+    /* position: relative; */
+    padding: rem;
+    /* background-color: black; */
+    border-radius: 10px;
+}
+
+img {
+    height: 70%;
+}
+
+.shows-header {
+    display: flex;
+    justify-content: center;
+}
+
+.shows-page {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.show-card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    background: linear-gradient(rgb(219, 175, 44),rgb(131, 104, 25));
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    /* padding: 1rem; */
+}
+
+.card-front img {
+    height: 70%;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+}
+
+.card-front {
+    text-align: center;
+}

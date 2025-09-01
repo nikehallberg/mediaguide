@@ -1,0 +1,11 @@
+2. add the flippable cards to songs
+5. fix styling for genre buttons
+6. about page for contact info?
+7. make the card flip back when you choose a genre
+
+
+
+längre mål
+1. login
+2. spara review
+3.

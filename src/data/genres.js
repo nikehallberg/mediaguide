@@ -3,5 +3,5 @@ export const genres1 = [
 ]
 
 export const genres2 = [
-    'Pop', 'R&B', 'Hiphop', 'Classical', 'Folk Music', 'Soundtrack', 'Indie'
+    'Pop', 'R&B', 'Rap', 'Classical', 'Folk Music', 'Soundtrack', 'Indie', 'Soul', 'Electro', 'Disco', 'Rock'
 ]

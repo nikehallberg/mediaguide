@@ -3,39 +3,60 @@ import { movies } from "../../data/movies";
 import { useState } from "react";
 import { genres1 } from "../../data/genres";
 
-function getGenres(selectedGenre) {
-  if (!selectedGenre) {
-    return movies 
+function getGenres(selectedGenres) {
+  if (!selectedGenres || selectedGenres.length === 0) {
+    return movies;
   } else {
-    return movies.filter((movie) => movie.genre.includes(selectedGenre))
+    return movies.filter((movie) =>
+      selectedGenres.every((genre) => movie.genre.includes(genre))
+    );
   }
 }
+
 const Movies = () => {
   const [flipped, setFlipped] = useState({});
-  const [selectedGenre, setSelectedGenre] = useState(null)
-  const filteredMovies = getGenres(selectedGenre)
+  const [selectedGenres, setSelectedGenres] = useState([]);
 
-  const handleFlip = title => {
-  setFlipped(f =>
-    movies.map((movie, i) =>
-      movie.title === title ? !f[i] : f[i]
-    )
-  );
-};
+  const filteredMovies = getGenres(selectedGenres);
+
+  const handleFlip = (title) => {
+    setFlipped((prev) => ({
+      ...prev,
+      [title]: !prev[title],
+    }));
+  };
+
+  const handleGenreClick = (genre) => {
+    setSelectedGenres((prev) =>
+      prev.includes(genre)
+        ? prev.filter((g) => g !== genre)
+        : [...prev, genre]
+    );
+  };
+
+  const clearGenres = () => setSelectedGenres([]);
+
   return (
     <div className="movies-page">
       <div className="genre-btn-container">
-              <button onClick={() => setSelectedGenre(null)}>All</button>
-              {genres1.map((genre) => (
-                <button key={genre} onClick={() => setSelectedGenre(genre)}>{genre}</button>
-              ))}
-            </div>
+        <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
+        {genres1.map((genre) => (
+          <button
+            key={genre}
+            onClick={() => handleGenreClick(genre)}
+            className={selectedGenres.includes(genre) ? "selected" : ""}
+          >
+            {genre}
+          </button>
+        ))}
+      </div>
       <div className="movies-container">
         {filteredMovies.map((movie) => (
-      <div className={`movie-card${flipped[movies.findIndex(m => m.title === movie.title)] ? " flipped" : ""}`}
-           key={movie.title}
-           onClick={() => handleFlip(movie.title)}
-  >
+          <div
+            className={`movie-card${flipped[movie.title] ? " flipped" : ""}`}
+            key={movie.title}
+            onClick={() => handleFlip(movie.title)}
+          >
             <div className="card-inner">
               <div className="card-front">
                 <h3>{movie.title}</h3>

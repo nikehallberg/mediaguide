@@ -67,3 +67,34 @@ img {
 .card-front {
     text-align: center;
 }
+
+.genre-btn-container button.selected {
+    background: #cfab47;
+    color: #fff;
+    border: 2px solid #4a3f0b;
+    font-weight: bold;
+    box-shadow: 0 0 8px #cfab47;
+    transform: scale(1.08);
+}
+
+.clear-btn {
+    background: #fff;
+    color: #cfab47;
+    border: 2px solid #cfab47;
+    border-radius: 25px;
+    padding: 0.7rem 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 1rem;
+    box-shadow: 0 4px 12px rgba(207,171,71,0.15);
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.clear-btn:hover,
+.clear-btn:focus {
+    background: #cfab47;
+    color: #fff;
+    transform: scale(1.12);
+    outline: none;
+}

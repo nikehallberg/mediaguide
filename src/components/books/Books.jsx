@@ -15,10 +15,14 @@ function getGenres(selectedGenres) {
 
 const Books = () => {
   const [flipped, setFlipped] = useState({});
-  const [selectedGenres, setSelectedGenres] = useState([])
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [bookSearch, setBookSearch] = useState("");
 
-  const filteredBooks = getGenres(selectedGenres);
-  
+  const filteredByGenre = getGenres(selectedGenres);
+  const filteredBooks = filteredByGenre.filter(book =>
+    book.title.toLowerCase().includes(bookSearch.toLowerCase())
+  );
+
   const handleFlip = (title) => {
     setFlipped((prev) => ({
       ...prev,
@@ -38,6 +42,15 @@ const Books = () => {
 
   return (
     <div className="books-page">
+      <div className="book-search-container">
+        <input
+          type="text"
+          placeholder="Search book name..."
+          value={bookSearch}
+          onChange={e => setBookSearch(e.target.value)}
+          className="book-search-input"
+        />
+      </div>
       <div className="genre-btn-container">
         <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
         {genres1.map((genre) => (
@@ -58,17 +71,16 @@ const Books = () => {
             onClick={() => handleFlip(book.title)}
           >
             <div className="card-inner">
-            <div className="card-front">
-            <h3>{book.title}</h3>
-            <img src={book.image} alt="" />
-            <p>{book.genre}</p>
+              <div className="card-front">
+                <h3>{book.title}</h3>
+                <img src={book.image} alt="A book cover" />
+                <p>{book.genre}</p>
+              </div>
+              <div className="card-back">
+                <p>{book.about}</p>
+                <p>{book.review}</p>
+              </div>
             </div>
-            <div className="card-back">
-            <p>{book.about}</p>
-            <p>{book.review}</p>
-            {/* <div className="books-bottom"></div> */}
-          </div> 
-          </div>
           </div>
         ))}
       </div>

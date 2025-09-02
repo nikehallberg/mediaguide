@@ -5,6 +5,10 @@
 - pick and remove genres, use multiple genres at once
 - responsive design
 - mobile view hamburger menu dropdown
+- search efter media
+
+
+- central funktion för genre 
 
 
 

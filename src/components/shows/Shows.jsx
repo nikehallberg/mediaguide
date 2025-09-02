@@ -1,42 +1,63 @@
 import "./Shows.css";
 import { shows } from "../../data/shows";
-import { genres1 } from "../../data/genres";
 import { useState } from "react";
+import { genres1 } from "../../data/genres";
 
-function getGenres(selectedGenre) {
-  if (!selectedGenre) {
-    return shows 
+function getGenres(selectedGenres) {
+  if (!selectedGenres || selectedGenres.length === 0) {
+    return shows;
   } else {
-    return shows.filter((show) => show.genre.includes(selectedGenre))
+    return shows.filter((show) =>
+      selectedGenres.every((genre) => show.genre.includes(genre))
+    );
   }
 }
+
 const Shows = () => {
   const [flipped, setFlipped] = useState({});
-  const [selectedGenre, setSelectedGenre] = useState(null)
-  const filteredShows = getGenres(selectedGenre)
+  const [selectedGenres, setSelectedGenres] = useState([])
 
-  const handleFlip = title => {
-    setFlipped(f =>
-      shows.map((show, i) =>
-        show.title === title ? !f[i] : f[i]
-      )
+  const filteredShows = getGenres(selectedGenres);
+  
+  const handleFlip = (title) => {
+    setFlipped((prev) => ({
+      ...prev,
+      [title]: !prev[title],
+    }));
+  };
+
+  const handleGenreClick = (genre) => {
+    setSelectedGenres((prev) =>
+      prev.includes(genre)
+        ? prev.filter((g) => g !== genre)
+        : [...prev, genre]
     );
   };
+
+  const clearGenres = () => setSelectedGenres([]);
+
   return (
     <div className="shows-page">
-        <div className="genre-btn-container">
-          <button onClick={() => setSelectedGenre(null)}>All</button>
-          {genres1.map((genre) => (
-            <button key={genre} onClick={() => setSelectedGenre(genre)}>{genre}</button>
-          ))}
-        </div>
+      <div className="genre-btn-container">
+        <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
+        {genres1.map((genre) => (
+          <button
+            key={genre}
+            onClick={() => handleGenreClick(genre)}
+            className={selectedGenres.includes(genre) ? "selected" : ""}
+          >
+            {genre}
+          </button>
+        ))}
+      </div>
       <div className="shows-container">
         {filteredShows.map((show) => (
-          <div className={`show-card${flipped[shows.findIndex(s => s.title === show.title)] ? " flipped" :""}`}
+          <div
+            className={`show-card${flipped[show.title] ? " flipped" : ""}`}
             key={show.title}
             onClick={() => handleFlip(show.title)}
           >
-          <div className="card-inner">
+            <div className="card-inner">
             <div className="card-front">
             <h3>{show.title}</h3>
             <img src={show.image} alt="" />
@@ -45,8 +66,9 @@ const Shows = () => {
             <div className="card-back">
             <p>{show.about}</p>
             <p>{show.review}</p>
-            </div>
-            </div>
+            {/* <div className="Shows-bottom"></div> */}
+          </div> 
+          </div>
           </div>
         ))}
       </div>

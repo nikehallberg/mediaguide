@@ -110,9 +110,8 @@ img {
 
 .book-search-input {
   padding: 0.5rem 1rem;
-  border-radius: 2em;
-  border: 3px linear-gradient(90deg, #f7c948, #f4e285);
+  border: 5em #f7c948;
   font-size: 1rem;
   width: 220px;
-  border-image: linear-gradient(90deg, #f4e285, #f7c948) 1;
+  border-radius: 20px;
 }

@@ -14,70 +14,80 @@ export const songs = [
         image: Song1, 
         genre: 'Pop, Folk Music',
         about: 'From the album "The Visitors"', 
-        review: 'review1'
+        review: 'review1',
+        dateAdded: "2025-09-01"
     },
     {
         title: 'Bobinsky - Bruno Coulais', 
         image: Song2N3, 
         genre: 'Classical, Soundtrack',
         about: 'A song from the movie "Coraline"', 
-        review: 'review2'
+        review: 'review2',
+        dateAdded: "2025-07-01"
     },
     {
         title: 'Exploration - Bruno Coulais', 
         image: Song2N3, 
         genre: 'Classical, Soundtrack',
         about: 'A song from the movie "Coraline"', 
-        review: 'review3'
+        review: 'review3',
+        dateAdded: "2025-09-01"
     },
     {
         title: 'You Rock My World - Michael Jackson', 
         image: Song4, 
         genre: 'R&B, Pop,',
         about: 'From the album "Invincible"', 
-        review: 'review4'
+        review: 'review4',
+        dateAdded: "2025-09-01"
     },
     {
         title: 'Merry-Go-Round of Life - Joe Hisashi', 
         image: Song5, 
         genre: 'Classical, Soundtrack',
         about: 'A song from the movie "Howls Moving Castle"', 
-        review: 'review5'
+        review: 'review5',
+        dateAdded: "2025-09-01"
     },
     {
         title: 'Bohemian Rhapsody - Queen', 
         image: Song6, 
         genre: 'Rock, Indie, Pop ',
         about: 'From the album "A Night at the Opera"', 
-        review: 'review5'
+        review: 'review5',
+        dateAdded: "2025-09-01"
     },
     {
         title: 'Treasure - Bruno Mars', 
         image: Song7, 
         genre: 'Pop, Soul, Disco',
         about: 'From the album "Unorthodox Jukebox"', 
-        review: 'review5'
+        review: 'review5',
+        dateAdded: "2025-09-01"
     },
     {
         title: 'Toxic - Britney Spears', 
         image: Song8, 
         genre: 'Pop, Electro',
         about: 'From the album "In the Zone"', 
-        review: 'review5'
+        review: 'review5',
+        dateAdded: "2025-09-01"
     },
     {
         title: 'My Band - D12', 
         image: Song9, 
         genre: 'Rap, Pop',
         about: 'From the album "D12 World"', 
-        review: 'review5'
+        review: 'review5',
+        dateAdded: "2025-09-01"
     },
     {
         title: 'No One Noticed - The Marias', 
         image: Song10, 
         genre: 'Indie, Electro ',
         about: 'From the album "Submarine"', 
-        review: 'review5'
+        review: 'review5',
+        dateAdded: "2025-09-05"
     }
 
 ];

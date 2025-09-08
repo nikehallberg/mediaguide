@@ -5,25 +5,12 @@
     margin: 3rem;
 }
 
-.home-header h1 {
-    margin-bottom: 2rem;
-}
-
 p {
     display: flex;
     text-align: center;
     font-size: 18px;
     max-width: 75%;
     max-height: 50%;
-}
-
-.home-welcome {
-    font-size: 24px;
-}
-
-.home-info {
-    font-size: 20px;
-    margin-bottom: 2rem;
 }
 
 .home-page {
@@ -55,4 +42,12 @@ p {
     .home-bottom {
         display: none;
     }
+}
+
+.home-recent-section {
+    padding: 1rem;
+}
+
+.home-recent-card1 {
+    background-color: #cfab47;
 }

@@ -18,6 +18,7 @@ const Movies = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [movieSearch, setMovieSearch] = useState("");
 
+
   const filteredByGenre = getGenres(selectedGenres);
   const filteredMovies = filteredByGenre.filter(movie =>
     movie.title.toLowerCase().includes(movieSearch.toLowerCase())
@@ -30,13 +31,13 @@ const Movies = () => {
     }));
   };
 
-  const handleGenreClick = (genre) => {
-    setSelectedGenres((prev) =>
-      prev.includes(genre)
-        ? prev.filter((g) => g !== genre)
-        : [...prev, genre]
-    );
-  };
+  // const handleGenreClick = (genre) => {
+  //   setSelectedGenres((prev) =>
+  //     prev.includes(genre)
+  //       ? prev.filter((g) => g !== genre)
+  //       : [...prev, genre]
+  //   );
+  // };
 
   const clearGenres = () => setSelectedGenres([]);
 
@@ -51,18 +52,25 @@ const Movies = () => {
           className="movie-search-input"
         />
       </div>
-      <div className="genre-btn-container">
-        <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
-        {genres1.map((genre) => (
-          <button
-            key={genre}
-            onClick={() => handleGenreClick(genre)}
-            className={selectedGenres.includes(genre) ? "selected" : ""}
-          >
-            {genre}
-          </button>
-        ))}
-      </div>
+      <div className="genre-dropdown-container">
+  <select
+    multiple
+    value={selectedGenres}
+    onChange={e =>
+      setSelectedGenres(
+        Array.from(e.target.selectedOptions, option => option.value)
+      )
+    }
+    className="genre-dropdown"
+  >
+    {genres1.map((genre) => (
+      <option key={genre} value={genre}>
+        {genre}
+      </option>
+    ))}
+  </select>
+  <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
+</div>
       <div className="movies-container">
         {filteredMovies.map((movie) => (
           <div

@@ -1,5 +1,4 @@
 - fix styling for genre buttons
-- about page for contact info?
 - make the card flip back when you choose a genre
 - add the stars for rating
 - responsive design

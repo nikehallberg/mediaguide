@@ -16,8 +16,12 @@ function getGenres(selectedGenres) {
 const Songs = () => {
   const [flipped, setFlipped] = useState({});
   const [selectedGenres, setSelectedGenres] = useState([])
+  const [songSearch, setSongSearch] = useState("")
 
-  const filteredSongs = getGenres(selectedGenres);
+  const filteredByGenre = getGenres(selectedGenres);
+  const filteredSongs = filteredByGenre.filter(song =>
+    song.title.toLowerCase().includes(songSearch.toLowerCase())
+  );
   
   const handleFlip = (title) => {
     setFlipped((prev) => ({
@@ -38,6 +42,15 @@ const Songs = () => {
 
   return (
     <div className="songs-page">
+      <div className="song-search-container">
+        <input
+          type="text"
+          placeholder="Search song name..."
+          value={songSearch}
+          onChange={e => setSongSearch(e.target.value)}
+          className="song-search-input"
+        />
+      </div>
       <div className="genre-btn-container">
         <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
         {genres2.map((genre) => (

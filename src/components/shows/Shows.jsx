@@ -16,8 +16,12 @@ function getGenres(selectedGenres) {
 const Shows = () => {
   const [flipped, setFlipped] = useState({});
   const [selectedGenres, setSelectedGenres] = useState([])
+  const [showSearch, setShowSearch] = useState("")
 
-  const filteredShows = getGenres(selectedGenres);
+  const filteredByGenre = getGenres(selectedGenres);
+  const filteredShows = filteredByGenre.filter(show =>
+    show.title.toLowerCase().includes(showSearch.toLowerCase())
+  );
   
   const handleFlip = (title) => {
     setFlipped((prev) => ({
@@ -38,6 +42,15 @@ const Shows = () => {
 
   return (
     <div className="shows-page">
+      <div className="show-search-container">
+        <input
+          type="text"
+          placeholder="Search show name..."
+          value={showSearch}
+          onChange={e => setShowSearch(e.target.value)}
+          className="show-search-input"
+        />
+      </div>
       <div className="genre-btn-container">
         <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
         {genres1.map((genre) => (

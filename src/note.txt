@@ -2,12 +2,8 @@
 - about page for contact info?
 - make the card flip back when you choose a genre
 - add the stars for rating
-- pick and remove genres, use multiple genres at once
 - responsive design
 - mobile view hamburger menu dropdown
-- search efter media
-
-
 - central funktion för genre 
 
 

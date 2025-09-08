@@ -16,8 +16,12 @@ function getGenres(selectedGenres) {
 const Movies = () => {
   const [flipped, setFlipped] = useState({});
   const [selectedGenres, setSelectedGenres] = useState([]);
+  const [movieSearch, setMovieSearch] = useState("");
 
-  const filteredMovies = getGenres(selectedGenres);
+  const filteredByGenre = getGenres(selectedGenres);
+  const filteredMovies = filteredByGenre.filter(movie =>
+    movie.title.toLowerCase().includes(movieSearch.toLowerCase())
+  );
 
   const handleFlip = (title) => {
     setFlipped((prev) => ({
@@ -38,6 +42,15 @@ const Movies = () => {
 
   return (
     <div className="movies-page">
+      <div className="movie-search-container">
+        <input
+          type="text"
+          placeholder="Search movie name..."
+          value={movieSearch}
+          onChange={e => setMovieSearch(e.target.value)}
+          className="movie-search-input"
+        />
+      </div>
       <div className="genre-btn-container">
         <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
         {genres1.map((genre) => (

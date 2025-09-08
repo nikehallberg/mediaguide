@@ -98,3 +98,17 @@ img {
     transform: scale(1.12);
     outline: none;
 }
+
+.movie-search-container {
+  display: flex;
+  justify-content: left;
+  margin: 1rem 0rem 0rem 8rem;
+}
+
+.movie-search-input {
+  padding: 0.5rem 1rem;
+  border: 2px solid #f7c948;
+  font-size: 1rem;
+  width: 220px;
+  border-radius: 20px;
+}

@@ -22,7 +22,6 @@ const recentSongs = [...songs]
   .slice(0, 3);
 
 const Home = () => {
-  // Carousel state for each category
   const [bookIdx, setBookIdx] = useState(0);
   const [movieIdx, setMovieIdx] = useState(0);
   const [showIdx, setShowIdx] = useState(0);
@@ -171,6 +170,15 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <footer className="home-footer">
+        <div>
+          <span>Contact: </span>
+          <a href="mailto:info@mediaguide.com">info@mediaguide.com</a>
+        </div>
+        <div>
+          <span>© {new Date().getFullYear()} MediaGuide</span>
+        </div>
+      </footer>
     </div>
   );
 };

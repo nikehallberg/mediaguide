@@ -3,12 +3,39 @@
   flex-direction: column;
   align-items: center;
   margin: 2rem 0;
+  text-align: center;
+  font-size: 1.18rem;
+  max-width: 700px;
+  margin: 0.5rem auto 1.5rem auto;
+  color: #6d4c00;
+  line-height: 1.7;
+  background: linear-gradient(90deg, #fffbe6 60%, #ffeabf 100%);
+  padding: 2.2rem 2rem 1.7rem 2rem;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(219, 175, 44, 0.10);
+  border: 1.5px solid #ffe066;
 }
 
-p {
-  text-align: center;
-  font-size: 18px;
-  max-width: 80%;
+.home-header .home-welcome {
+  font-family: 'Merriweather', 'Georgia', serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #b48a00;
+  margin-bottom: 0.7rem;
+  text-shadow: 0 2px 8px #ffeabf;
+}
+
+.home-header .home-info {
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  font-size: 1.15rem;
+  color: #7c5b13;
+  font-weight: 500;
+  margin-bottom: 0;
+  background: none;
+  padding: 0;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .home-page {
@@ -39,14 +66,15 @@ p {
 }
 
 .recent-category {
-  background: #fff;
+  background: linear-gradient(90deg, #b89432, #ecdd8e);
   padding: 1.2rem 1rem 1rem 1rem;
   border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.13);
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 320px;
+  border: 1.5px solid #ffd54f;
 }
 
 .recent-category h3 {
@@ -71,6 +99,7 @@ p {
   justify-content: center;
   gap: 1rem;
   width: 100%;
+  min-height: 260px; 
 }
 
 .carousel-slide {
@@ -79,6 +108,8 @@ p {
   align-items: center;
   gap: 0.5rem;
   flex: 1;
+  min-width: 0;
+  width: 140px;
 }
 
 .carousel-slide span {
@@ -86,6 +117,13 @@ p {
   font-weight: 600;
   margin-top: 0.5rem;
   color: #222;
+  text-align: center;
+  min-height: 3.2em; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  word-break: break-word;
 }
 
 .carousel-btn {
@@ -106,6 +144,11 @@ p {
   background: #e0e0e0;
 }
 
+p {
+  all: unset;
+  display: block;
+}
+
 @media (max-width: 900px) {
   .recent-thumb {
     width: 90px;
@@ -116,5 +159,12 @@ p {
   }
   .recent-category h3 {
     font-size: 1.1rem;
+  }
+  .home-header {
+    padding: 1.2rem 0.7rem 1rem 0.7rem;
+    font-size: 1rem;
+  }
+  .home-header .home-welcome {
+    font-size: 1.3rem;
   }
 }

@@ -1,7 +1,8 @@
 import "./Movies.css";
 import { movies } from "../../data/movies";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { genres1 } from "../../data/genres";
+import Rating from '@mui/material/Rating';
 
 // Filters movies by selected genres
 function getGenres(selectedGenres) {
@@ -23,6 +24,9 @@ const Movies = () => {
   // State for the movie search input
   const [movieSearch, setMovieSearch] = useState("");
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
   // Filter movies by selected genres
   const filteredByGenre = getGenres(selectedGenres);
   // Further filter movies by search input (case-insensitive)
@@ -38,40 +42,68 @@ const Movies = () => {
     }));
   };
 
-  // Handles clearing all selected genres
+  // Handles clicking a genre button (select/deselect)
+  const handleGenreClick = (genre) => {
+    setSelectedGenres((prev) =>
+      prev.includes(genre)
+        ? prev.filter((g) => g !== genre) // Remove if already selected
+        : [...prev, genre] // Add if not selected
+    );
+  };
+
+  // Clears all selected genres
   const clearGenres = () => setSelectedGenres([]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="movies-page">
-      {/* Search input for movie titles */}
-      <div className="movie-search-container">
-        <input
-          type="text"
-          placeholder="Search movie name..."
-          value={movieSearch}
-          onChange={e => setMovieSearch(e.target.value)}
-          className="movie-search-input"
-        />
-      </div>
-      {/* Genre filter dropdown (multi-select) */}
-      <div className="genre-dropdown-container">
-        <select
-          multiple
-          value={selectedGenres}
-          onChange={e =>
-            setSelectedGenres(
-              Array.from(e.target.selectedOptions, option => option.value)
-            )
-          }
-          className="genre-dropdown"
-        >
-          {genres1.map((genre) => (
-            <option key={genre} value={genre}>
-              {genre}
-            </option>
-          ))}
-        </select>
-        <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
+      {/* Search and filter row */}
+      <div className="show-search-filter-row">
+        <div className="movie-search-container">
+          <input
+            type="text"
+            placeholder="Search movie name..."
+            value={movieSearch}
+            onChange={e => setMovieSearch(e.target.value)}
+            className="movie-search-input"
+          />
+        </div>
+        <div className="dropdown" ref={dropdownRef}>
+          <button
+            className="dropbtn"
+            onClick={() => setDropdownOpen((open) => !open)}
+          >
+            Filter by Genre
+          </button>
+          {dropdownOpen && (
+            <div className="dropdown-content">
+              {genres1.map((genre) => (
+                <button
+                  key={genre}
+                  className={`dropdown-genre-btn${selectedGenres.includes(genre) ? " selected" : ""}`}
+                  onClick={() => handleGenreClick(genre)}
+                  type="button"
+                >
+                  {genre}
+                </button>
+              ))}
+              {selectedGenres.length > 0 && (
+                <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
+                  Clear
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       {/* Movie cards grid */}
       <div className="movies-container">
@@ -91,7 +123,7 @@ const Movies = () => {
               {/* Back of the card: shows about and review */}
               <div className="card-back">
                 <p>{movie.about}</p>
-                <p>{movie.review}</p>
+                <Rating name="half-rating-read" value={movie.review} precision={0.5} readOnly />
               </div>
             </div>
           </div>

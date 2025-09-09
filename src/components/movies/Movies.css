@@ -99,12 +99,6 @@ img {
     outline: none;
 }
 
-.movie-search-container {
-  display: flex;
-  justify-content: left;
-  margin: 1rem 0rem 0rem 8rem;
-}
-
 .movie-search-input {
   padding: 0.5rem 1rem;
   border: 2px solid #f7c948;

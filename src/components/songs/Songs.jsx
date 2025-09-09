@@ -1,7 +1,7 @@
 import "./Songs.css";
 import { songs } from "../../data/songs";
 import { genres2 } from "../../data/genres";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // Filters songs by selected genres
 function getGenres(selectedGenres) {
@@ -23,6 +23,9 @@ const Songs = () => {
   // State for the song search input
   const [songSearch, setSongSearch] = useState("");
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
   // Filter songs by selected genres
   const filteredByGenre = getGenres(selectedGenres);
   // Further filter songs by search input (case-insensitive)
@@ -40,40 +43,82 @@ const Songs = () => {
 
   // Handles clicking a genre button (select/deselect)
   const handleGenreClick = (genre) => {
-    setSelectedGenres((prev) =>
-      prev.includes(genre)
-        ? prev.filter((g) => g !== genre) // Remove if already selected
-        : [...prev, genre] // Add if not selected
-    );
+    setSelectedGenres((prev) => {
+      if (prev.includes(genre)) {
+        return prev.filter((g) => g !== genre); // Remove if already selected
+      } else if (prev.length < 3) {
+        return [...prev, genre]; // Add if not selected and under limit
+      } else {
+        return prev; // Do not add more than 3
+      }
+    });
   };
-
   // Clears all selected genres
   const clearGenres = () => setSelectedGenres([]);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div className="songs-page">
-      {/* Search input for song titles */}
-      <div className="song-search-container">
-        <input
-          type="text"
-          placeholder="Search song name..."
-          value={songSearch}
-          onChange={e => setSongSearch(e.target.value)}
-          className="song-search-input"
-        />
-      </div>
-      {/* Genre filter buttons */}
-      <div className="genre-btn-container">
-        <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
-        {genres2.map((genre) => (
+      {/* Search and filter row */}
+      <div className="show-search-filter-row">
+        <div className="song-search-container">
+          <input
+            type="text"
+            placeholder="Search song name..."
+            value={songSearch}
+            onChange={e => setSongSearch(e.target.value)}
+            className="song-search-input"
+          />
+        </div>
+        <div className="dropdown" ref={dropdownRef}>
           <button
-            key={genre}
-            onClick={() => handleGenreClick(genre)}
-            className={selectedGenres.includes(genre) ? "selected" : ""}
+            className="dropbtn"
+            onClick={() => setDropdownOpen((open) => !open)}
           >
-            {genre}
+            Filter by Genre
           </button>
-        ))}
+          {dropdownOpen && (
+            <div className="dropdown-content">
+              {genres2.map((genre) => (
+                <button
+                  key={genre}
+                  className={`dropdown-genre-btn${selectedGenres.includes(genre) ? " selected" : ""}`}
+                  onClick={() => handleGenreClick(genre)}
+                  type="button"
+                  disabled={
+                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
+                  }
+                  style={
+                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
+                      ? { opacity: 0.5, cursor: "not-allowed" }
+                      : {}
+                  }
+                >
+                  {genre}
+                </button>
+              ))}
+              {selectedGenres.length > 0 && (
+                <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
+                  Clear
+                </button>
+              )}
+              {selectedGenres.length >= 3 && (
+                <div style={{ color: "#b00", fontSize: "0.9em", marginTop: "6px" }}>
+                  You can select up to 3 genres.
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       {/* Song cards grid */}
       <div className="songs-container">
@@ -94,7 +139,6 @@ const Songs = () => {
               <div className="card-back">
                 <p>{song.about}</p>
                 <p>{song.review}</p>
-                {/* <div className="songs-bottom"></div> */}
               </div> 
             </div>
           </div>

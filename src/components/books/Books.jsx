@@ -1,7 +1,9 @@
 import "./Books.css";
 import { books } from "../../data/books";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { genres1 } from "../../data/genres";
+import Rating from '@mui/material/Rating';
+
 
 // Filters books by selected genres
 function getGenres(selectedGenres) {
@@ -23,6 +25,9 @@ const Books = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   // State for book search input
   const [bookSearch, setBookSearch] = useState("");
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   // Filter books by selected genres
   const filteredByGenre = getGenres(selectedGenres);
@@ -51,30 +56,56 @@ const Books = () => {
   // Clears all selected genres
   const clearGenres = () => setSelectedGenres([]);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div className="books-page">
-      {/* Search input for book titles */}
-      <div className="book-search-container">
-        <input
-          type="text"
-          placeholder="Search book name..."
-          value={bookSearch}
-          onChange={e => setBookSearch(e.target.value)}
-          className="book-search-input"
-        />
-      </div>
-      {/* Genre filter buttons */}
-      <div className="genre-btn-container">
-        <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
-        {genres1.map((genre) => (
+      {/* Search and filter row */}
+      <div className="show-search-filter-row">
+        <div className="book-search-container">
+          <input
+            type="text"
+            placeholder="Search book name..."
+            value={bookSearch}
+            onChange={e => setBookSearch(e.target.value)}
+            className="book-search-input"
+          />
+        </div>
+        <div className="dropdown" ref={dropdownRef}>
           <button
-            key={genre}
-            onClick={() => handleGenreClick(genre)}
-            className={selectedGenres.includes(genre) ? "selected" : ""}
+            className="dropbtn"
+            onClick={() => setDropdownOpen((open) => !open)}
           >
-            {genre}
+            Filter by Genre
           </button>
-        ))}
+          {dropdownOpen && (
+            <div className="dropdown-content">
+              {genres1.map((genre) => (
+                <button
+                  key={genre}
+                  className={`dropdown-genre-btn${selectedGenres.includes(genre) ? " selected" : ""}`}
+                  onClick={() => handleGenreClick(genre)}
+                  type="button"
+                >
+                  {genre}
+                </button>
+              ))}
+              {selectedGenres.length > 0 && (
+                <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
+                  Clear
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       {/* Book cards grid */}
       <div className="books-container">
@@ -94,7 +125,7 @@ const Books = () => {
               {/* Back of the card: about and review */}
               <div className="card-back">
                 <p>{book.about}</p>
-                <p>{book.review}</p>
+                <Rating name="half-rating-read" value={book.review} precision={0.5} readOnly />
               </div>
             </div>
           </div>

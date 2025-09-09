@@ -1,6 +1,6 @@
 import "./Shows.css";
 import { shows } from "../../data/shows";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { genres1 } from "../../data/genres";
 
 // Filters shows by selected genres
@@ -22,6 +22,9 @@ const Shows = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   // State for the show search input
   const [showSearch, setShowSearch] = useState("");
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   // Filter shows by selected genres
   const filteredByGenre = getGenres(selectedGenres);
@@ -50,30 +53,56 @@ const Shows = () => {
   // Clears all selected genres
   const clearGenres = () => setSelectedGenres([]);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div className="shows-page">
-      {/* Search input for show titles */}
-      <div className="show-search-container">
-        <input
-          type="text"
-          placeholder="Search show name..."
-          value={showSearch}
-          onChange={e => setShowSearch(e.target.value)}
-          className="show-search-input"
-        />
-      </div>
-      {/* Genre filter buttons */}
-      <div className="genre-btn-container">
-        <button className="clear-btn" onClick={clearGenres}>Clear genres</button>
-        {genres1.map((genre) => (
+      {/* Search and filter row */}
+      <div className="show-search-filter-row">
+        <div className="show-search-container">
+          <input
+            type="text"
+            placeholder="Search show name..."
+            value={showSearch}
+            onChange={e => setShowSearch(e.target.value)}
+            className="show-search-input"
+          />
+        </div>
+        <div className="dropdown" ref={dropdownRef}>
           <button
-            key={genre}
-            onClick={() => handleGenreClick(genre)}
-            className={selectedGenres.includes(genre) ? "selected" : ""}
+            className="dropbtn"
+            onClick={() => setDropdownOpen((open) => !open)}
           >
-            {genre}
+            Filter by Genre
           </button>
-        ))}
+          {dropdownOpen && (
+            <div className="dropdown-content">
+              {genres1.map((genre) => (
+                <button
+                  key={genre}
+                  className={`dropdown-genre-btn${selectedGenres.includes(genre) ? " selected" : ""}`}
+                  onClick={() => handleGenreClick(genre)}
+                  type="button"
+                >
+                  {genre}
+                </button>
+              ))}
+              {selectedGenres.length > 0 && (
+                <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
+                  Clear
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       {/* Show cards grid */}
       <div className="shows-container">
@@ -94,7 +123,6 @@ const Shows = () => {
               <div className="card-back">
                 <p>{show.about}</p>
                 <p>{show.review}</p>
-                {/* <div className="Shows-bottom"></div> */}
               </div> 
             </div>
           </div>

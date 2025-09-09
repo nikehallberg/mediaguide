@@ -5,6 +5,7 @@ import { shows } from "../../data/shows";
 import { songs } from "../../data/songs";
 import { useState } from "react";
 
+//sorts array for most recent, takes the top 3 to display
 const recentBooks = [...books]
   .sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
   .slice(0, 3);
@@ -21,12 +22,14 @@ const recentSongs = [...songs]
   .sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
   .slice(0, 3);
 
+
+  //state variables
 const Home = () => {
   const [bookIdx, setBookIdx] = useState(0);
   const [movieIdx, setMovieIdx] = useState(0);
   const [showIdx, setShowIdx] = useState(0);
   const [songIdx, setSongIdx] = useState(0);
-
+//carousel navigation
   const prev = (idx, setIdx, arr) =>
     setIdx(idx === 0 ? arr.length - 1 : idx - 1);
   const next = (idx, setIdx, arr) =>

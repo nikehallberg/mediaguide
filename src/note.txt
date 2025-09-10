@@ -7,5 +7,6 @@
 
 längre mål
 1. login
-2. spara review
-3.
+2. spara review enskild review
+3. räkna ihop medelbetyget och visa det som betyget för mediat
+4.

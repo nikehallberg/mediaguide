@@ -2,6 +2,7 @@ import "./Songs.css";
 import { songs } from "../../data/songs";
 import { genres2 } from "../../data/genres";
 import { useState, useRef, useEffect } from "react";
+import Rating from '@mui/material/Rating';
 
 // Filters songs by selected genres
 function getGenres(selectedGenres) {
@@ -138,7 +139,7 @@ const Songs = () => {
               {/* Back of the card: shows about and review */}
               <div className="card-back">
                 <p>{song.about}</p>
-                <p>{song.review}</p>
+                <Rating name="half-rating-read" value={song.review} precision={0.5} readOnly />
               </div> 
             </div>
           </div>

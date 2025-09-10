@@ -46,11 +46,15 @@ const Books = () => {
 
   // Handles selecting/deselecting a genre
   const handleGenreClick = (genre) => {
-    setSelectedGenres((prev) =>
-      prev.includes(genre)
-        ? prev.filter((g) => g !== genre) // Remove genre if already selected
-        : [...prev, genre] // Add genre if not selected
-    );
+    setSelectedGenres((prev) => {
+      if (prev.includes(genre)) {
+        return prev.filter((g) => g !== genre); // Remove if already selected
+      } else if (prev.length < 3) {
+        return [...prev, genre]; // Add if not selected and under limit
+      } else {
+        return prev; // Do not add more than 3
+      }
+    });
   };
 
   // Clears all selected genres
@@ -94,6 +98,14 @@ const Books = () => {
                   className={`dropdown-genre-btn${selectedGenres.includes(genre) ? " selected" : ""}`}
                   onClick={() => handleGenreClick(genre)}
                   type="button"
+                  disabled={
+                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
+                  }
+                  style={
+                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
+                      ? { opacity: 0.5, cursor: "not-allowed" }
+                      : {}
+                  }
                 >
                   {genre}
                 </button>
@@ -102,6 +114,11 @@ const Books = () => {
                 <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
                   Clear
                 </button>
+              )}
+              {selectedGenres.length >= 3 && (
+                <div style={{ color: "#b00", fontSize: "0.9em", marginTop: "6px" }}>
+                  You can select up to 3 genres.
+                </div>
               )}
             </div>
           )}

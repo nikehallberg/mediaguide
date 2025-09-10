@@ -14,7 +14,7 @@ export const songs = [
         image: Song1, 
         genre: 'Pop, Folk Music',
         about: 'From the album "The Visitors"', 
-        review: 'review1',
+        review: 5,
         dateAdded: "2025-09-01"
     },
     {
@@ -22,7 +22,7 @@ export const songs = [
         image: Song2N3, 
         genre: 'Classical, Soundtrack',
         about: 'A song from the movie "Coraline"', 
-        review: 'review2',
+        review: 4.5,
         dateAdded: "2025-07-01"
     },
     {
@@ -30,7 +30,7 @@ export const songs = [
         image: Song2N3, 
         genre: 'Classical, Soundtrack',
         about: 'A song from the movie "Coraline"', 
-        review: 'review3',
+        review: 5,
         dateAdded: "2025-09-01"
     },
     {
@@ -38,7 +38,7 @@ export const songs = [
         image: Song4, 
         genre: 'R&B, Pop,',
         about: 'From the album "Invincible"', 
-        review: 'review4',
+        review: 5,
         dateAdded: "2025-09-01"
     },
     {
@@ -46,7 +46,7 @@ export const songs = [
         image: Song5, 
         genre: 'Classical, Soundtrack',
         about: 'A song from the movie "Howls Moving Castle"', 
-        review: 'review5',
+        review: 5,
         dateAdded: "2025-09-01"
     },
     {
@@ -54,7 +54,7 @@ export const songs = [
         image: Song6, 
         genre: 'Rock, Indie, Pop ',
         about: 'From the album "A Night at the Opera"', 
-        review: 'review5',
+        review: 5,
         dateAdded: "2025-09-01"
     },
     {
@@ -62,7 +62,7 @@ export const songs = [
         image: Song7, 
         genre: 'Pop, Soul, Disco',
         about: 'From the album "Unorthodox Jukebox"', 
-        review: 'review5',
+        review: 3,
         dateAdded: "2025-09-01"
     },
     {
@@ -70,7 +70,7 @@ export const songs = [
         image: Song8, 
         genre: 'Pop, Electro',
         about: 'From the album "In the Zone"', 
-        review: 'review5',
+        review: 3.5,
         dateAdded: "2025-09-01"
     },
     {
@@ -78,7 +78,7 @@ export const songs = [
         image: Song9, 
         genre: 'Rap, Pop',
         about: 'From the album "D12 World"', 
-        review: 'review5',
+        review: 4,
         dateAdded: "2025-09-01"
     },
     {
@@ -86,7 +86,7 @@ export const songs = [
         image: Song10, 
         genre: 'Indie, Electro ',
         about: 'From the album "Submarine"', 
-        review: 'review5',
+        review: 5,
         dateAdded: "2025-09-05"
     }
 

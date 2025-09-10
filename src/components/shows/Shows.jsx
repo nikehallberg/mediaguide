@@ -2,6 +2,7 @@ import "./Shows.css";
 import { shows } from "../../data/shows";
 import { useState, useRef, useEffect } from "react";
 import { genres1 } from "../../data/genres";
+import Rating from '@mui/material/Rating';
 
 // Filters shows by selected genres
 function getGenres(selectedGenres) {
@@ -43,11 +44,15 @@ const Shows = () => {
 
   // Handles clicking a genre button (select/deselect)
   const handleGenreClick = (genre) => {
-    setSelectedGenres((prev) =>
-      prev.includes(genre)
-        ? prev.filter((g) => g !== genre) // Remove if already selected
-        : [...prev, genre] // Add if not selected
-    );
+    setSelectedGenres((prev) => {
+      if (prev.includes(genre)) {
+        return prev.filter((g) => g !== genre); // Remove if already selected
+      } else if (prev.length < 3) {
+        return [...prev, genre]; // Add if not selected and under limit
+      } else {
+        return prev; // Do not add more than 3
+      }
+    });
   };
 
   // Clears all selected genres
@@ -91,6 +96,14 @@ const Shows = () => {
                   className={`dropdown-genre-btn${selectedGenres.includes(genre) ? " selected" : ""}`}
                   onClick={() => handleGenreClick(genre)}
                   type="button"
+                  disabled={
+                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
+                  }
+                  style={
+                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
+                      ? { opacity: 0.5, cursor: "not-allowed" }
+                      : {}
+                  }
                 >
                   {genre}
                 </button>
@@ -99,6 +112,11 @@ const Shows = () => {
                 <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
                   Clear
                 </button>
+              )}
+              {selectedGenres.length >= 3 && (
+                <div style={{ color: "#b00", fontSize: "0.9em", marginTop: "6px" }}>
+                  You can select up to 3 genres.
+                </div>
               )}
             </div>
           )}
@@ -122,7 +140,7 @@ const Shows = () => {
               {/* Back of the card: shows about and review */}
               <div className="card-back">
                 <p>{show.about}</p>
-                <p>{show.review}</p>
+                <Rating name="half-rating-read" value={show.review} precision={0.5} readOnly />
               </div> 
             </div>
           </div>

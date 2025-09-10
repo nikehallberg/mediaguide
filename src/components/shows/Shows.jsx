@@ -68,6 +68,11 @@ const Shows = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+  // Reset all flipped cards when genres change
+  setFlipped({});
+}, [selectedGenres]);
+
   return (
     <div className="shows-page">
       {/* Search and filter row */}

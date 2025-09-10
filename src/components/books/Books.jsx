@@ -69,6 +69,11 @@ const Books = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  
+  useEffect(() => {
+  // Reset all flipped cards when genres change
+  setFlipped({});
+}, [selectedGenres]);
 
   return (
     <div className="books-page">

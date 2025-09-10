@@ -1,7 +1,5 @@
-- fix styling for genre buttons
 - make the card flip back when you choose a genre
 - responsive design
-- mobile view hamburger menu dropdown
 - central funktion för genre 
 
 

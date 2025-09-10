@@ -67,6 +67,11 @@ const Songs = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+  // Reset all flipped cards when genres change
+  setFlipped({});
+}, [selectedGenres]);
+
   return (
     <div className="songs-page">
       {/* Search and filter row */}

@@ -168,3 +168,37 @@ p {
     font-size: 1.3rem;
   }
 }
+
+@media (max-width: 900px) {
+  .recent-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .recent-category {
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 600px) {
+  .recent-section {
+    margin: 1rem 0;
+    max-width: 100%;
+    width: 24rem;
+  }
+  .recent-grid {
+    margin: 0 0.5rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .recent-category {
+    min-height: 180px;
+    padding: 0.7rem 0.5rem 0.7rem 0.5rem;
+  }
+  .recent-thumb {
+    width: 70px;
+    height: 90px;
+  }
+  .carousel-slide span {
+    font-size: 0.95rem;
+  }
+}

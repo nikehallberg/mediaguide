@@ -103,6 +103,30 @@ img {
   padding: 0.5rem 1rem;
   border: 2px solid #f7c948;
   font-size: 1rem;
-  width: 220px;
+  width: 100%;
+  max-width: 220px;
   border-radius: 20px;
+}
+
+
+@media (max-width: 900px) {
+  .movies-container {
+    margin: 0 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .movies-container {
+    margin: 0 0.5rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .movie-card {
+    height: 16rem;
+  }
+  .card-front img {
+    height: 50%;
+  }
 }

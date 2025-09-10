@@ -5,8 +5,6 @@ import Movies from "./components/movies/Movies";
 import Shows from "./components/shows/Shows";
 import Songs from "./components/songs/Songs";
 import { Route, Routes } from "react-router-dom";
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import { Dropdown } from 'react-bootstrap';
 
 const App = () => {
   return (

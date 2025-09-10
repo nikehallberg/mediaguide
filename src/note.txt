@@ -1,6 +1,5 @@
 - fix styling for genre buttons
 - make the card flip back when you choose a genre
-- add the stars for rating
 - responsive design
 - mobile view hamburger menu dropdown
 - central funktion för genre 

@@ -11,6 +11,13 @@ import Book10 from '../assets/book10.jpg';
 import Book11 from '../assets/book11.jpg';
 import Book12 from '../assets/book12.jpg';
 import Book13 from '../assets/book13.jpg';
+import Book14 from '../assets/book14.jpg';
+import Book15 from '../assets/book15.jpg';
+import Book16 from '../assets/book16.jpg';
+import Book17 from '../assets/book17.jpg';
+import Book18 from '../assets/book18.jpg';
+import Book19 from '../assets/book19.jpg';
+import Book20 from '../assets/book20.jpg';
 
 export const books = [
     {
@@ -117,4 +124,60 @@ export const books = [
         review: 2,
         dateAdded: "2025-09-09"
     },
+    {
+        title: 'The Hobbit',
+        image: Book14,
+        genre: 'Fantasy, Adventure',
+        about: "Bilbo Baggins, a hobbit, is swept into an epic quest to reclaim the lost Dwarf Kingdom of Erebor from the fearsome dragon Smaug.",
+        review: 4.5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'To Kill a Mockingbird',
+        image: Book15,
+        genre: 'Classic, Fiction',
+        about: "Scout Finch grows up in the racially charged Depression-era South, learning about justice and empathy as her father defends a black man falsely accused of a crime.",
+        review: 5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: '1984',
+        image: Book16,
+        genre: 'Dystopian, Science Fiction',
+        about: "In a totalitarian future society, Winston Smith struggles with oppression, surveillance, and the dangers of independent thought.",
+        review: 4,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'The Great Gatsby',
+        image: Book17,
+        genre: 'Classic, Fiction, Romance',
+        about: "Nick Carraway narrates the story of Jay Gatsby, a mysterious millionaire obsessed with rekindling his love for Daisy Buchanan.",
+        review: 4,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'The Hunger Games',
+        image: Book18,
+        genre: 'Dystopian, Young Adult, Adventure',
+        about: "Katniss Everdeen volunteers to take her sister's place in a televised fight to the death in a dystopian future.",
+        review: 4.5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Brave New World',
+        image: Book19,
+        genre: 'Dystopian, Science Fiction, Classic',
+        about: "In a futuristic society driven by technology and control, individuality and free will are suppressed for the sake of stability and happiness.",
+        review: 4,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Pride and Prejudice',
+        image: Book20,
+        genre: 'Classic, Romance, Fiction',
+        about: "Elizabeth Bennet navigates issues of manners, upbringing, morality, and marriage in the society of early 19th-century England.",
+        review: 5,
+        dateAdded: "2025-09-15"
+    }
 ];

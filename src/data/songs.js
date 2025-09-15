@@ -7,6 +7,16 @@ import Song7 from '../assets/song7.jpg'
 import Song8 from '../assets/song8.jpg'
 import Song9 from '../assets/song9.jpg'
 import Song10 from '../assets/song10.jpg'
+import Song11 from '../assets/song11.png'
+import Song12 from '../assets/song12.jpg'
+import Song13 from '../assets/song13.jpg'
+import Song14 from '../assets/song14.png'
+import Song15 from '../assets/song15.png'
+import Song16 from '../assets/song16.png'
+import Song17 from '../assets/song17.jpg'
+import Song18 from '../assets/song18.jpg'
+import Song19 from '../assets/song19.jpg'
+import Song20 from '../assets/song20.png'
 
 export const songs = [
     {
@@ -16,14 +26,6 @@ export const songs = [
         about: 'From the album "The Visitors"', 
         review: 5,
         dateAdded: "2025-09-01"
-    },
-    {
-        title: 'Bobinsky - Bruno Coulais', 
-        image: Song2N3, 
-        genre: 'Classical, Soundtrack',
-        about: 'A song from the movie "Coraline"', 
-        review: 4.5,
-        dateAdded: "2025-07-01"
     },
     {
         title: 'Exploration - Bruno Coulais', 
@@ -88,6 +90,85 @@ export const songs = [
         about: 'From the album "Submarine"', 
         review: 5,
         dateAdded: "2025-09-05"
+    },
+    {
+        title: 'Blinding Lights - The Weeknd',
+        image: Song11,
+        genre: 'Synthwave, Pop',
+        about: 'From the album "After Hours"',
+        review: 5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Levitating - Dua Lipa',
+        image: Song12,
+        genre: 'Pop, Disco',
+        about: 'From the album "Future Nostalgia"',
+        review: 4,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Watermelon Sugar - Harry Styles',
+        image: Song13,
+        genre: 'Pop, Rock',
+        about: 'From the album "Fine Line"',
+        review: 4.5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Dance Monkey - Tones and I',
+        image: Song14,
+        genre: 'Pop',
+        about: 'From the album "The Kids Are Coming"',
+        review: 3.5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Bad Guy - Billie Eilish',
+        image: Song15,
+        genre: 'Pop, Electro',
+        about: 'From the album "When We All Fall Asleep, Where Do We Go?"',
+        review: 4,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Sunflower - Post Malone & Swae Lee',
+        image: Song16,
+        genre: 'Hip-Hop, Pop',
+        about: 'From the album "Hollywood’s Bleeding"',
+        review: 4.5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Shallow - Lady Gaga & Bradley Cooper',
+        image: Song17,
+        genre: 'Pop, Soundtrack',
+        about: 'From the movie "A Star Is Born"',
+        review: 5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Old Town Road - Lil Nas X',
+        image: Song18,
+        genre: 'Country, Hip-Hop',
+        about: 'From the album "7 EP"',
+        review: 3.5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Don’t Start Now - Dua Lipa',
+        image: Song19,
+        genre: 'Pop, Disco',
+        about: 'From the album "Future Nostalgia"',
+        review: 4,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Peaches - Justin Bieber',
+        image: Song20,
+        genre: 'R&B, Pop',
+        about: 'From the album "Justice"',
+        review: 3.5,
+        dateAdded: "2025-09-15"
     }
-
 ];

@@ -8,6 +8,16 @@ import Movie7 from '../assets/movie7.jpg'
 import Movie8 from '../assets/movie8.png'
 import Movie9 from '../assets/movie9.png'
 import Movie10 from '../assets/movie10.jpg'
+import Movie11 from '../assets/movie11.jpg'
+import Movie12 from '../assets/movie12.jpg'
+import Movie13 from '../assets/movie13.jpg'
+import Movie14 from '../assets/movie14.png'
+import Movie15 from '../assets/movie15.jpeg'
+import Movie16 from '../assets/movie16.jpg'
+import Movie17 from '../assets/movie17.png'
+import Movie18 from '../assets/movie18.jpeg'
+import Movie19 from '../assets/movie19.jpg'
+import Movie20 from '../assets/movie20.jpg'
 
 export const movies = [
     {
@@ -89,5 +99,85 @@ export const movies = [
         about: "A gorgeous, seductive cheerleader takes evil to a whole new level after she’s possessed by a sinister demon. Now it’s up to her best friend to stop her reign of terror before it’s too late.",  
         review: 3,
         dateAdded: "2025-09-11"
+    },
+    {
+        title: 'Interstellar',
+        image: Movie11,
+        genre: 'Sci-Fi, Adventure, Drama',
+        about: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+        review: 5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Parasite',
+        image: Movie12,
+        genre: 'Thriller, Drama, Dark Comedy',
+        about: "A poor family schemes to become employed by a wealthy family by infiltrating their household and posing as unrelated, highly qualified individuals.",
+        review: 4.5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'The Grand Budapest Hotel',
+        image: Movie13,
+        genre: 'Comedy, Drama, Adventure',
+        about: "A legendary concierge at a famous hotel and his protégé become involved in the theft and recovery of a priceless Renaissance painting.",
+        review: 4,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Spider-Man: Into the Spider-Verse',
+        image: Movie14,
+        genre: 'Animated, Action, Adventure',
+        about: "Teenager Miles Morales becomes Spider-Man and meets alternate versions of himself from other dimensions to save the multiverse.",
+        review: 5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Knives Out',
+        image: Movie15,
+        genre: 'Mystery, Comedy, Crime',
+        about: "A detective investigates the death of a patriarch of an eccentric, combative family.",
+        review: 4,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Everything Everywhere All at Once',
+        image: Movie16,
+        genre: 'Action, Adventure, Comedy, Sci-Fi',
+        about: "An aging Chinese immigrant is swept up in an insane adventure, where she alone can save the world by exploring other universes and connecting with the lives she could have led.",
+        review: 4.5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'The Social Network',
+        image: Movie17,
+        genre: 'Drama, Biography',
+        about: "The story of the founding of Facebook and the lawsuits that followed, focusing on Mark Zuckerberg's rise and the cost of ambition.",
+        review: 4,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Coco',
+        image: Movie18,
+        genre: 'Animation, Adventure, Family',
+        about: "Aspiring musician Miguel, confronted with his family's ancestral ban on music, enters the Land of the Dead to find his great-great-grandfather, a legendary singer.",
+        review: 5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'Arrival',
+        image: Movie19,
+        genre: 'Sci-Fi, Drama, Mystery',
+        about: "A linguist works with the military to communicate with alien lifeforms after twelve mysterious spacecraft appear around the world.",
+        review: 4.5,
+        dateAdded: "2025-09-15"
+    },
+    {
+        title: 'The Shape of Water',
+        image: Movie20,
+        genre: 'Drama, Fantasy, Romance',
+        about: "At a top-secret research facility, a lonely janitor forms a unique relationship with an amphibious creature that is being held in captivity.",
+        review: 4,
+        dateAdded: "2025-09-15"
     }
 ];

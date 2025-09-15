@@ -40,3 +40,39 @@ a:hover {
 a.active{
     color: rgb(164, 145, 49);
 }
+
+.navbar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem 0 0;
+}
+
+.auth-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.auth-link {
+    font-size: 18px;
+    color: #b48a00;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.auth-link:hover {
+    background: #fffbe6;
+    color: #7c5b13;
+}
+
+.login-dropdown {
+  position: absolute;
+  top: 2.7rem;
+  right: 0;
+  z-index: 100;
+  background: transparent;
+  min-width: 350px;
+}

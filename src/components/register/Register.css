@@ -1,4 +1,4 @@
-.login-container {
+.register-container {
   max-width: 340px;
   margin: 2.5rem auto;
   padding: 2rem 2.2rem 1.5rem 2.2rem;
@@ -11,7 +11,7 @@
   align-items: center;
 }
 
-.login-container p {
+.register-container p {
   font-size: 2rem;
   font-weight: 700;
   color: #b48a00;
@@ -47,7 +47,7 @@
   color: #7c5b13;
 }
 
-button[type="submit"] {
+button[type="submit"], .register-container button {
   width: 100%;
   padding: 0.7rem 0;
   background: linear-gradient(90deg, #ffe066 60%, #ffd54f 100%);
@@ -61,12 +61,12 @@ button[type="submit"] {
   transition: background 0.2s;
 }
 
-button[type="submit"]:hover {
+button[type="submit"]:hover, .register-container button:hover {
   background: linear-gradient(90deg, #ffd54f 60%, #ffe066 100%);
 }
 
 @media (max-width: 500px) {
-  .login-container {
+  .register-container {
     padding: 1.2rem 0.7rem;
     max-width: 98vw;
   }

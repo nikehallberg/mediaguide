@@ -16,6 +16,8 @@ function getGenres(selectedGenres) {
   }
 }
 
+const SHOWS_PER_PAGE = 8; 
+
 const Shows = () => {
   // State for which cards are flipped (for card flip animation)
   const [flipped, setFlipped] = useState({});
@@ -26,6 +28,8 @@ const Shows = () => {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const [visibleCount, setVisibleCount] = useState(SHOWS_PER_PAGE);
 
   // Filter shows by selected genres
   const filteredByGenre = getGenres(selectedGenres);
@@ -69,9 +73,23 @@ const Shows = () => {
   }, []);
 
   useEffect(() => {
-  // Reset all flipped cards when genres change
-  setFlipped({});
-}, [selectedGenres]);
+    // Reset all flipped cards when genres or search change
+    setFlipped({});
+    setVisibleCount(SHOWS_PER_PAGE);
+  }, [selectedGenres, showSearch]);
+
+  // Show only a limited number of shows
+  const showsToShow = filteredShows.slice(0, visibleCount);
+
+  // Handler for "Show More" button
+  const handleShowMore = () => {
+    setVisibleCount((prev) => prev + SHOWS_PER_PAGE);
+  };
+
+  // Handler for "Show Less" button
+  const handleShowLess = () => {
+    setVisibleCount((prev) => Math.max(SHOWS_PER_PAGE, prev - SHOWS_PER_PAGE));
+  };
 
   return (
     <div className="shows-page">
@@ -129,7 +147,7 @@ const Shows = () => {
       </div>
       {/* Show cards grid */}
       <div className="shows-container">
-        {filteredShows.map((show) => (
+        {showsToShow.map((show) => (
           <div
             className={`show-card${flipped[show.title] ? " flipped" : ""}`}
             key={show.title}
@@ -151,6 +169,25 @@ const Shows = () => {
           </div>
         ))}
       </div>
+      {/* Show More / Show Less buttons */}
+      {filteredShows.length > SHOWS_PER_PAGE && (
+        <div style={{ textAlign: "center", margin: "24px 0" }}>
+          {visibleCount < filteredShows.length && (
+            <button className="show-more-btn" onClick={handleShowMore}>
+              Show More
+            </button>
+          )}
+          {visibleCount > SHOWS_PER_PAGE && (
+            <button
+              className="show-more-btn"
+              style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
+              onClick={handleShowLess}
+            >
+              Show Less
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

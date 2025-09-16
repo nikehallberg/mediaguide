@@ -171,7 +171,7 @@ const handleShowLess = () => {
           </div>
         ))}
       </div>
-      {/* Show More/Less button */}
+      {/* Show More/Lessbutton */}
       {filteredBooks.length > BOOKS_PER_PAGE && (
         <div style={{ textAlign: "center", margin: "24px 0" }}>
         {visibleCount < filteredBooks.length && (

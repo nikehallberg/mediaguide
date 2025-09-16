@@ -27,6 +27,8 @@ const Movies = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  const [visibleCount, setVisibleCount] = useState(12);
+
   // Filter movies by selected genres
   const filteredByGenre = getGenres(selectedGenres);
   // Further filter movies by search input (case-insensitive)
@@ -71,6 +73,24 @@ const Movies = () => {
   // Reset all flipped cards when genres change
   setFlipped({});
 }, [selectedGenres]);
+
+  useEffect(() => {
+  function handleScroll() {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
+      visibleCount < filteredMovies.length
+    ) {
+      setVisibleCount((prev) => prev + 9); // Load 9 more movies
+    }
+  }
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [visibleCount, filteredMovies.length]);
+
+  useEffect(() => {
+  setVisibleCount(12); // Reset to initial count when filters/search change
+  }, [selectedGenres, movieSearch]);
+
 
   return (
     <div className="movies-page">
@@ -128,7 +148,7 @@ const Movies = () => {
       </div>
       {/* Movie cards grid */}
       <div className="movies-container">
-        {filteredMovies.map((movie) => (
+        {filteredMovies.slice(0, visibleCount).map((movie) => (
           <div
             className={`movie-card${flipped[movie.title] ? " flipped" : ""}`}
             key={movie.title}

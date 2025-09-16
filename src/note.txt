@@ -1,6 +1,8 @@
 - responsive design
 - central funktion för genre 
 - show more button, media limit 
+- alfabetisk ordning genres
+- like, dislike
 
 endless scrolling, när inne på genre
 egen databas

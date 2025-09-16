@@ -2,13 +2,15 @@
 - central funktion för genre 
 - show more button, media limit 
 
-endless scrolling
+endless scrolling, när inne på genre
 egen databas
 
 
 
 längre mål
-1.
+1. review input field, thank u message
+2. read reviews for this item
+3. databas mongodb
 
 
 
@@ -19,4 +21,4 @@ längre mål
 
 1. spara review enskild review
 2. räkna ihop medelbetyget och visa det som betyget för mediat
-3.
+3. ändra view när inloggad, min sida osv

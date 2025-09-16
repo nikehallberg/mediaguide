@@ -1,5 +1,5 @@
 export const genres1 = [
-    'Romance', 'Mystery', 'Horror', 'Fantasy', 'Thriller', 'Sci-Fi', 'Young Adult', 'Drama', 'Comedy', 'Dark Comedy', 'Period Piece', 'Satire', 'Supernatural'
+    'Romance', 'Mystery', 'Horror', 'Fantasy', 'Thriller', 'Sci-Fi', 'Young Adult', 'Drama', 'Comedy', 'Dark Comedy', 'Period Piece', 'Satire', 'Supernatural', 'Action', 'Crime', 'Biography', 'Animated', 'Family', 'War'
 ]
 
 export const genres2 = [

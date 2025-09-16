@@ -16,7 +16,7 @@ function getGenres(selectedGenres) {
   }
 }
 
-const SHOWS_PER_PAGE = 8; 
+const SHOWS_PER_PAGE = 9; 
 
 const Shows = () => {
   // State for which cards are flipped (for card flip animation)

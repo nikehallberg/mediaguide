@@ -17,7 +17,7 @@ function getGenres(selectedGenres) {
   }
 }
 
-const BOOKS_PER_PAGE = 8; // Limit for how many books to show at once
+const BOOKS_PER_PAGE = 9; // Limit for how many books to show at once
 
 const Books = () => {
   // State for tracking which cards are flipped

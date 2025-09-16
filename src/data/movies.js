@@ -18,6 +18,21 @@ import Movie17 from '../assets/movie17.png'
 import Movie18 from '../assets/movie18.jpeg'
 import Movie19 from '../assets/movie19.jpg'
 import Movie20 from '../assets/movie20.jpg'
+import Movie21 from '../assets/movie21.jpg'
+import Movie22 from '../assets/movie22.jpg'
+import Movie23 from '../assets/movie23.jpg'
+import Movie24 from '../assets/movie24.jpg'
+import Movie25 from '../assets/movie25.jpg'
+import Movie26 from '../assets/movie26.png'
+import Movie27 from '../assets/movie27.jpg'
+import Movie28 from '../assets/movie28.jpg'
+import Movie29 from '../assets/movie29.jpg'
+import Movie30 from '../assets/movie30.jpg'
+import Movie31 from '../assets/movie31.jpg'
+import Movie32 from '../assets/movie32.jpg'
+import Movie33 from '../assets/movie33.jpg'
+import Movie34 from '../assets/movie34.jpg'
+import Movie35 from '../assets/movie35.jpg'
 
 export const movies = [
     {
@@ -179,5 +194,125 @@ export const movies = [
         about: "At a top-secret research facility, a lonely janitor forms a unique relationship with an amphibious creature that is being held in captivity.",
         review: 4,
         dateAdded: "2025-09-15"
+    },
+    {
+        title: 'The Godfather',
+        image: Movie21,
+        genre: 'Crime, Drama',
+        about: "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+        review: 5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'Pulp Fiction',
+        image: Movie22,
+        genre: 'Crime, Drama',
+        about: "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+        review: 4.5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'The Dark Knight',
+        image: Movie23,
+        genre: 'Action, Crime, Drama',
+        about: "When the menace known as the Joker emerges, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+        review: 5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'Forrest Gump',
+        image: Movie24,
+        genre: 'Drama, Romance',
+        about: "The presidencies of Kennedy and Johnson, the Vietnam War, and more through the eyes of an Alabama man with a low IQ.",
+        review: 4.5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'Fight Club',
+        image: Movie25,
+        genre: 'Drama',
+        about: "An insomniac office worker and a soap maker form an underground fight club that evolves into something much more.",
+        review: 4.5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'The Matrix',
+        image: Movie26,
+        genre: 'Action, Sci-Fi',
+        about: "A computer hacker learns about the true nature of his reality and his role in the war against its controllers.",
+        review: 5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'Goodfellas',
+        image: Movie27,
+        genre: 'Biography, Crime, Drama',
+        about: "The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners.",
+        review: 4.5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'The Lord of the Rings: The Fellowship of the Ring',
+        image: Movie28,
+        genre: 'Action, Adventure, Drama',
+        about: "A meek Hobbit and eight companions set out on a journey to destroy the One Ring and save Middle-earth.",
+        review: 5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'Star Wars: Episode V - The Empire Strikes Back',
+        image: Movie29,
+        genre: 'Action, Adventure, Fantasy',
+        about: "After the Rebels are brutally overpowered by the Empire, Luke Skywalker begins Jedi training with Yoda.",
+        review: 4.5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'Inglourious Basterds',
+        image: Movie30,
+        genre: 'Adventure, Drama, War',
+        about: "In Nazi-occupied France, a plan to assassinate Nazi leaders by a group of Jewish U.S. soldiers coincides with a theatre owner's vengeful plans.",
+        review: 4,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'The Silence of the Lambs',
+        image: Movie31,
+        genre: 'Crime, Drama, Thriller',
+        about: "A young F.B.I. cadet must confide in an incarcerated and manipulative killer to catch another serial killer.",
+        review: 4.5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'Saving Private Ryan',
+        image: Movie32,
+        genre: 'Drama, War',
+        about: "Following the Normandy Landings, a group of U.S. soldiers go behind enemy lines to retrieve a paratrooper whose brothers have been killed in action.",
+        review: 5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'The Green Mile',
+        image: Movie33,
+        genre: 'Crime, Drama, Fantasy',
+        about: "The lives of guards on Death Row are affected by one of their charges: a black man accused of child murder and rape, yet who has a mysterious gift.",
+        review: 4.5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'Se7en',
+        image: Movie34,
+        genre: 'Crime, Drama, Mystery',
+        about: "Two detectives hunt a serial killer who uses the seven deadly sins as his motives.",
+        review: 4.5,
+        dateAdded: "2025-09-16"
+    },
+    {
+        title: 'The Prestige',
+        image: Movie35,
+        genre: 'Drama, Mystery, Sci-Fi',
+        about: "After a tragic accident, two stage magicians engage in a battle to create the ultimate illusion while sacrificing everything they have.",
+        review: 4.5,
+        dateAdded: "2025-09-16"
     }
 ];

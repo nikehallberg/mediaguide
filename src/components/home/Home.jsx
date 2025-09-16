@@ -1,3 +1,4 @@
+// Import styles and data for each media type
 import "./Home.css";
 import { books } from "../../data/books";
 import { movies } from "../../data/movies";
@@ -5,7 +6,8 @@ import { shows } from "../../data/shows";
 import { songs } from "../../data/songs";
 import { useState } from "react";
 
-//sorts array for most recent, takes the top 3 to display
+
+// Sort each array for most recent items and take the top 3 to display
 const recentBooks = [...books]
   .sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
   .slice(0, 3);
@@ -23,20 +25,28 @@ const recentSongs = [...songs]
   .slice(0, 3);
 
 
-  //state variables
+
+// Home component displays the landing page with carousels for recent media
 const Home = () => {
+  // State variables for carousel indices
   const [bookIdx, setBookIdx] = useState(0);
   const [movieIdx, setMovieIdx] = useState(0);
   const [showIdx, setShowIdx] = useState(0);
   const [songIdx, setSongIdx] = useState(0);
-//carousel navigation
+
+  // Carousel navigation functions
+  // Go to previous item in carousel
   const prev = (idx, setIdx, arr) =>
     setIdx(idx === 0 ? arr.length - 1 : idx - 1);
+  // Go to next item in carousel
   const next = (idx, setIdx, arr) =>
     setIdx(idx === arr.length - 1 ? 0 : idx + 1);
 
+
+  // Render the home page with carousels for each media type
   return (
     <div className="home-page">
+      {/* Header section */}
       <div className="home-header">
         <p className="home-welcome">Welcome to MediaGuide</p>
         <p className="home-info">
@@ -44,9 +54,11 @@ const Home = () => {
           Use the navigation above to choose a category and start discovering new favorites!
         </p>
       </div>
+      {/* Recently Added section */}
       <div className="recent-section">
         <h2>Recently Added</h2>
         <div className="recent-grid">
+          {/* Books carousel */}
           <div className="recent-category">
             <h3>Books</h3>
             <div className="carousel-container">
@@ -78,6 +90,7 @@ const Home = () => {
               </button>
             </div>
           </div>
+          {/* Movies carousel */}
           <div className="recent-category">
             <h3>Movies</h3>
             <div className="carousel-container">
@@ -109,6 +122,7 @@ const Home = () => {
               </button>
             </div>
           </div>
+          {/* Shows carousel */}
           <div className="recent-category">
             <h3>Shows</h3>
             <div className="carousel-container">
@@ -140,6 +154,7 @@ const Home = () => {
               </button>
             </div>
           </div>
+          {/* Songs carousel */}
           <div className="recent-category">
             <h3>Songs</h3>
             <div className="carousel-container">
@@ -173,6 +188,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      {/* Footer section */}
       <footer className="home-footer">
         <div>
           <span>Contact: </span>

@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from '@mui/material/Rating';
 
-
 // Filters books by selected genres
 function getGenres(selectedGenres) {
   if (!selectedGenres || selectedGenres.length === 0) {
@@ -18,6 +17,8 @@ function getGenres(selectedGenres) {
   }
 }
 
+const BOOKS_PER_PAGE = 8; // Limit for how many books to show at once
+
 const Books = () => {
   // State for tracking which cards are flipped
   const [flipped, setFlipped] = useState({});
@@ -25,9 +26,11 @@ const Books = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   // State for book search input
   const [bookSearch, setBookSearch] = useState("");
-
+  // State for dropdown open/close
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  // State for how many books to show
+  const [visibleCount, setVisibleCount] = useState(BOOKS_PER_PAGE);
 
   // Filter books by selected genres
   const filteredByGenre = getGenres(selectedGenres);
@@ -43,6 +46,11 @@ const Books = () => {
       [title]: !prev[title],
     }));
   };
+
+  // Handler for "Show Less" button
+const handleShowLess = () => {
+  setVisibleCount((prev) => Math.max(BOOKS_PER_PAGE, prev - BOOKS_PER_PAGE));
+};
 
   // Handles selecting/deselecting a genre
   const handleGenreClick = (genre) => {
@@ -71,9 +79,19 @@ const Books = () => {
   }, []);
   
   useEffect(() => {
-  // Reset all flipped cards when genres change
-  setFlipped({});
-}, [selectedGenres]);
+    // Reset all flipped cards when genres change
+    setFlipped({});
+    // Reset visible count when filters/search change
+    setVisibleCount(BOOKS_PER_PAGE);
+  }, [selectedGenres, bookSearch]);
+
+  // Show only a limited number of books
+  const booksToShow = filteredBooks.slice(0, visibleCount);
+
+  // Handler for "Show More" button
+  const handleShowMore = () => {
+    setVisibleCount((prev) => prev + BOOKS_PER_PAGE);
+  };
 
   return (
     <div className="books-page">
@@ -131,7 +149,7 @@ const Books = () => {
       </div>
       {/* Book cards grid */}
       <div className="books-container">
-        {filteredBooks.map((book) => (
+        {booksToShow.map((book) => (
           <div
             className={`book-card${flipped[book.title] ? " flipped" : ""}`}
             key={book.title}
@@ -153,6 +171,25 @@ const Books = () => {
           </div>
         ))}
       </div>
+      {/* Show More/Less button */}
+      {filteredBooks.length > BOOKS_PER_PAGE && (
+        <div style={{ textAlign: "center", margin: "24px 0" }}>
+        {visibleCount < filteredBooks.length && (
+          <button className="show-more-btn" onClick={handleShowMore}>
+          Show More
+          </button>
+        )}
+        {visibleCount > BOOKS_PER_PAGE && (
+        <button
+        className="show-more-btn"
+        style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
+        onClick={handleShowLess}
+      >
+        Show Less
+      </button>
+    )}
+  </div>
+)}
     </div>
   );
 };

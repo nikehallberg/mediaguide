@@ -1,12 +1,21 @@
 - responsive design
 - central funktion för genre 
+- show more button, media limit 
 
 
 
 
 
 längre mål
-1. login
-2. spara review enskild review
-3. räkna ihop medelbetyget och visa det som betyget för mediat
-4.
+1.
+
+
+
+
+
+
+
+
+1. spara review enskild review
+2. räkna ihop medelbetyget och visa det som betyget för mediat
+3.

@@ -112,6 +112,28 @@ img {
   border-radius: 20px;
 }
 
+.show-more-btn {
+  background: linear-gradient(90deg, #f7c948, #f4e285);
+  color: #4a3f0b;
+  border: none;
+  border-radius: 20px;
+  padding: 0.7rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin-top: 1rem;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.show-more-btn:hover,
+.show-more-btn:focus {
+  background: linear-gradient(90deg, #f4e285, #f7c948);
+  transform: translateY(-2px) scale(1.05);
+  outline: none;
+}
+
+
 @media (max-width: 900px) {
   .books-container {
     margin: 0 2rem;

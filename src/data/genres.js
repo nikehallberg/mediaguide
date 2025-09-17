@@ -3,5 +3,5 @@ export const genres1 = [
 ].sort();
 
 export const genres2 = [
-    'Pop', 'R&B', 'Rap', 'Classical', 'Folk Music', 'Soundtrack', 'Indie', 'Soul', 'Electro', 'Disco', 'Rock'
+    'Pop', 'R&B', 'Rap', 'Classical', 'Folk Music', 'Soundtrack', 'Indie', 'Soul', 'Electro', 'Disco', 'Rock', 'Country', 'Synthwave', 
 ].sort();

@@ -170,5 +170,13 @@ export const songs = [
         about: 'From the album "Justice"',
         review: 3.5,
         dateAdded: "2025-09-15"
-    }
+    },
+    {
+        title: 'Bobinsky - Bruno Coulais', 
+        image: Song2N3, 
+        genre: 'Classical, Soundtrack',
+        about: 'A song from the movie "Coraline"', 
+        review: 5,
+        dateAdded: "2025-09-01"
+    },
 ];

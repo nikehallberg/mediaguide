@@ -2,7 +2,7 @@
 - central funktion för genre 
 - show more button, media limit 
 - like, dislike
-- göra så att medierna kan sorteras i betyg fallande, betyg stigande, alfabetisk ordning
+- göra så att medierna kan sorteras i betyg fallande, betyg stigande, alfabetisk ordning, author, artist, stoppa in filtreringen i filterbar också
 
 endless scrolling, när inne på genre
 egen databas

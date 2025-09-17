@@ -1,8 +1,8 @@
 - responsive design
 - central funktion för genre 
 - show more button, media limit 
-- alfabetisk ordning genres
 - like, dislike
+- göra så att medierna kan sorteras i betyg fallande, betyg stigande, alfabetisk ordning
 
 endless scrolling, när inne på genre
 egen databas

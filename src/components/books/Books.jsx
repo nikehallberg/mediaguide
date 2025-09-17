@@ -26,18 +26,30 @@ const Books = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   // State for book search input
   const [bookSearch, setBookSearch] = useState("");
-  // State for dropdown open/close
+  // State for genre dropdown open/close
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  // State for sort option
+  const [sortOption, setSortOption] = useState("");
   // State for how many books to show
   const [visibleCount, setVisibleCount] = useState(BOOKS_PER_PAGE);
+
 
   // Filter books by selected genres
   const filteredByGenre = getGenres(selectedGenres);
   // Further filter books by search input (case-insensitive)
-  const filteredBooks = filteredByGenre.filter(book =>
+  let filteredBooks = filteredByGenre.filter(book =>
     book.title.toLowerCase().includes(bookSearch.toLowerCase())
   );
+
+  // Sort books based on sortOption
+  if (sortOption === "alphabetical") {
+    filteredBooks = [...filteredBooks].sort((a, b) => a.title.localeCompare(b.title));
+  } else if (sortOption === "rating-asc") {
+    filteredBooks = [...filteredBooks].sort((a, b) => a.review - b.review);
+  } else if (sortOption === "rating-desc") {
+    filteredBooks = [...filteredBooks].sort((a, b) => b.review - a.review);
+  }
 
   // Handles flipping a book card
   const handleFlip = (title) => {
@@ -95,8 +107,8 @@ const handleShowLess = () => {
 
   return (
     <div className="books-page">
-      {/* Search and filter row */}
-      <div className="show-search-filter-row">
+      {/* Search, filter, and sort row */}
+      <div className="show-search-filter-row" style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
         <div className="book-search-container">
           <input
             type="text"
@@ -145,6 +157,20 @@ const handleShowLess = () => {
               )}
             </div>
           )}
+        </div>
+        {/* Sort dropdown */}
+        <div className="sort-dropdown" style={{ minWidth: 180 }}>
+          <select
+            value={sortOption}
+            onChange={e => setSortOption(e.target.value)}
+            className="book-search-input"
+            style={{ minWidth: 180 }}
+          >
+            <option value="">Sort by...</option>
+            <option value="alphabetical">Alphabetical (A-Z)</option>
+            <option value="rating-asc">Rating (Lowest First)</option>
+            <option value="rating-desc">Rating (Highest First)</option>
+          </select>
         </div>
       </div>
       {/* Book cards grid */}

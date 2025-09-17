@@ -1,6 +1,8 @@
 import "./Books.css";
+
+// Import styles and dependencies
 import { books } from "../../data/books";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from '@mui/material/Rating';
 
@@ -17,22 +19,28 @@ function getGenres(selectedGenres) {
   }
 }
 
+// Number of books to show per page/load
 const BOOKS_PER_PAGE = 9; // Limit for how many books to show at once
 
+
 const Books = () => {
-  // State for tracking which cards are flipped
+  // State for tracking which cards are flipped (for card flip animation)
   const [flipped, setFlipped] = useState({});
-  // State for selected genres
+  // State for selected genres (array of selected genre strings)
   const [selectedGenres, setSelectedGenres] = useState([]);
-  // State for book search input
+  // State for book search input (search bar value)
   const [bookSearch, setBookSearch] = useState("");
   // State for genre dropdown open/close
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  // Ref for dropdown element to detect outside clicks
   const dropdownRef = useRef(null);
-  // State for sort option
+  // State for sort option (e.g. alphabetical, rating)
   const [sortOption, setSortOption] = useState("");
-  // State for how many books to show
+  // State for how many books to show (pagination/infinite scroll)
   const [visibleCount, setVisibleCount] = useState(BOOKS_PER_PAGE);
+
+  // Ref for debouncing the scroll handler
+  const debounceRef = useRef(null);
 
 
   // Filter books by selected genres
@@ -42,16 +50,40 @@ const Books = () => {
     book.title.toLowerCase().includes(bookSearch.toLowerCase())
   );
 
+
+  // Debounced infinite scroll handler: loads more books when scrolled near bottom (only if genres are selected)
+  const handleScroll = useCallback(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      if (selectedGenres.length === 0) return;
+      // Check if user is near the bottom of the page
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 100
+      ) {
+        setVisibleCount((prev) => {
+          if (prev >= filteredBooks.length) return prev;
+          return prev + BOOKS_PER_PAGE;
+        });
+      }
+    }, 150); // 150ms debounce delay
+  }, [selectedGenres, filteredBooks.length]);
+
+
   // Sort books based on sortOption
   if (sortOption === "alphabetical") {
+    // Sort alphabetically by title
     filteredBooks = [...filteredBooks].sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortOption === "rating-asc") {
+    // Sort by rating, lowest first
     filteredBooks = [...filteredBooks].sort((a, b) => a.review - b.review);
   } else if (sortOption === "rating-desc") {
+    // Sort by rating, highest first
     filteredBooks = [...filteredBooks].sort((a, b) => b.review - a.review);
   }
 
-  // Handles flipping a book card
+
+  // Handles flipping a book card (toggles front/back)
   const handleFlip = (title) => {
     setFlipped((prev) => ({
       ...prev,
@@ -59,12 +91,14 @@ const Books = () => {
     }));
   };
 
-  // Handler for "Show Less" button
-const handleShowLess = () => {
-  setVisibleCount((prev) => Math.max(BOOKS_PER_PAGE, prev - BOOKS_PER_PAGE));
-};
 
-  // Handles selecting/deselecting a genre
+    // Handler for "Show Less" button (decreases visible books, but not below 1 page)
+    const handleShowLess = () => {
+      setVisibleCount((prev) => Math.max(BOOKS_PER_PAGE, prev - BOOKS_PER_PAGE));
+    };
+
+
+  // Handles selecting/deselecting a genre (max 3 genres)
   const handleGenreClick = (genre) => {
     setSelectedGenres((prev) => {
       if (prev.includes(genre)) {
@@ -77,9 +111,12 @@ const handleShowLess = () => {
     });
   };
 
+
   // Clears all selected genres
   const clearGenres = () => setSelectedGenres([]);
 
+
+  // Effect: closes dropdown if clicking outside of it
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -90,25 +127,36 @@ const handleShowLess = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
   
+  // Effect: reset flipped cards and visible count when genres or search changes
   useEffect(() => {
-    // Reset all flipped cards when genres change
     setFlipped({});
-    // Reset visible count when filters/search change
     setVisibleCount(BOOKS_PER_PAGE);
   }, [selectedGenres, bookSearch]);
 
-  // Show only a limited number of books
+  // Effect: add/remove scroll event listener for infinite scroll (only if genres selected)
+  useEffect(() => {
+    if (selectedGenres.length > 0) {
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+  }, [selectedGenres, handleScroll]);
+
+
+  // Only show up to visibleCount books (for pagination/infinite scroll)
   const booksToShow = filteredBooks.slice(0, visibleCount);
 
-  // Handler for "Show More" button
+
+  // Handler for "Show More" button (increases visible books by one page)
   const handleShowMore = () => {
     setVisibleCount((prev) => prev + BOOKS_PER_PAGE);
   };
+
 
   return (
     <div className="books-page">
       {/* Search, filter, and sort row */}
       <div className="show-search-filter-row" style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
+        {/* Book search input */}
         <div className="book-search-container">
           <input
             type="text"
@@ -118,6 +166,7 @@ const handleShowLess = () => {
             className="book-search-input"
           />
         </div>
+        {/* Genre filter dropdown */}
         <div className="dropdown" ref={dropdownRef}>
           <button
             className="dropbtn"
@@ -127,6 +176,7 @@ const handleShowLess = () => {
           </button>
           {dropdownOpen && (
             <div className="dropdown-content">
+              {/* List of genre buttons */}
               {genres1.map((genre) => (
                 <button
                   key={genre}
@@ -145,11 +195,13 @@ const handleShowLess = () => {
                   {genre}
                 </button>
               ))}
+              {/* Clear genres button */}
               {selectedGenres.length > 0 && (
                 <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
                   Clear
                 </button>
               )}
+              {/* Genre selection limit message */}
               {selectedGenres.length >= 3 && (
                 <div style={{ color: "#b00", fontSize: "0.9em", marginTop: "6px" }}>
                   You can select up to 3 genres.
@@ -197,27 +249,30 @@ const handleShowLess = () => {
           </div>
         ))}
       </div>
-      {/* Show More/Lessbutton */}
-      {filteredBooks.length > BOOKS_PER_PAGE && (
+      {/* Show More/Less buttons only if no genre is selected */}
+      {filteredBooks.length > BOOKS_PER_PAGE && selectedGenres.length === 0 && (
         <div style={{ textAlign: "center", margin: "24px 0" }}>
-        {visibleCount < filteredBooks.length && (
-          <button className="show-more-btn" onClick={handleShowMore}>
-          Show More
-          </button>
-        )}
-        {visibleCount > BOOKS_PER_PAGE && (
-        <button
-        className="show-more-btn"
-        style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
-        onClick={handleShowLess}
-      >
-        Show Less
-      </button>
-    )}
-  </div>
-)}
+          {/* Show More button */}
+          {visibleCount < filteredBooks.length && (
+            <button className="show-more-btn" onClick={handleShowMore}>
+              Show More
+            </button>
+          )}
+          {/* Show Less button */}
+          {visibleCount > BOOKS_PER_PAGE && (
+            <button
+              className="show-more-btn"
+              style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
+              onClick={handleShowLess}
+            >
+              Show Less
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };
+
 
 export default Books;

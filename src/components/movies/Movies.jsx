@@ -1,42 +1,40 @@
-import "./Movies.css";
-import { movies } from "../../data/movies";
-import { useState, useRef, useEffect } from "react";
-import { genres1 } from "../../data/genres";
-import Rating from '@mui/material/Rating';
 
-// Filters movies by selected genres
-function getGenres(selectedGenres) {
-  if (!selectedGenres || selectedGenres.length === 0) {
-    return movies; // No genres selected, return all movies
-  } else {
-    // Return movies that include all selected genres
-    return movies.filter((movie) =>
+import "./Movies.css";
+import "../shared/MediaShared.css";
+import { movies } from "../../data/movies";
+import { useState, useEffect } from "react";
+import { genres1 } from "../../data/genres";
+import Rating from "@mui/material/Rating";
+import FilterBar from "../shared/MediaShared";
+
+// Utility: Filter movies by selected genres and search term
+function filterMovies(movies, selectedGenres, searchTerm) {
+  let filtered = movies;
+  if (selectedGenres.length > 0) {
+    filtered = filtered.filter((movie) =>
       selectedGenres.every((genre) => movie.genre.includes(genre))
     );
   }
+  if (searchTerm) {
+    filtered = filtered.filter((movie) =>
+      movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+  return filtered;
 }
 
 const Movies = () => {
-  // State for which cards are flipped (for card flip animation)
   const [flipped, setFlipped] = useState({});
-  // State for selected genres (array of strings)
   const [selectedGenres, setSelectedGenres] = useState([]);
-  // State for the movie search input
   const [movieSearch, setMovieSearch] = useState("");
+  // Constants for pagination
+  const MOVIES_PER_PAGE = 9;
+  const [visibleCount, setVisibleCount] = useState(MOVIES_PER_PAGE);
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  // Filtered movies
+  const filteredMovies = filterMovies(movies, selectedGenres, movieSearch);
 
-  const [visibleCount, setVisibleCount] = useState(12);
-
-  // Filter movies by selected genres
-  const filteredByGenre = getGenres(selectedGenres);
-  // Further filter movies by search input (case-insensitive)
-  const filteredMovies = filteredByGenre.filter(movie =>
-    movie.title.toLowerCase().includes(movieSearch.toLowerCase())
-  );
-
-  // Toggles the flipped state for a movie card
+  // Card flip handler
   const handleFlip = (title) => {
     setFlipped((prev) => ({
       ...prev,
@@ -44,132 +42,61 @@ const Movies = () => {
     }));
   };
 
-  // Handles clicking a genre button (select/deselect)
-  const handleGenreClick = (genre) => {
-    setSelectedGenres((prev) => {
-      if (prev.includes(genre)) {
-        return prev.filter((g) => g !== genre); // Remove if already selected
-      } else if (prev.length < 3) {
-        return [...prev, genre]; // Add if not selected and under limit
-      } else {
-        return prev; // Do not add more than 3
-      }
-    });
-  };
-  // Clears all selected genres
-  const clearGenres = () => setSelectedGenres([]);
 
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-  
-  useEffect(() => {
-  // Reset all flipped cards when genres change
-  setFlipped({});
-}, [selectedGenres]);
 
+  // Reset visible movies and flips on filter/search change
   useEffect(() => {
-  function handleScroll() {
-    if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
-      visibleCount < filteredMovies.length
-    ) {
-      setVisibleCount((prev) => prev + 9); // Load 9 more movies
-    }
-  }
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [visibleCount, filteredMovies.length]);
-
-  useEffect(() => {
-  setVisibleCount(12); // Reset to initial count when filters/search change
+    setVisibleCount(MOVIES_PER_PAGE);
+    setFlipped({});
   }, [selectedGenres, movieSearch]);
 
+  // Only show up to visibleCount movies (for pagination/infinite scroll)
+  const moviesToShow = filteredMovies.slice(0, visibleCount);
 
   return (
-    <div className="movies-page">
-      {/* Search and filter row */}
-      <div className="show-search-filter-row">
-        <div className="movie-search-container">
-          <input
-            type="text"
-            placeholder="Search movie name..."
-            value={movieSearch}
-            onChange={e => setMovieSearch(e.target.value)}
-            className="movie-search-input"
-          />
-        </div>
-        <div className="dropdown" ref={dropdownRef}>
-          <button
-            className="dropbtn"
-            onClick={() => setDropdownOpen((open) => !open)}
-          >
-            Filter by Genre
-          </button>
-          {dropdownOpen && (
-            <div className="dropdown-content">
-              {genres1.map((genre) => (
-              <button
-                  key={genre}
-                  className={`dropdown-genre-btn${selectedGenres.includes(genre) ? " selected" : ""}`}
-                  onClick={() => handleGenreClick(genre)}
-                  type="button"
-                  disabled={
-                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
-                  }
-                  style={
-                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
-                      ? { opacity: 0.5, cursor: "not-allowed" }
-                      : {}
-                  }
-                >
-                  {genre}
-                </button>
-              ))}
-              {selectedGenres.length > 0 && (
-                <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
-                  Clear
-                </button>
-              )}
-              {selectedGenres.length >= 3 && (
-                <div style={{ color: "#b00", fontSize: "0.9em", marginTop: "6px" }}>
-                  You can select up to 3 genres.
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+    <div className='movies-page'>
+      <div className='show-search-filter-row'>
+        <FilterBar
+          genres={genres1}
+          searchTerm={movieSearch}
+          setSearchTerm={setMovieSearch}
+          selectedGenres={selectedGenres}
+          setSelectedGenres={setSelectedGenres}
+          maxGenres={3}
+          visibleCount={visibleCount}
+          setVisibleCount={setVisibleCount}
+          totalCount={filteredMovies.length}
+          perPage={MOVIES_PER_PAGE}
+          infiniteScroll={selectedGenres.length > 0}
+        />
       </div>
-      {/* Movie cards grid */}
-      <div className="movies-container">
-        {filteredMovies.slice(0, visibleCount).map((movie) => (
+      <div className='movies-container'>
+        {moviesToShow.map((movie) => (
           <div
             className={`movie-card${flipped[movie.title] ? " flipped" : ""}`}
             key={movie.title}
             onClick={() => handleFlip(movie.title)}
           >
-            <div className="card-inner">
-              {/* Front of the card: shows title, image, and genre */}
-              <div className="card-front">
+            <div className='card-inner'>
+              <div className='card-front'>
                 <h3>{movie.title}</h3>
-                <img src={movie.image} alt="" />
+                <img src={movie.image} alt='' />
                 <p>{movie.genre}</p>
               </div>
-              {/* Back of the card: shows about and review */}
-              <div className="card-back">
+              <div className='card-back'>
                 <p>{movie.about}</p>
-                <Rating name="half-rating-read" value={movie.review} precision={0.5} readOnly />
+                <Rating
+                  name='half-rating-read'
+                  value={movie.review}
+                  precision={0.5}
+                  readOnly
+                />
               </div>
             </div>
           </div>
         ))}
       </div>
+      {/* Show More/Less buttons and infinite scroll are now handled by FilterBar */}
     </div>
   );
 };

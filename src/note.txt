@@ -1,18 +1,16 @@
 - responsive design
 - central funktion för genre 
-- show more button, media limit 
 - like, dislike
 - göra så att medierna kan sorteras i betyg fallande, betyg stigande, alfabetisk ordning, author, artist, stoppa in filtreringen i filterbar också
 
-endless scrolling, när inne på genre
-egen databas
+gemensam css fil
 
-
+fixa problem med movies och shows
 
 längre mål
 1. review input field, thank u message
 2. read reviews for this item
-3. databas mongodb
+3. egen databas, mongodb
 
 
 

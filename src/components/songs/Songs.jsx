@@ -1,7 +1,9 @@
 import "./Songs.css";
+import "../shared/MediaShared.css";
 import { songs } from "../../data/songs";
 import { genres2 } from "../../data/genres";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import FilterBar from "../shared/MediaShared";
 import Rating from '@mui/material/Rating';
 
 // Filters songs by selected genres
@@ -16,6 +18,9 @@ function getGenres(selectedGenres) {
   }
 }
 
+
+const SONGS_PER_PAGE = 9;
+
 const Songs = () => {
   // State for which cards are flipped (for card flip animation)
   const [flipped, setFlipped] = useState({});
@@ -23,9 +28,11 @@ const Songs = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   // State for the song search input
   const [songSearch, setSongSearch] = useState("");
-
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  // Removed dropdown state/refs (handled by FilterBar)
+  // State for how many songs to show (pagination/infinite scroll)
+  const [visibleCount, setVisibleCount] = useState(SONGS_PER_PAGE);
+  // Ref for debouncing the scroll handler (for infinite scroll)
+  const debounceRef = useRef(null);
 
   // Filter songs by selected genres
   const filteredByGenre = getGenres(selectedGenres);
@@ -33,7 +40,24 @@ const Songs = () => {
   const filteredSongs = filteredByGenre.filter(song =>
     song.title.toLowerCase().includes(songSearch.toLowerCase())
   );
-  
+
+  // Infinite scroll is now handled by FilterBar
+
+  // Dropdown close handled by FilterBar
+
+  // Effect: reset flipped cards and visible count when genres or search changes
+  useEffect(() => {
+    setFlipped({});
+    setVisibleCount(SONGS_PER_PAGE);
+  }, [selectedGenres, songSearch]);
+
+  // Infinite scroll handled by FilterBar
+
+  // Only show up to visibleCount songs (for pagination/infinite scroll)
+  const songsToShow = filteredSongs.slice(0, visibleCount);
+
+  // Show More/Less handled by FilterBar
+
   // Toggles the flipped state for a song card
   const handleFlip = (title) => {
     setFlipped((prev) => ({
@@ -42,93 +66,29 @@ const Songs = () => {
     }));
   };
 
-  // Handles clicking a genre button (select/deselect)
-  const handleGenreClick = (genre) => {
-    setSelectedGenres((prev) => {
-      if (prev.includes(genre)) {
-        return prev.filter((g) => g !== genre); // Remove if already selected
-      } else if (prev.length < 3) {
-        return [...prev, genre]; // Add if not selected and under limit
-      } else {
-        return prev; // Do not add more than 3
-      }
-    });
-  };
-  // Clears all selected genres
-  const clearGenres = () => setSelectedGenres([]);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-  // Reset all flipped cards when genres change
-  setFlipped({});
-}, [selectedGenres]);
+  // Genre click/clear handled by FilterBar
 
   return (
     <div className="songs-page">
-      {/* Search and filter row */}
+      {/* Search and filter row using FilterBar */}
       <div className="show-search-filter-row">
-        <div className="song-search-container">
-          <input
-            type="text"
-            placeholder="Search song name..."
-            value={songSearch}
-            onChange={e => setSongSearch(e.target.value)}
-            className="song-search-input"
-          />
-        </div>
-        <div className="dropdown" ref={dropdownRef}>
-          <button
-            className="dropbtn"
-            onClick={() => setDropdownOpen((open) => !open)}
-          >
-            Filter by Genre
-          </button>
-          {dropdownOpen && (
-            <div className="dropdown-content">
-              {genres2.map((genre) => (
-                <button
-                  key={genre}
-                  className={`dropdown-genre-btn${selectedGenres.includes(genre) ? " selected" : ""}`}
-                  onClick={() => handleGenreClick(genre)}
-                  type="button"
-                  disabled={
-                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
-                  }
-                  style={
-                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
-                      ? { opacity: 0.5, cursor: "not-allowed" }
-                      : {}
-                  }
-                >
-                  {genre}
-                </button>
-              ))}
-              {selectedGenres.length > 0 && (
-                <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
-                  Clear
-                </button>
-              )}
-              {selectedGenres.length >= 3 && (
-                <div style={{ color: "#b00", fontSize: "0.9em", marginTop: "6px" }}>
-                  You can select up to 3 genres.
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+        <FilterBar
+          genres={genres2}
+          searchTerm={songSearch}
+          setSearchTerm={setSongSearch}
+          selectedGenres={selectedGenres}
+          setSelectedGenres={setSelectedGenres}
+          maxGenres={3}
+          visibleCount={visibleCount}
+          setVisibleCount={setVisibleCount}
+          totalCount={filteredSongs.length}
+          perPage={SONGS_PER_PAGE}
+          infiniteScroll={selectedGenres.length > 0}
+        />
       </div>
       {/* Song cards grid */}
       <div className="songs-container">
-        {filteredSongs.map((song) => (
+        {songsToShow.map((song) => (
           <div
             className={`song-card${flipped[song.title] ? " flipped" : ""}`}
             key={song.title}
@@ -150,6 +110,7 @@ const Songs = () => {
           </div>
         ))}
       </div>
+      {/* Show More/Less buttons and infinite scroll are now handled by FilterBar */}
     </div>
   );
 };

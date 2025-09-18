@@ -1,10 +1,12 @@
 import "./Books.css";
+import "../shared/MediaShared.css";
 
 // Import styles and dependencies
 import { books } from "../../data/books";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from '@mui/material/Rating';
+import FilterBar from "../shared/MediaShared";
 
 // Filters books by selected genres
 function getGenres(selectedGenres) {
@@ -30,10 +32,6 @@ const Books = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   // State for book search input (search bar value)
   const [bookSearch, setBookSearch] = useState("");
-  // State for genre dropdown open/close
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  // Ref for dropdown element to detect outside clicks
-  const dropdownRef = useRef(null);
   // State for sort option (e.g. alphabetical, rating)
   const [sortOption, setSortOption] = useState("");
   // State for how many books to show (pagination/infinite scroll)
@@ -98,35 +96,6 @@ const Books = () => {
     };
 
 
-  // Handles selecting/deselecting a genre (max 3 genres)
-  const handleGenreClick = (genre) => {
-    setSelectedGenres((prev) => {
-      if (prev.includes(genre)) {
-        return prev.filter((g) => g !== genre); // Remove if already selected
-      } else if (prev.length < 3) {
-        return [...prev, genre]; // Add if not selected and under limit
-      } else {
-        return prev; // Do not add more than 3
-      }
-    });
-  };
-
-
-  // Clears all selected genres
-  const clearGenres = () => setSelectedGenres([]);
-
-
-  // Effect: closes dropdown if clicking outside of it
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-  
   // Effect: reset flipped cards and visible count when genres or search changes
   useEffect(() => {
     setFlipped({});
@@ -154,62 +123,21 @@ const Books = () => {
 
   return (
     <div className="books-page">
-      {/* Search, filter, and sort row */}
+      {/* Search, filter, and sort row using FilterBar */}
       <div className="show-search-filter-row" style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
-        {/* Book search input */}
-        <div className="book-search-container">
-          <input
-            type="text"
-            placeholder="Search book name..."
-            value={bookSearch}
-            onChange={e => setBookSearch(e.target.value)}
-            className="book-search-input"
-          />
-        </div>
-        {/* Genre filter dropdown */}
-        <div className="dropdown" ref={dropdownRef}>
-          <button
-            className="dropbtn"
-            onClick={() => setDropdownOpen((open) => !open)}
-          >
-            Filter by Genre
-          </button>
-          {dropdownOpen && (
-            <div className="dropdown-content">
-              {/* List of genre buttons */}
-              {genres1.map((genre) => (
-                <button
-                  key={genre}
-                  className={`dropdown-genre-btn${selectedGenres.includes(genre) ? " selected" : ""}`}
-                  onClick={() => handleGenreClick(genre)}
-                  type="button"
-                  disabled={
-                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
-                  }
-                  style={
-                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
-                      ? { opacity: 0.5, cursor: "not-allowed" }
-                      : {}
-                  }
-                >
-                  {genre}
-                </button>
-              ))}
-              {/* Clear genres button */}
-              {selectedGenres.length > 0 && (
-                <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
-                  Clear
-                </button>
-              )}
-              {/* Genre selection limit message */}
-              {selectedGenres.length >= 3 && (
-                <div style={{ color: "#b00", fontSize: "0.9em", marginTop: "6px" }}>
-                  You can select up to 3 genres.
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+        <FilterBar
+          genres={genres1}
+          searchTerm={bookSearch}
+          setSearchTerm={setBookSearch}
+          selectedGenres={selectedGenres}
+          setSelectedGenres={setSelectedGenres}
+          maxGenres={3}
+          visibleCount={visibleCount}
+          setVisibleCount={setVisibleCount}
+          totalCount={filteredBooks.length}
+          perPage={BOOKS_PER_PAGE}
+          infiniteScroll={selectedGenres.length > 0}
+        />
         {/* Sort dropdown */}
         <div className="sort-dropdown" style={{ minWidth: 180 }}>
           <select
@@ -249,27 +177,7 @@ const Books = () => {
           </div>
         ))}
       </div>
-      {/* Show More/Less buttons only if no genre is selected */}
-      {filteredBooks.length > BOOKS_PER_PAGE && selectedGenres.length === 0 && (
-        <div style={{ textAlign: "center", margin: "24px 0" }}>
-          {/* Show More button */}
-          {visibleCount < filteredBooks.length && (
-            <button className="show-more-btn" onClick={handleShowMore}>
-              Show More
-            </button>
-          )}
-          {/* Show Less button */}
-          {visibleCount > BOOKS_PER_PAGE && (
-            <button
-              className="show-more-btn"
-              style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
-              onClick={handleShowLess}
-            >
-              Show Less
-            </button>
-          )}
-        </div>
-      )}
+      {/* Show More/Less buttons and infinite scroll are now handled by FilterBar */}
     </div>
   );
 };

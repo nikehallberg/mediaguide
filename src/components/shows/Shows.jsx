@@ -1,6 +1,8 @@
 import "./Shows.css";
+import "../shared/MediaShared.css";
 import { shows } from "../../data/shows";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import FilterBar from "../shared/MediaShared";
 import { genres1 } from "../../data/genres";
 import Rating from '@mui/material/Rating';
 
@@ -16,7 +18,8 @@ function getGenres(selectedGenres) {
   }
 }
 
-const SHOWS_PER_PAGE = 9; 
+
+const SHOWS_PER_PAGE = 9;
 
 const Shows = () => {
   // State for which cards are flipped (for card flip animation)
@@ -25,11 +28,11 @@ const Shows = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   // State for the show search input
   const [showSearch, setShowSearch] = useState("");
-
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
-
+  // Removed dropdown state/refs (handled by FilterBar)
+  // State for how many shows to show (pagination/infinite scroll)
   const [visibleCount, setVisibleCount] = useState(SHOWS_PER_PAGE);
+  // Ref for debouncing the scroll handler (for infinite scroll)
+  const debounceRef = useRef(null);
 
   // Filter shows by selected genres
   const filteredByGenre = getGenres(selectedGenres);
@@ -37,113 +40,41 @@ const Shows = () => {
   const filteredShows = filteredByGenre.filter(show =>
     show.title.toLowerCase().includes(showSearch.toLowerCase())
   );
-  
-  // Toggles the flipped state for a show card
-  const handleFlip = (title) => {
-    setFlipped((prev) => ({
-      ...prev,
-      [title]: !prev[title],
-    }));
-  };
 
-  // Handles clicking a genre button (select/deselect)
-  const handleGenreClick = (genre) => {
-    setSelectedGenres((prev) => {
-      if (prev.includes(genre)) {
-        return prev.filter((g) => g !== genre); // Remove if already selected
-      } else if (prev.length < 3) {
-        return [...prev, genre]; // Add if not selected and under limit
-      } else {
-        return prev; // Do not add more than 3
-      }
-    });
-  };
+  // Infinite scroll is now handled by FilterBar
 
-  // Clears all selected genres
-  const clearGenres = () => setSelectedGenres([]);
+  // Dropdown close handled by FilterBar
 
+  // Effect: reset flipped cards and visible count when genres or search changes
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    // Reset all flipped cards when genres or search change
     setFlipped({});
     setVisibleCount(SHOWS_PER_PAGE);
   }, [selectedGenres, showSearch]);
 
-  // Show only a limited number of shows
+  // Infinite scroll handled by FilterBar
+
+  // Only show up to visibleCount shows (for pagination/infinite scroll)
   const showsToShow = filteredShows.slice(0, visibleCount);
 
-  // Handler for "Show More" button
-  const handleShowMore = () => {
-    setVisibleCount((prev) => prev + SHOWS_PER_PAGE);
-  };
-
-  // Handler for "Show Less" button
-  const handleShowLess = () => {
-    setVisibleCount((prev) => Math.max(SHOWS_PER_PAGE, prev - SHOWS_PER_PAGE));
-  };
+  // Show More/Less handled by FilterBar
 
   return (
     <div className="shows-page">
-      {/* Search and filter row */}
+      {/* Search and filter row using FilterBar */}
       <div className="show-search-filter-row">
-        <div className="show-search-container">
-          <input
-            type="text"
-            placeholder="Search show name..."
-            value={showSearch}
-            onChange={e => setShowSearch(e.target.value)}
-            className="show-search-input"
-          />
-        </div>
-        <div className="dropdown" ref={dropdownRef}>
-          <button
-            className="dropbtn"
-            onClick={() => setDropdownOpen((open) => !open)}
-          >
-            Filter by Genre
-          </button>
-          {dropdownOpen && (
-            <div className="dropdown-content">
-              {genres1.map((genre) => (
-                <button
-                  key={genre}
-                  className={`dropdown-genre-btn${selectedGenres.includes(genre) ? " selected" : ""}`}
-                  onClick={() => handleGenreClick(genre)}
-                  type="button"
-                  disabled={
-                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
-                  }
-                  style={
-                    !selectedGenres.includes(genre) && selectedGenres.length >= 3
-                      ? { opacity: 0.5, cursor: "not-allowed" }
-                      : {}
-                  }
-                >
-                  {genre}
-                </button>
-              ))}
-              {selectedGenres.length > 0 && (
-                <button className="dropdown-clear-btn" onClick={clearGenres} type="button">
-                  Clear
-                </button>
-              )}
-              {selectedGenres.length >= 3 && (
-                <div style={{ color: "#b00", fontSize: "0.9em", marginTop: "6px" }}>
-                  You can select up to 3 genres.
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+        <FilterBar
+          genres={genres1}
+          searchTerm={showSearch}
+          setSearchTerm={setShowSearch}
+          selectedGenres={selectedGenres}
+          setSelectedGenres={setSelectedGenres}
+          maxGenres={3}
+          visibleCount={visibleCount}
+          setVisibleCount={setVisibleCount}
+          totalCount={filteredShows.length}
+          perPage={SHOWS_PER_PAGE}
+          infiniteScroll={selectedGenres.length > 0}
+        />
       </div>
       {/* Show cards grid */}
       <div className="shows-container">
@@ -169,25 +100,7 @@ const Shows = () => {
           </div>
         ))}
       </div>
-      {/* Show More / Show Less buttons */}
-      {filteredShows.length > SHOWS_PER_PAGE && (
-        <div style={{ textAlign: "center", margin: "24px 0" }}>
-          {visibleCount < filteredShows.length && (
-            <button className="show-more-btn" onClick={handleShowMore}>
-              Show More
-            </button>
-          )}
-          {visibleCount > SHOWS_PER_PAGE && (
-            <button
-              className="show-more-btn"
-              style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
-              onClick={handleShowLess}
-            >
-              Show Less
-            </button>
-          )}
-        </div>
-      )}
+      {/* Show More/Less buttons and infinite scroll are now handled by FilterBar */}
     </div>
   );
 };

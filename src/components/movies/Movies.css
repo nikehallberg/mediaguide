@@ -1,3 +1,30 @@
+
+.movies-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Unify search/filter bar layout with Books/Songs */
+.show-search-filter-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 1.5rem 0 2rem 0;
+  flex-wrap: wrap;
+}
+
+/* Center Show More/Less bar */
+.show-more-btn, .show-more-btn:only-child {
+  display: inline-block;
+  margin-left: 0;
+}
+.show-more-btn + .show-more-btn {
+  margin-left: 1rem;
+}
 .movies-container {
     margin: 0 7rem;
     display: grid;
@@ -5,77 +32,16 @@
     gap: 3rem;
 }
 
+
 .movie-card {
-    height: 20rem;
-    width: 100%; 
-    max-width: 100%;
-    /* perspective: 1000px; */
-    cursor: pointer;
-    background: none;
-    /* position: relative; */
-    /* background-color: black; */
-    border-radius: 10px;
-}
-
-img {
-    height: 10rem;
-    width: 70%;
-}
-
-.movies-header {
-    display: flex;
-    justify-content: center;
-}
-
-.movies-page {
-    display: flex;
-    flex-direction: column;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-
-.card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-}
-
-.movie-card.flipped .card-inner {
-    transform: rotateY(180deg);
-}
-
-.card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    background: linear-gradient(rgb(219, 175, 44),rgb(131, 104, 25));
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    /* padding: 1rem; */
-}
-
-.card-back {
-    transform: rotateY(180deg);
-}
-
-.card-front {
-    text-align: center;
-}
-
-.genre-btn-container button.selected {
-    background: #cfab47;
-    color: #fff;
-    border: 2px solid #4a3f0b;
-    font-weight: bold;
-    box-shadow: 0 0 8px #cfab47;
-    transform: scale(1.08);
+  height: 20rem;
+  width: 100%;
+  max-width: 100%;
+  /* perspective: 1000px; */
+  cursor: pointer;
+  background: none;
+  /* position: relative; */
+  border-radius: 10px;
 }
 
 .clear-btn {
@@ -127,7 +93,5 @@ img {
   .movie-card {
     height: 16rem;
   }
-  .card-front img {
-    height: 50%;
-  }
 }
+

@@ -2,7 +2,7 @@
 const songImage = (num, ext = 'jpg') => {
     // Some images have different extensions
     const extMap = {
-        11: 'png', 14: 'png', 15: 'png', 16: 'png', 20: 'png', 21: 'png'
+        11: 'png', 14: 'png', 15: 'png', 16: 'png', 20: 'png'
     };
     const realExt = extMap[num] || ext;
     return new URL(`../assets/song${num}.${realExt}`, import.meta.url).href;

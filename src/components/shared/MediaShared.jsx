@@ -1,3 +1,12 @@
+import { movies } from "../../data/movies";
+import { books } from "../../data/books";
+import { shows } from "../../data/shows";
+import { songs } from "../../data/songs";
+import "../movies/Movies.css";
+import "../shared/MediaShared.css";
+import { genres1 } from "../../data/genres";
+import Rating from "@mui/material/Rating";
+
 import { useRef, useState, useEffect } from "react";
 
 const FilterBar = ({

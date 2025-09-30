@@ -3,6 +3,7 @@
 - like, dislike
 - göra så att medierna kan sorteras i betyg fallande, betyg stigande, alfabetisk ordning, author, artist, stoppa in filtreringen i filterbar också
 - showmore showless när utan genre, endless scroll när med genre
+- api
 
 gemensam css fil
 

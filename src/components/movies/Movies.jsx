@@ -23,7 +23,7 @@ function filterMovies(movies, selectedGenres, searchTerm) {
   return filtered;
 }
 
-const MOVIES_PER_PAGE = 12;
+const MOVIES_PER_PAGE = 9;
 
 const sortOptions = [
   { value: "alphabetical", label: "Alphabetical (A-Z)" },
@@ -109,6 +109,25 @@ const Movies = () => {
           </div>
         ))}
       </div>
+      {/* Show More/Less buttons below the card grid */}
+      {!selectedGenres.length && filteredMovies.length > MOVIES_PER_PAGE && (
+        <div style={{ textAlign: "center", margin: "24px 0" }}>
+          {visibleCount < filteredMovies.length && (
+            <button className="show-more-btn" onClick={() => setVisibleCount((prev) => prev + MOVIES_PER_PAGE)}>
+              Show More
+            </button>
+          )}
+          {visibleCount > MOVIES_PER_PAGE && (
+            <button
+              className="show-more-btn"
+              style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
+              onClick={() => setVisibleCount((prev) => Math.max(MOVIES_PER_PAGE, prev - MOVIES_PER_PAGE))}
+            >
+              Show Less
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

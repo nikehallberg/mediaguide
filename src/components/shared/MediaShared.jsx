@@ -1,10 +1,6 @@
-import { movies } from "../../data/movies";
-import { books } from "../../data/books";
-import { shows } from "../../data/shows";
-import { songs } from "../../data/songs";
+
 import "../shared/MediaShared.css";
-import { genres1 } from "../../data/genres";
-import Rating from "@mui/material/Rating";
+
 
 
 import { useRef, useState, useEffect } from "react";
@@ -160,25 +156,6 @@ const FilterBar = ({
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
-        </div>
-      )}
-      {/* Show More/Less buttons only if not infinite scroll and enough items */}
-      {!infiniteScroll && totalCount > perPage && (
-        <div style={{ textAlign: "center", margin: "24px 0" }}>
-          {visibleCount < totalCount && (
-            <button className="show-more-btn" onClick={handleShowMore}>
-              Show More
-            </button>
-          )}
-          {visibleCount > perPage && (
-            <button
-              className="show-more-btn"
-              style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
-              onClick={handleShowLess}
-            >
-              Show Less
-            </button>
-          )}
         </div>
       )}
     </div>

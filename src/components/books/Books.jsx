@@ -1,5 +1,5 @@
 import "./Books.css";
-// import "../shared/MediaShared.css"
+import "../shared/MediaShared.css"
 
 
 // Import styles and dependencies
@@ -106,6 +106,25 @@ const Books = () => {
           </div>
         ))}
       </div>
+      {/* Show More/Less buttons below the card grid */}
+      {!selectedGenres.length && filteredBooks.length > BOOKS_PER_PAGE && (
+        <div style={{ textAlign: "center", margin: "24px 0" }}>
+          {visibleCount < filteredBooks.length && (
+            <button className="show-more-btn" onClick={() => setVisibleCount((prev) => prev + BOOKS_PER_PAGE)}>
+              Show More
+            </button>
+          )}
+          {visibleCount > BOOKS_PER_PAGE && (
+            <button
+              className="show-more-btn"
+              style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
+              onClick={() => setVisibleCount((prev) => Math.max(BOOKS_PER_PAGE, prev - BOOKS_PER_PAGE))}
+            >
+              Show Less
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

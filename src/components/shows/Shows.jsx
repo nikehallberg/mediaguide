@@ -103,6 +103,25 @@ const Shows = () => {
           </div>
         ))}
       </div>
+      {/* Show More/Less buttons below the card grid */}
+      {!selectedGenres.length && filteredShows.length > SHOWS_PER_PAGE && (
+        <div style={{ textAlign: "center", margin: "24px 0" }}>
+          {visibleCount < filteredShows.length && (
+            <button className="show-more-btn" onClick={() => setVisibleCount((prev) => prev + SHOWS_PER_PAGE)}>
+              Show More
+            </button>
+          )}
+          {visibleCount > SHOWS_PER_PAGE && (
+            <button
+              className="show-more-btn"
+              style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
+              onClick={() => setVisibleCount((prev) => Math.max(SHOWS_PER_PAGE, prev - SHOWS_PER_PAGE))}
+            >
+              Show Less
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

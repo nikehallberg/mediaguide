@@ -2,7 +2,6 @@ import { movies } from "../../data/movies";
 import { books } from "../../data/books";
 import { shows } from "../../data/shows";
 import { songs } from "../../data/songs";
-import "../movies/Movies.css";
 import "../shared/MediaShared.css";
 import { genres1 } from "../../data/genres";
 import Rating from "@mui/material/Rating";
@@ -10,6 +9,7 @@ import Rating from "@mui/material/Rating";
 
 import { useRef, useState, useEffect } from "react";
 
+// Add sort dropdown logic and props
 const FilterBar = ({
   genres = [],
   searchTerm,
@@ -24,6 +24,9 @@ const FilterBar = ({
   infiniteScroll = false,
   searchPlaceholder = "Search...",
   inputClass = "",
+  sortOption = "",
+  setSortOption,
+  sortOptions = [],
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -143,6 +146,22 @@ const FilterBar = ({
           </div>
         )}
       </div>
+      {/* Sort dropdown if options provided */}
+      {sortOptions.length > 0 && setSortOption && (
+        <div className="sort-dropdown" style={{ minWidth: 180 }}>
+          <select
+            value={sortOption}
+            onChange={e => setSortOption(e.target.value)}
+            className={inputClass}
+            style={{ minWidth: 180 }}
+          >
+            <option value="">Sort by...</option>
+            {sortOptions.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
+      )}
       {/* Show More/Less buttons only if not infinite scroll and enough items */}
       {!infiniteScroll && totalCount > perPage && (
         <div style={{ textAlign: "center", margin: "24px 0" }}>

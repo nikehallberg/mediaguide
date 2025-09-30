@@ -1,10 +1,10 @@
+
 .movies-container, .shows-container, .songs-container, .books-container  {
     margin: 0 7rem;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 3rem;
 }
-
 .movie-card, .show-card, .song-card, .book-card {
     height: 20rem;
     width: 100%; 
@@ -17,24 +17,20 @@
     /* background-color: black; */
     border-radius: 10px;
 }
-
 img {
     height: 10rem;
     width: 70%;
 }
-
 .movies-header, .show-header, .song-header, .book-header {
     display: flex;
     justify-content: center;
 }
-
 .movies-page, .show-page, .song-page, .book-page {
   display: flex;
   flex-direction: column;
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
-
 .card-inner {
     position: relative;
     width: 100%;
@@ -42,11 +38,9 @@ img {
     transition: transform 0.6s;
     transform-style: preserve-3d;
 }
-
 .movie-card.flipped .card-inner, .show-card.flipped .card-inner, .song-card.flipped .card-inner, .book-card.flipped .card-inner{
     transform: rotateY(180deg);
 }
-
 .card-front, .card-back {
     position: absolute;
     width: 100%;
@@ -61,19 +55,15 @@ img {
     align-items: center;
     /* padding: 1rem; */
 }
-
 .card-front img {
     height: 70%;
 }
-
 .card-back {
     transform: rotateY(180deg);
 }
-
 .card-front {
     text-align: center;
 }
-
 .genre-btn-container {
     display: flex;
     flex-wrap: wrap;
@@ -81,8 +71,12 @@ img {
     justify-content: center;
     margin-bottom: 2rem;
     margin-top: 2rem;
+    padding: 0.5rem 0;
+    width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
-
 .genre-btn-container button {
     background: linear-gradient(90deg, #f7c948, #f4e285);
     color: #4a3f0b;
@@ -93,25 +87,25 @@ img {
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    transition: background 0.2s, transform 0.2s;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    outline: none;
+    min-width: 100px;
+    margin: 0.25rem 0;
 }
-
+.genre-btn-container button.active {
+    background: linear-gradient(90deg, #f4e285, #f7c948);
+    color: #2d2300;
+    box-shadow: 0 4px 12px rgba(219,175,44,0.18);
+    transform: scale(1.08);
+    font-weight: 700;
+}
 .genre-btn-container button:hover,
 .genre-btn-container button:focus {
     background: linear-gradient(90deg, #f4e285, #f7c948);
     transform: translateY(-2px) scale(1.05);
     outline: none;
+    box-shadow: 0 4px 12px rgba(219,175,44,0.18);
 }
-
-.movie-search-input, .show-search-input, .song-search-input, .book-search-input {
-  padding: 0.5rem 1rem;
-  border: 2px solid #f7c948;
-  font-size: 1rem;
-  width: 100%;
-  max-width: 220px;
-  border-radius: 20px;
-}
-
 .show-more-btn {
   background: linear-gradient(90deg, #f7c948, #f4e285);
   color: #4a3f0b;
@@ -125,15 +119,114 @@ img {
   margin-top: 1rem;
   transition: background 0.2s, transform 0.2s;
 }
-
 .show-more-btn:hover,
 .show-more-btn:focus {
   background: linear-gradient(90deg, #f4e285, #f7c948);
   transform: translateY(-2px) scale(1.05);
   outline: none;
 }
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+.media-search-container {
+  padding: 0.5rem 1rem;
+  border: 2px solid #f7c948;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 220px;
+  border-radius: 20px;
+}
 
-
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropbtn {
+  background: linear-gradient(90deg, #f7c948, #f4e285);
+  color: #4a3f0b;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: background 0.2s, transform 0.2s;
+  margin-right: 0.5rem;
+}
+.dropbtn:hover,
+.dropbtn:focus {
+  background: linear-gradient(90deg, #f4e285, #f7c948);
+  transform: translateY(-2px) scale(1.05);
+  outline: none;
+}
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background: #fffbe6;
+  min-width: 220px;
+  box-shadow: 0 4px 16px rgba(219,175,44,0.18);
+  border-radius: 16px;
+  padding: 1rem;
+  z-index: 100;
+  top: 110%;
+  left: 0;
+}
+.dropdown-genre-btn {
+  background: linear-gradient(90deg, #f7c948, #f4e285);
+  color: #4a3f0b;
+  border: none;
+  border-radius: 20px;
+  padding: 0.4rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  transition: background 0.2s, transform 0.2s;
+}
+.dropdown-genre-btn.selected {
+  background: linear-gradient(90deg, #f4e285, #f7c948);
+  color: #2d2300;
+  font-weight: 700;
+  transform: scale(1.08);
+}
+.dropdown-genre-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.dropdown-genre-btn:hover,
+.dropdown-genre-btn:focus {
+  background: linear-gradient(90deg, #f4e285, #f7c948);
+  transform: translateY(-2px) scale(1.05);
+  outline: none;
+}
+.dropdown-clear-btn {
+  background: #fffbe6;
+  color: #b00;
+  border: none;
+  border-radius: 20px;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  transition: background 0.2s, color 0.2s;
+}
+.dropdown-clear-btn:hover,
+.dropdown-clear-btn:focus {
+  background: #f7c948;
+  color: #4a3f0b;
+}
+.sort-dropdown {
+  min-width: 180px;
+}
 @media (max-width: 900px) {
   .movies-container, .shows-container, .song-container, .book-container {
     margin: 0 2rem;
@@ -141,7 +234,6 @@ img {
     gap: 2rem;
   }
 }
-
 @media (max-width: 600px) {
   .movies-container, .shows-container, .songs-container, .books-container {
     margin: 0 0.5rem;
@@ -153,5 +245,25 @@ img {
   }
   .card-front img {
     height: 50%;
+  }
+  .genre-btn-container {
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    max-width: 100%;
+  }
+  .genre-btn-container button {
+    font-size: 0.95rem;
+    padding: 0.4rem 1rem;
+    min-width: 80px;
+  }
+  .filter-bar {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  .dropdown-content {
+    min-width: 100%;
+    left: 0;
+    top: 110%;
   }
 }

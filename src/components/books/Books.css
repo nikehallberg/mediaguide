@@ -74,16 +74,16 @@ img {
     text-align: center;
 }
 
-.genre-btn-container {
+/* .genre-btn-container {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
     justify-content: center;
     margin-bottom: 2rem;
     margin-top: 2rem;
-}
+} */
 
-.genre-btn-container button {
+/* .genre-btn-container button {
     background: linear-gradient(90deg, #f7c948, #f4e285);
     color: #4a3f0b;
     border: none;
@@ -94,25 +94,25 @@ img {
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     transition: background 0.2s, transform 0.2s;
-}
+} */
 
-.genre-btn-container button:hover,
+/* .genre-btn-container button:hover,
 .genre-btn-container button:focus {
     background: linear-gradient(90deg, #f4e285, #f7c948);
     transform: translateY(-2px) scale(1.05);
     outline: none;
-}
+} */
 
-.book-search-input {
+/* .book-search-input {
   padding: 0.5rem 1rem;
   border: 2px solid #f7c948;
   font-size: 1rem;
   width: 100%;
   max-width: 220px;
   border-radius: 20px;
-}
+} */
 
-.show-more-btn {
+/* .show-more-btn {
   background: linear-gradient(90deg, #f7c948, #f4e285);
   color: #4a3f0b;
   border: none;
@@ -124,14 +124,14 @@ img {
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   margin-top: 1rem;
   transition: background 0.2s, transform 0.2s;
-}
+} */
 
-.show-more-btn:hover,
+/* .show-more-btn:hover,
 .show-more-btn:focus {
   background: linear-gradient(90deg, #f4e285, #f7c948);
   transform: translateY(-2px) scale(1.05);
   outline: none;
-}
+} */
 
 
 @media (max-width: 900px) {

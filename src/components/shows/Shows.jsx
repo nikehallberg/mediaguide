@@ -1,4 +1,7 @@
 import "./Shows.css";
+import "../shared/MediaShared.css"
+
+
 import { shows } from "../../data/shows";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { genres1 } from "../../data/genres";

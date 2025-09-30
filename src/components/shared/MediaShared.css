@@ -1,10 +1,50 @@
-/* Shared card styles */
+.movies-container, .shows-container, .songs-container, .books-container  {
+    margin: 0 7rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+}
+
+.movie-card, .show-card, .song-card, .book-card {
+    height: 20rem;
+    width: 100%; 
+    max-width: 100%;
+    /* perspective: 1000px; */
+    cursor: pointer;
+    background: none;
+    /* position: relative; */
+    padding: rem;
+    /* background-color: black; */
+    border-radius: 10px;
+}
+
+img {
+    height: 10rem;
+    width: 70%;
+}
+
+.movies-header, .show-header, .song-header, .book-header {
+    display: flex;
+    justify-content: center;
+}
+
+.movies-page, .show-page, .song-page, .book-page {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .card-inner {
     position: relative;
     width: 100%;
     height: 100%;
     transition: transform 0.6s;
     transform-style: preserve-3d;
+}
+
+.movie-card.flipped .card-inner, .show-card.flipped .card-inner, .song-card.flipped .card-inner, .book-card.flipped .card-inner{
+    transform: rotateY(180deg);
 }
 
 .card-front, .card-back {
@@ -19,6 +59,11 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    /* padding: 1rem; */
+}
+
+.card-front img {
+    height: 70%;
 }
 
 .card-back {
@@ -29,11 +74,36 @@
     text-align: center;
 }
 
-/* Search input (shared) */
-.movie-search-input,
-.book-search-input,
-.song-search-input,
-.show-search-input {
+.genre-btn-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+.genre-btn-container button {
+    background: linear-gradient(90deg, #f7c948, #f4e285);
+    color: #4a3f0b;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.genre-btn-container button:hover,
+.genre-btn-container button:focus {
+    background: linear-gradient(90deg, #f4e285, #f7c948);
+    transform: translateY(-2px) scale(1.05);
+    outline: none;
+}
+
+.movie-search-input, .show-search-input, .song-search-input, .book-search-input {
   padding: 0.5rem 1rem;
   border: 2px solid #f7c948;
   font-size: 1rem;
@@ -42,17 +112,6 @@
   border-radius: 20px;
 }
 
-.card-front img,
-.movie-card img,
-.show-card img {
-  width: 100%;
-  height: 70%;
-  object-fit: cover;
-  border-radius: 10px;
-  display: block;
-}
-
-/* Show More/Less button (shared) */
 .show-more-btn {
   background: linear-gradient(90deg, #f7c948, #f4e285);
   color: #4a3f0b;
@@ -66,9 +125,33 @@
   margin-top: 1rem;
   transition: background 0.2s, transform 0.2s;
 }
+
 .show-more-btn:hover,
 .show-more-btn:focus {
   background: linear-gradient(90deg, #f4e285, #f7c948);
   transform: translateY(-2px) scale(1.05);
   outline: none;
+}
+
+
+@media (max-width: 900px) {
+  .movies-container, .shows-container, .song-container, .book-container {
+    margin: 0 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .movies-container, .shows-container, .songs-container, .books-container {
+    margin: 0 0.5rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .movie-card, .shows-card, .songs-card, .book-card {
+    height: 16rem;
+  }
+  .card-front img {
+    height: 50%;
+  }
 }

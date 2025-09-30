@@ -1,4 +1,6 @@
 import "./Books.css";
+import "../shared/MediaShared.css"
+
 
 // Import styles and dependencies
 import { books } from "../../data/books";

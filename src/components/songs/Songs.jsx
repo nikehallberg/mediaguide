@@ -1,4 +1,6 @@
 import "./Songs.css";
+import "../shared/MediaShared.css"
+
 import { songs } from "../../data/songs";
 import { genres2 } from "../../data/genres";
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -14,8 +16,6 @@ function getGenres(selectedGenres) {
     );
   }
 }
-
-
 
 const SONGS_PER_PAGE = 9;
 

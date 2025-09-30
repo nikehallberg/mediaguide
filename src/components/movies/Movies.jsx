@@ -1,10 +1,10 @@
-
 import "./Movies.css";
 import { movies } from "../../data/movies";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from "@mui/material/Rating";
 
+const MOVIES_PER_PAGE = 9;
 
 // Filters movies by selected genres
 function getGenres(selectedGenres) {
@@ -16,9 +16,6 @@ function getGenres(selectedGenres) {
     );
   }
 }
-
-
-const MOVIES_PER_PAGE = 9;
 
 const Movies = () => {
   const [flipped, setFlipped] = useState({});
@@ -33,7 +30,7 @@ const Movies = () => {
   // Filter movies by selected genres
   const filteredByGenre = getGenres(selectedGenres);
   // Further filter movies by search input (case-insensitive)
-  let filteredMovies = filteredByGenre.filter(movie =>
+  let filteredMovies = filteredByGenre.filter((movie) =>
     movie.title.toLowerCase().includes(movieSearch.toLowerCase())
   );
 
@@ -56,7 +53,9 @@ const Movies = () => {
 
   // Sort movies based on sortOption
   if (sortOption === "alphabetical") {
-    filteredMovies = [...filteredMovies].sort((a, b) => a.title.localeCompare(b.title));
+    filteredMovies = [...filteredMovies].sort((a, b) =>
+      a.title.localeCompare(b.title)
+    );
   } else if (sortOption === "rating-asc") {
     filteredMovies = [...filteredMovies].sort((a, b) => a.review - b.review);
   } else if (sortOption === "rating-desc") {

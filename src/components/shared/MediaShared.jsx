@@ -21,6 +21,8 @@ const FilterBar = ({
   totalCount,
   perPage = 12,
   infiniteScroll = false,
+  searchPlaceholder = "Search...",
+  inputClass = "",
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -80,13 +82,13 @@ const FilterBar = ({
 
   return (
     <div className='filter-bar'>
-      <div className='movie-search-container'>
+      <div className='media-search-container'>
         <input
           type='text'
-          placeholder='Search movie name...'
+          placeholder={searchPlaceholder}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className='movie-search-input'
+          className={inputClass}
         />
       </div>
       <div className='dropdown' ref={dropdownRef}>

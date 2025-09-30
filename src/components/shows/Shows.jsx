@@ -15,8 +15,6 @@ function getGenres(selectedGenres) {
   }
 }
 
-
-
 const SHOWS_PER_PAGE = 9;
 
 const Shows = () => {

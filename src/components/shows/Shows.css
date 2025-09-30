@@ -1,11 +1,3 @@
-
-.shows-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
 .shows-container {
     margin: 0 7rem;
     display: grid;
@@ -14,16 +6,65 @@
 }
 
 .show-card {
-  height: 20rem;
-  width: 100%;
-  max-width: 100%;
-  /* perspective: 1000px; */
-  cursor: pointer;
-  background: none;
-  /* position: relative; */
-  border-radius: 10px;
+    height: 20rem;
+    width: 100%; 
+    max-width: 100%;
+    /* perspective: 1000px; */
+    cursor: pointer;
+    background: none;
+    /* position: relative; */
+    padding: rem;
+    /* background-color: black; */
+    border-radius: 10px;
 }
 
+img {
+    height: 10rem;
+    width: 70%;
+}
+
+.shows-header {
+    display: flex;
+    justify-content: center;
+}
+
+.shows-page {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.show-card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    background: linear-gradient(rgb(219, 175, 44),rgb(131, 104, 25));
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    /* padding: 1rem; */
+}
+
+.card-front img {
+    height: 70%;
+}
 
 .card-back {
     transform: rotateY(180deg);
@@ -33,22 +74,33 @@
     text-align: center;
 }
 
-
-.show-search-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
+.genre-btn-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
 }
 
+.genre-btn-container button {
+    background: linear-gradient(90deg, #f7c948, #f4e285);
+    color: #4a3f0b;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, transform 0.2s;
+}
 
-.show-search-filter-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  margin: 1.5rem 0 2rem 0;
-  flex-wrap: wrap;
+.genre-btn-container button:hover,
+.genre-btn-container button:focus {
+    background: linear-gradient(90deg, #f4e285, #f7c948);
+    transform: translateY(-2px) scale(1.05);
+    outline: none;
 }
 
 .show-search-input {
@@ -60,89 +112,27 @@
   border-radius: 20px;
 }
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-  margin: 0;
-  margin-left: 0.5rem;
-  margin-bottom: 0;
-  vertical-align: middle;
-}
-
-/* Style the dropdown button */
-.dropbtn {
-  background-color: #947b26;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
+.show-more-btn {
+  background: linear-gradient(90deg, #f7c948, #f4e285);
+  color: #4a3f0b;
   border: none;
+  border-radius: 20px;
+  padding: 0.7rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin-top: 1rem;
+  transition: background 0.2s, transform 0.2s;
 }
 
-/* Change background color of dropdown button on hover */
-.dropdown:hover .dropbtn,
-.dropbtn:focus {
-  background-color: #947b26;
+.show-more-btn:hover,
+.show-more-btn:focus {
+  background: linear-gradient(90deg, #f4e285, #f7c948);
+  transform: translateY(-2px) scale(1.05);
+  outline: none;
 }
 
-/* Dropdown content */
-.dropdown-content {
-  display: block; /* Keep block for React control, not :hover */
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 200px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-  border-radius: 4px;
-  margin-top: 4px;
-  padding: 8px 0;
-}
-
-/* Links inside dropdown content */
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #f1f1f1;
-}
-
-/* Genre button styles inside dropdown */
-.dropdown-genre-btn {
-  background: none;
-  border: none;
-  color: #333;
-  padding: 8px 16px;
-  width: 50%;
-  text-align: left;
-  cursor: pointer;
-  font-size: 15px;
-  transition: background 0.2s;
-}
-
-.dropdown-genre-btn.selected,
-.dropdown-genre-btn:hover {
-  background-color: #f5e8c9;
-  color: #67601c;
-}
-
-.dropdown-clear-btn {
-  background: #f44336;
-  color: #fff;
-  border: none;
-  width: 100%;
-  padding: 8px 16px;
-  margin-top: 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 15px;
-}
 
 @media (max-width: 900px) {
   .shows-container {
@@ -160,5 +150,8 @@
   }
   .show-card {
     height: 16rem;
+  }
+  .card-front img {
+    height: 50%;
   }
 }

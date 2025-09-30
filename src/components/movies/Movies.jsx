@@ -1,10 +1,11 @@
 import "./Movies.css";
+import "../shared/MediaShared.css"
+
 import { movies } from "../../data/movies";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from "@mui/material/Rating";
 
-const MOVIES_PER_PAGE = 9;
 
 // Filters movies by selected genres
 function getGenres(selectedGenres) {
@@ -16,6 +17,8 @@ function getGenres(selectedGenres) {
     );
   }
 }
+
+const MOVIES_PER_PAGE = 9;
 
 const Movies = () => {
   const [flipped, setFlipped] = useState({});

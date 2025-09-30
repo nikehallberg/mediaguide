@@ -7,6 +7,7 @@ import "../shared/MediaShared.css";
 import { genres1 } from "../../data/genres";
 import Rating from "@mui/material/Rating";
 
+
 import { useRef, useState, useEffect } from "react";
 
 const FilterBar = ({

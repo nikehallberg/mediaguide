@@ -5,7 +5,7 @@ import { songs } from "../../data/songs";
 import { genres2 } from "../../data/genres";
 import { useState, useEffect } from "react";
 import Rating from '@mui/material/Rating';
-import FilterBar from "../shared/MediaShared";
+import FilterBar, { LikeDislike, scrollToContainer } from "../shared/MediaShared";
 
 // Filters songs by selected genres
 function filterSongs(songs, selectedGenres, searchTerm) {
@@ -58,6 +58,10 @@ const Songs = () => {
   useEffect(() => {
     setFlipped({});
     setVisibleCount(SONGS_PER_PAGE);
+    // Auto scroll to songs container when a genre is selected
+    if (selectedGenres.length > 0) {
+      scrollToContainer('songs-container');
+    }
   }, [selectedGenres, songSearch, sortOption]);
 
   return (
@@ -97,6 +101,7 @@ const Songs = () => {
               <div className="card-back">
                 <p>{song.about}</p>
                 <Rating name="half-rating-read" value={song.review} precision={0.5} readOnly />
+                <LikeDislike id={song.title} />
               </div> 
             </div>
           </div>

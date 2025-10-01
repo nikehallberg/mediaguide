@@ -6,7 +6,7 @@ import { shows } from "../../data/shows";
 import { useState, useEffect } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from '@mui/material/Rating';
-import FilterBar from "../shared/MediaShared";
+import FilterBar, { LikeDislike, scrollToContainer } from "../shared/MediaShared";
 
 // Filters shows by selected genres
 function filterShows(shows, selectedGenres, searchTerm) {
@@ -59,6 +59,10 @@ const Shows = () => {
   useEffect(() => {
     setFlipped({});
     setVisibleCount(SHOWS_PER_PAGE);
+    // Auto scroll to shows container when a genre is selected
+    if (selectedGenres.length > 0) {
+      scrollToContainer('shows-container');
+    }
   }, [selectedGenres, showSearch, sortOption]);
 
   return (
@@ -98,6 +102,7 @@ const Shows = () => {
               <div className="card-back">
                 <p>{show.about}</p>
                 <Rating name="half-rating-read" value={show.review} precision={0.5} readOnly />
+                <LikeDislike id={show.title} />
               </div> 
             </div>
           </div>

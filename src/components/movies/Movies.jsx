@@ -5,7 +5,7 @@ import { movies } from "../../data/movies";
 import { useState, useEffect } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from "@mui/material/Rating";
-import FilterBar from "../shared/MediaShared";
+import FilterBar, { LikeDislike, scrollToContainer } from "../shared/MediaShared";
 
 // Utility: Filter movies by selected genres and search term
 function filterMovies(movies, selectedGenres, searchTerm) {
@@ -60,6 +60,10 @@ const Movies = () => {
   useEffect(() => {
     setVisibleCount(MOVIES_PER_PAGE);
     setFlipped({});
+    // Auto scroll to movies container when a genre is selected
+    if (selectedGenres.length > 0) {
+      scrollToContainer('movies-container');
+    }
   }, [selectedGenres, movieSearch, sortOption]);
 
   return (
@@ -104,6 +108,7 @@ const Movies = () => {
                   precision={0.5}
                   readOnly
                 />
+                <LikeDislike id={movie.title} />
               </div>
             </div>
           </div>

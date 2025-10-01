@@ -22,6 +22,7 @@ import book20 from '../assets/book20.jpg';
 export const books = [
     {
         title: 'Coraline',
+        author: 'Neil Gaiman',
         image: book1,
         genre:'Fantasy, Horror',
         about: 'Coraline is bored and disappointed with her parents. One day she finds a secret door and on the other side he discovers a better version of his life! But the new world turns out to be not so perfect.',
@@ -30,6 +31,7 @@ export const books = [
     },
     {
         title: 'The Shining',
+        author: 'Stephen King',
         image: book2,
         genre: 'Horror, Mystery',
         about: "Writer Jack takes his son Danny and wife Wendy to work at a remote hotel. However, Jack suffers from writer's block and the longer the family is at the hotel, the more he breaks down.",
@@ -38,6 +40,7 @@ export const books = [
     },
     {
         title: 'You',
+        author: 'Caroline Kepnes',
         image: book3,
         genre: 'Thriller, Romance',
         about: 'A charming and seemingly normal bookstore manager becomes obsessed with his girlfriends and often resorts to extreme measures to control their lives and eliminate any threat to the relationship.',
@@ -46,6 +49,7 @@ export const books = [
     },
     {
         title: 'It',
+        author: 'Stephen King',
         image: book4,
         genre: 'Horror, Thriller, Fantasy',
         about: 'When children mysteriously disappear from the small town of Derry, seven friends begin to investigate, facing their own inner demons in the form of an evil clown named Pennywise.',
@@ -54,6 +58,7 @@ export const books = [
     },
     {
         title: 'One Of Us Is Lying',
+        author: 'Karen M. McManus',
         image: book5,
         genre: 'Young Adult, Mystery',
         about: 'Five students are in detention when one of the students suddenly dies while the teacher is out. After claims that this was no accident, the four remaining students in detention become suspects.',
@@ -62,6 +67,7 @@ export const books = [
     },
     {
         title: "Harry Potter and the Sorcerer's Stone",
+        author: 'J.K. Rowling',
         image: book6,
         genre: 'Fantasy, Fiction, Young Adult',
         about: "Harry Potter, an orphaned boy with magical talents, begins studies at Hogwarts, a school for wizardry. Harry meets Hermione and Ron and unravels the mystery surrounding his parents' deaths.",
@@ -70,6 +76,7 @@ export const books = [
     },
     {
         title: 'Harry Potter and the Chamber of Secrets',
+        author: 'J.K. Rowling',
         image: book7,
         genre: 'Fantasy, Fiction, Young Adult',
         about: 'The summer holidays are finally over and the orphaned little boy Harry Potter returns to Hogwarts School of Wizardry, where another year of adventure and witchcraft awaits.',
@@ -78,6 +85,7 @@ export const books = [
     },
     {
         title: 'Harry Potter and the Prisoner of Azkaban',
+        author: 'J.K. Rowling',
         image: book8,
         genre: 'Fantasy, Fiction, Young Adult',
         about: "It's Harry Potter's third year at Hogwarts and he and his friends are confronted by Sirius Black, an escaped prisoner with strong ties to Harry's past.",
@@ -86,6 +94,7 @@ export const books = [
     },
     {
         title: 'Harry Potter and the Goblet of Fire',
+        author: 'J.K. Rowling',
         image: book9,
         genre: 'Fantasy, Fiction, Young Adult',
         about: "In Harry's fourth year at Hogwarts, the school prepares a match between the three leading schools. But when the Goblet of Fire has chosen three players, it also chooses a fourth: Harry.",
@@ -94,6 +103,7 @@ export const books = [
     },
     {
         title: 'Harry Potter and the Order of the Phoenix',
+        author: 'J.K. Rowling',
         image: book10,
         genre: 'Fantasy, Fiction, Young Adult',
         about: 'The new Defense Against the Dark Arts teacher has some bureaucratic methods that leave Hogwarts weak against an evil conspiracy. Harry then begins teaching a group of students how to defend themselves.',
@@ -102,6 +112,7 @@ export const books = [
     },
     {
         title: 'Harry Potter and the Half-Blood Prince',
+        author: 'J.K. Rowling',
         image: book11,
         genre: 'Fantasy, Fiction, Young Adult',
         about: 'Dumbledore does his best to prepare Harry for his final battle against Voldemort, while the Death Eaters wreak havoc in both the Muggle and wizarding worlds -- and a great tragedy is about to occur.',
@@ -110,6 +121,7 @@ export const books = [
     },
     {
         title: 'Harry Potter and the Deathly Hallows',
+        author: 'J.K. Rowling',
         image: book12,
         genre: 'Fantasy, Fiction, Young Adult',
         about: 'The evil wizard Voldemort has hidden Horcruxes in secret places and managed to make himself immortal. Harry Potter must find and destroy the Horcruxes to make Voldemort mortal again.',
@@ -118,6 +130,7 @@ export const books = [
     },
     {
         title: 'Harry Potter and the Cursed Child',
+        author: 'J.K. Rowling & Jack Thorne',
         image: book13,
         genre: 'Fantasy, Fiction, Young Adult',
         about: "Follow a resentful Albus Potter and best friend, Scorpius Malfoy, as they try to prevent Cedric Diggory's death but instead create an alternate timeline where Voldemort triumphs",
@@ -126,6 +139,7 @@ export const books = [
     },
     {
         title: 'The Hobbit',
+        author: 'J.R.R. Tolkien',
         image: book14,
         genre: 'Fantasy, Adventure',
         about: "Bilbo Baggins, a hobbit, is swept into an epic quest to reclaim the lost Dwarf Kingdom of Erebor from the fearsome dragon Smaug.",
@@ -134,6 +148,7 @@ export const books = [
     },
     {
         title: 'To Kill a Mockingbird',
+        author: 'Harper Lee',
         image: book15,
         genre: 'Classic, Fiction',
         about: "Scout Finch grows up in the racially charged Depression-era South, learning about justice and empathy as her father defends a black man falsely accused of a crime.",
@@ -142,6 +157,7 @@ export const books = [
     },
     {
         title: '1984',
+        author: 'George Orwell',
         image: book16,
         genre: 'Dystopian, Science Fiction',
         about: "In a totalitarian future society, Winston Smith struggles with oppression, surveillance, and the dangers of independent thought.",
@@ -150,6 +166,7 @@ export const books = [
     },
     {
         title: 'The Great Gatsby',
+        author: 'F. Scott Fitzgerald',
         image: book17,
         genre: 'Classic, Fiction, Romance',
         about: "Nick Carraway narrates the story of Jay Gatsby, a mysterious millionaire obsessed with rekindling his love for Daisy Buchanan.",
@@ -158,6 +175,7 @@ export const books = [
     },
     {
         title: 'The Hunger Games',
+        author: 'Suzanne Collins',
         image: book18,
         genre: 'Dystopian, Young Adult, Adventure',
         about: "Katniss Everdeen volunteers to take her sister's place in a televised fight to the death in a dystopian future.",
@@ -166,6 +184,7 @@ export const books = [
     },
     {
         title: 'Brave New World',
+        author: 'Aldous Huxley',
         image: book19,
         genre: 'Dystopian, Science Fiction, Classic',
         about: "In a futuristic society driven by technology and control, individuality and free will are suppressed for the sake of stability and happiness.",
@@ -174,6 +193,7 @@ export const books = [
     },
     {
         title: 'Pride and Prejudice',
+        author: 'Jane Austen',
         image: book20,
         genre: 'Classic, Romance, Fiction',
         about: "Elizabeth Bennet navigates issues of manners, upbringing, morality, and marriage in the society of early 19th-century England.",

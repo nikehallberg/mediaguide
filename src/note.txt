@@ -1,5 +1,4 @@
 - responsive design
-- like, dislike
 - göra så att medierna kan sorteras author, artist
 - showmore showless när utan genre, endless scroll när med genre
 - api

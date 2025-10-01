@@ -1,9 +1,75 @@
+// Utility: Enable endless scrolling for a container
+export function endlessScroll({ enabled, containerClass, visibleCount, setVisibleCount, totalCount, perPage }) {
+  useEffect(() => {
+    if (!enabled) return;
+    function handleScroll() {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 100
+      ) {
+        setVisibleCount((prev) => {
+          if (prev >= totalCount) return prev;
+          return prev + perPage;
+        });
+      }
+    }
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [enabled, totalCount, perPage, setVisibleCount]);
+}
+// Utility: Smooth scroll to a container by class name
+export function scrollToContainer(className) {
+  setTimeout(() => {
+    const container = document.querySelector(`.${className}`);
+    if (container) {
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 100);
+}
+import { useRef, useEffect, useState } from "react";
+export const LikeDislike = ({ id }) => {
+  const [likes, setLikes] = useState({});
+  const [dislikes, setDislikes] = useState({});
+  const [voted, setVoted] = useState({});
+
+  const handleLike = () => {
+    if (voted[id]) return;
+    setLikes((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+    setVoted((prev) => ({ ...prev, [id]: true }));
+  };
+  const handleDislike = () => {
+    if (voted[id]) return;
+    setDislikes((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+    setVoted((prev) => ({ ...prev, [id]: true }));
+  };
+
+  return (
+    <div className="like-dislike-container" style={{ display: "flex", gap: "1rem", justifyContent: "center", marginTop: "1rem" }}>
+      <button
+        type="button"
+        onClick={e => { e.stopPropagation(); handleLike(); }}
+        disabled={!!voted[id]}
+        style={{ fontSize: "1.2rem", border: "none", background: "#fffbe6", borderRadius: "10px", cursor: !!voted[id] ? "not-allowed" : "pointer", padding: "0.5rem 1rem", opacity: !!voted[id] ? 0.6 : 1 }}
+      >
+        👍 {likes[id] || 0}
+      </button>
+      <button
+        type="button"
+        onClick={e => { e.stopPropagation(); handleDislike(); }}
+        disabled={!!voted[id]}
+        style={{ fontSize: "1.2rem", border: "none", background: "#fffbe6", borderRadius: "10px", cursor: !!voted[id] ? "not-allowed" : "pointer", padding: "0.5rem 1rem", opacity: !!voted[id] ? 0.6 : 1 }}
+      >
+        👎 {dislikes[id] || 0}
+      </button>
+    </div>
+  );
+};
 
 import "../shared/MediaShared.css";
 
 
 
-import { useRef, useState, useEffect } from "react";
+
 
 // Add sort dropdown logic and props
 const FilterBar = ({

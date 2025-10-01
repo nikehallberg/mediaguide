@@ -7,7 +7,7 @@ import { books } from "../../data/books";
 import { useState, useEffect } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from '@mui/material/Rating';
-import FilterBar from "../shared/MediaShared";
+import FilterBar, { LikeDislike, scrollToContainer } from "../shared/MediaShared";
 
 // Filters books by selected genres
 function filterBooks(books, selectedGenres, searchTerm) {
@@ -29,6 +29,7 @@ function filterBooks(books, selectedGenres, searchTerm) {
 const BOOKS_PER_PAGE = 9;
 const sortOptions = [
   { value: "alphabetical", label: "Alphabetical (A-Z)" },
+  { value: "author", label: "Author (A-Z)" },
   { value: "rating-asc", label: "Rating (Lowest First)" },
   { value: "rating-desc", label: "Rating (Highest First)" },
 ];
@@ -44,6 +45,8 @@ const Books = () => {
   let filteredBooks = filterBooks(books, selectedGenres, bookSearch);
   if (sortOption === "alphabetical") {
     filteredBooks = [...filteredBooks].sort((a, b) => a.title.localeCompare(b.title));
+  } else if (sortOption === "author") {
+    filteredBooks = [...filteredBooks].sort((a, b) => (a.author || "").localeCompare(b.author || ""));
   } else if (sortOption === "rating-asc") {
     filteredBooks = [...filteredBooks].sort((a, b) => a.review - b.review);
   } else if (sortOption === "rating-desc") {
@@ -62,7 +65,29 @@ const Books = () => {
   useEffect(() => {
     setFlipped({});
     setVisibleCount(BOOKS_PER_PAGE);
+    // Auto scroll to books container when a genre is selected
+    if (selectedGenres.length > 0) {
+      scrollToContainer('books-container');
+    }
   }, [selectedGenres, bookSearch, sortOption]);
+
+  // Endless scroll when a genre is chosen
+  useEffect(() => {
+    if (selectedGenres.length === 0) return;
+    function handleScroll() {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 100
+      ) {
+        setVisibleCount((prev) => {
+          if (prev >= filteredBooks.length) return prev;
+          return prev + BOOKS_PER_PAGE;
+        });
+      }
+    }
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [selectedGenres, filteredBooks.length]);
 
   return (
     <div className="books-page">
@@ -101,6 +126,7 @@ const Books = () => {
               <div className="card-back">
                 <p>{book.about}</p>
                 <Rating name="half-rating-read" value={book.review} precision={0.5} readOnly />
+                <LikeDislike id={book.title} />
               </div>
             </div>
           </div>

@@ -1,13 +1,9 @@
 - responsive design
 - like, dislike
-- göra så att medierna kan sorteras i betyg fallande, betyg stigande, alfabetisk ordning, author, artist, stoppa in filtreringen i filterbar också
+- göra så att medierna kan sorteras author, artist
 - showmore showless när utan genre, endless scroll när med genre
 - api
-- kryss i search bar
-
-gemensam css fil
-
-fixa problem med movies och shows
+- responsiv för telefon, burger menu
 
 längre mål
 1. review input field, thank u message

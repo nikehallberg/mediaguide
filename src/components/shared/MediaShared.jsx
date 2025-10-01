@@ -82,16 +82,36 @@ const FilterBar = ({
 
   return (
     <div className='filter-bar'>
-      <div className='media-search-container'>
-        <input
-          type='text'
-          placeholder={searchPlaceholder}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className={inputClass}
-        />
-      </div>
-      <div className='dropdown' ref={dropdownRef}>
+<div className='media-search-container' style={{ position: "relative" }}>
+  <input
+    type='text'
+    placeholder={searchPlaceholder}
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className={inputClass}
+  />
+  {searchTerm && (
+    <button
+      type="button"
+      onClick={() => setSearchTerm("")}
+      style={{
+        position: "absolute",
+        right: "12px",
+        top: "50%",
+        transform: "translateY(-50%)",
+        background: "none",
+        border: "none",
+        fontSize: "1.2rem",
+        cursor: "pointer",
+        color: "#b48a00"
+      }}
+      aria-label="Clear search"
+    >
+      ×
+    </button>
+  )}
+</div>
+      <div className='dropdown' ref={dropdownRef} style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
         <button
           className='dropbtn'
           onClick={() => setDropdownOpen((open) => !open)}
@@ -99,6 +119,24 @@ const FilterBar = ({
         >
           Filter by Genre
         </button>
+        {selectedGenres.length > 0 && (
+          <button
+            type="button"
+            onClick={clearGenres}
+            style={{
+              marginLeft: '4px',
+              background: 'none',
+              border: 'none',
+              fontSize: '1.2rem',
+              cursor: 'pointer',
+              color: '#b48a00',
+              padding: 0
+            }}
+            aria-label="Clear selected genres"
+          >
+            ×
+          </button>
+        )}
         {dropdownOpen && (
           <div className='dropdown-content'>
             {genres.map((genre) => (

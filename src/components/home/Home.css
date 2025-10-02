@@ -6,7 +6,7 @@
   text-align: center;
   font-size: 1.18rem;
   max-width: 700px;
-  margin: 0.5rem auto 1.5rem auto;
+  margin: 4rem auto 1.5rem auto;
   color: #6d4c00;
   line-height: 1.7;
   background: linear-gradient(90deg, #fffbe6 60%, #ffeabf 100%);
@@ -151,8 +151,8 @@ p {
 
 @media (max-width: 900px) {
   .recent-thumb {
-    width: 90px;
-    height: 120px;
+    width: 140px;
+    height: 190px;
   }
   .carousel-slide span {
     font-size: 1rem;
@@ -195,8 +195,8 @@ p {
     padding: 0.7rem 0.5rem 0.7rem 0.5rem;
   }
   .recent-thumb {
-    width: 70px;
-    height: 90px;
+    width: 120px;
+    height: 160px;
   }
   .carousel-slide span {
     font-size: 0.95rem;

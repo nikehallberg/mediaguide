@@ -8,7 +8,21 @@ import Register from "../register/Register";
 const Navbar = ({ user, onLogout, onLogin }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  // Close burger menu when clicking outside or resizing
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth > 900 && menuOpen) {
+        setMenuOpen(false);
+      }
+    }
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -33,6 +47,29 @@ const Navbar = ({ user, onLogout, onLogin }) => {
         <NavLink to="/">
           <img className="logo" src={Logo} alt="" />
         </NavLink>
+        <div className={`burger-menu${menuOpen ? " open" : ""}`} onClick={() => setMenuOpen((open) => !open)}>
+          <div className={`bar${menuOpen ? " open" : ""}`}></div>
+          <div className={`bar${menuOpen ? " open" : ""}`}></div>
+          <div className={`bar${menuOpen ? " open" : ""}`}></div>
+          {/* Nav links inside burger menu for mobile */}
+          <ul className={menuOpen ? "nav-open" : ""}>
+            <li>
+              <NavLink to="/" onClick={() => setMenuOpen(false)}>Home</NavLink>
+            </li>
+            <li>
+              <NavLink to="/books" onClick={() => setMenuOpen(false)}>Books</NavLink>
+            </li>
+            <li>
+              <NavLink to="/movies" onClick={() => setMenuOpen(false)}>Movies</NavLink>
+            </li>
+            <li>
+              <NavLink to="/shows" onClick={() => setMenuOpen(false)}>Shows</NavLink>
+            </li>
+            <li>
+              <NavLink to="/songs" onClick={() => setMenuOpen(false)}>Songs</NavLink>
+            </li>
+          </ul>
+        </div>
         <div className="auth-links" style={{ position: "relative" }}>
           {user ? (
             <>
@@ -49,6 +86,7 @@ const Navbar = ({ user, onLogout, onLogin }) => {
                 onClick={() => {
                   setShowLogin((v) => !v);
                   setShowRegister(false);
+                  setMenuOpen(false);
                 }}
               >
                 Login
@@ -59,6 +97,7 @@ const Navbar = ({ user, onLogout, onLogin }) => {
                 onClick={() => {
                   setShowRegister((v) => !v);
                   setShowLogin(false);
+                  setMenuOpen(false);
                 }}
               >
                 Register
@@ -77,7 +116,8 @@ const Navbar = ({ user, onLogout, onLogin }) => {
           )}
         </div>
       </div>
-      <ul>
+      {/* Desktop nav links */}
+      <ul className="desktop-nav">
         <li>
           <NavLink to="/">Home</NavLink>
         </li>

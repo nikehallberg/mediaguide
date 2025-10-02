@@ -21,7 +21,8 @@ import song21 from '../assets/song21.jpg';
 
 export const songs = [
     {
-        title: 'Slipping through my fingers - ABBA',
+        title: 'Slipping through my fingers',
+        artist: 'ABBA',
         image: song1,
         genre: 'Pop, Folk Music',
         about: 'From the album "The Visitors"',
@@ -29,48 +30,54 @@ export const songs = [
         dateAdded: "2025-09-01"
     },
     {
-        title: 'Exploration - Bruno Coulais',
-    image: song2,
+        title: 'Exploration',
+        artist: 'Bruno Coulais',
+        image: song2,
         genre: 'Classical, Soundtrack',
         about: 'A song from the movie "Coraline"',
         review: 5,
         dateAdded: "2025-09-01"
     },
     {
-        title: 'You Rock My World - Michael Jackson',
-    image: song4,
-        genre: 'R&B, Pop,',
+        title: 'You Rock My World',
+        artist: 'Michael Jackson',
+        image: song4,
+        genre: 'R&B, Pop',
         about: 'From the album "Invincible"',
         review: 5,
         dateAdded: "2025-09-01"
     },
     {
-        title: 'Merry-Go-Round of Life - Joe Hisashi',
-    image: song5,
+        title: 'Merry-Go-Round of Life',
+        artist: 'Joe Hisashi',
+        image: song5,
         genre: 'Classical, Soundtrack',
         about: 'A song from the movie "Howls Moving Castle"',
         review: 5,
         dateAdded: "2025-09-01"
     },
     {
-        title: 'Bohemian Rhapsody - Queen',
-    image: song6,
+        title: 'Bohemian Rhapsody',
+        artist: 'Queen',
+        image: song6,
         genre: 'Rock, Indie, Pop ',
         about: 'From the album "A Night at the Opera"',
         review: 5,
         dateAdded: "2025-09-01"
     },
     {
-        title: 'Treasure - Bruno Mars',
-    image: song7,
+        title: 'Treasure',
+        artist: 'Bruno Mars',
+        image: song7,
         genre: 'Pop, Soul, Disco',
         about: 'From the album "Unorthodox Jukebox"',
         review: 3,
         dateAdded: "2025-09-01"
     },
     {
-        title: 'Toxic - Britney Spears',
-    image: song8,
+        title: 'Toxic',
+        artist: 'Britney Spears',
+        image: song8,
         genre: 'Pop, Electro',
         about: 'From the album "In the Zone"',
         review: 3.5,
@@ -78,7 +85,8 @@ export const songs = [
     },
     {
         title: 'My Band - D12',
-    image: song9,
+        artist: 'D12',
+        image: song9,
         genre: 'Rap, Pop',
         about: 'From the album "D12 World"',
         review: 4,
@@ -86,95 +94,107 @@ export const songs = [
     },
     {
         title: 'No One Noticed - The Marias',
-    image: song10,
+        artist: 'The Marias',
+        image: song10,
         genre: 'Indie, Electro ',
         about: 'From the album "Submarine"',
         review: 5,
         dateAdded: "2025-09-05"
     },
     {
-        title: 'Blinding Lights - The Weeknd',
-    image: song11,
+        title: 'Blinding Lights',
+        artist: 'The Weeknd',
+        image: song11,
         genre: 'Synthwave, Pop',
         about: 'From the album "After Hours"',
         review: 5,
         dateAdded: "2025-09-15"
     },
     {
-        title: 'Levitating - Dua Lipa',
-    image: song12,
+        title: 'Levitating',
+        artist: 'Dua Lipa',
+        image: song12,
         genre: 'Pop, Disco',
         about: 'From the album "Future Nostalgia"',
         review: 4,
         dateAdded: "2025-09-15"
     },
     {
-        title: 'Watermelon Sugar - Harry Styles',
-    image: song13,
+        title: 'Watermelon Sugar',
+        artist: 'Harry Styles',
+        image: song13,
         genre: 'Pop, Rock',
         about: 'From the album "Fine Line"',
         review: 4.5,
         dateAdded: "2025-09-15"
     },
     {
-        title: 'Dance Monkey - Tones and I',
-    image: song14,
+        title: 'Dance Monkey',
+        artist: 'Tones and I',
+        image: song14,
         genre: 'Pop',
         about: 'From the album "The Kids Are Coming"',
         review: 3.5,
         dateAdded: "2025-09-15"
     },
     {
-        title: 'Bad Guy - Billie Eilish',
-    image: song15,
+        title: 'Bad Guy',
+        artist: 'Billie Eilish',
+        image: song15,
         genre: 'Pop, Electro',
         about: 'From the album "When We All Fall Asleep, Where Do We Go?"',
         review: 4,
         dateAdded: "2025-09-15"
     },
     {
-        title: 'Sunflower - Post Malone & Swae Lee',
-    image: song16,
+        title: 'Sunflower',
+        artist: 'Post Malone & Swae Lee',
+        image: song16,
         genre: 'Hip-Hop, Pop',
         about: 'From the album "Hollywood’s Bleeding"',
         review: 4.5,
         dateAdded: "2025-09-15"
     },
     {
-        title: 'Shallow - Lady Gaga & Bradley Cooper',
-    image: song17,
+        title: 'Shallow',
+        artist: 'Lady Gaga & Bradley Cooper',
+        image: song17,
         genre: 'Pop, Soundtrack',
         about: 'From the movie "A Star Is Born"',
         review: 5,
         dateAdded: "2025-09-15"
     },
     {
-        title: 'Old Town Road - Lil Nas X',
-    image: song18,
+        title: 'Old Town Road',
+        artist: 'Lil Nas X',
+        image: song18,
         genre: 'Country, Hip-Hop',
         about: 'From the album "7 EP"',
         review: 3.5,
         dateAdded: "2025-09-15"
     },
     {
-        title: 'Don’t Start Now - Dua Lipa',
-    image: song19,
+        title: 'Don’t Start Now',
+        artist: 'Dua Lipa',
+        image: song19,
         genre: 'Pop, Disco',
         about: 'From the album "Future Nostalgia"',
         review: 4,
         dateAdded: "2025-09-15"
     },
     {
-        title: 'Peaches - Justin Bieber',
-    image: song20,
+        title: 'Peaches',
+        artist: 'Justin Bieber',
+        image: song20,
         genre: 'R&B, Pop',
         about: 'From the album "Justice"',
         review: 3.5,
         dateAdded: "2025-09-15"
     },
     {
-        title: 'Bobinsky - Bruno Coulais',
-    image: song21,
+        title: 'Bobinsky',
+        artist: 'Bruno Coulais',
+        image: song21,
         genre: 'Classical, Soundtrack',
         about: 'A song from the movie "Coraline"',
         review: 5,

@@ -16,9 +16,13 @@ function filterMovies(movies, selectedGenres, searchTerm) {
     );
   }
   if (searchTerm) {
-    filtered = filtered.filter((movie) =>
-      movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const term = searchTerm.toLowerCase();
+    filtered = filtered.filter((movie) => {
+      // Match title or actor name
+      const titleMatch = movie.title.toLowerCase().includes(term);
+      const actorMatch = (movie.actor || "").toLowerCase().includes(term);
+      return titleMatch || actorMatch;
+    });
   }
   return filtered;
 }
@@ -83,7 +87,7 @@ const Movies = () => {
           sortOption={sortOption}
           setSortOption={setSortOption}
           sortOptions={sortOptions}
-          searchPlaceholder="Search movie name..."
+          searchPlaceholder="Search movie or actor name..."
           inputClass="movie-search-input"
         />
       </div>

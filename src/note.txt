@@ -1,8 +1,9 @@
 - responsive design
-- göra så att medierna kan sorteras author, artist
+- filtrera by author, kunna söka efter author, search by author
 - showmore showless när utan genre, endless scroll när med genre
 - api
 - responsiv för telefon, burger menu
+- integrera med imdb
 
 längre mål
 1. review input field, thank u message

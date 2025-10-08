@@ -89,6 +89,8 @@ const FilterBar = ({
   sortOption = "",
   setSortOption,
   sortOptions = [],
+  searchMode = "title",
+  setSearchMode = () => {},
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -146,37 +148,108 @@ const FilterBar = ({
     setVisibleCount((prev) => Math.max(perPage, prev - perPage));
   };
 
+  const [searchMenuOpen, setSearchMenuOpen] = useState(false);
   return (
     <div className='filter-bar'>
-<div className='media-search-container' style={{ position: "relative" }}>
-  <input
-    type='text'
-    placeholder={searchPlaceholder}
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    className={inputClass}
-  />
-  {searchTerm && (
-    <button
-      type="button"
-      onClick={() => setSearchTerm("")}
-      style={{
-        position: "absolute",
-        right: "12px",
-        top: "50%",
-        transform: "translateY(-50%)",
-        background: "none",
-        border: "none",
-        fontSize: "1.2rem",
-        cursor: "pointer",
-        color: "#b48a00"
-      }}
-      aria-label="Clear search"
-    >
-      ×
-    </button>
-  )}
-</div>
+      <div className='media-search-container' style={{ position: "relative", display: "flex", alignItems: "center" }}>
+        <input
+          type='text'
+          placeholder={searchPlaceholder}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className={inputClass}
+          style={{ flex: 1 }}
+        />
+        {/* Hamburger menu for search mode */}
+        <button
+          type="button"
+          onClick={() => setSearchMenuOpen(open => !open)}
+          style={{
+            position: "absolute",
+            left: "8px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            background: "none",
+            border: "none",
+            fontSize: "1.5rem",
+            cursor: "pointer",
+            color: "#b48a00",
+            zIndex: 2
+          }}
+          aria-label="Search by menu"
+        >
+          <span style={{ fontSize: "1.5rem" }}>&#9776;</span>
+        </button>
+        {searchMenuOpen && (
+          <div style={{
+            position: "absolute",
+            left: "40px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            background: "#fffbe6",
+            border: "1px solid #b48a00",
+            borderRadius: "8px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            zIndex: 10,
+            minWidth: "120px"
+          }}>
+            <button
+              type="button"
+              style={{
+                display: "block",
+                width: "100%",
+                background: "none",
+                border: "none",
+                padding: "8px 16px",
+                textAlign: "left",
+                cursor: "pointer",
+                color: searchMode === "title" ? "#b48a00" : "#282621ff",
+                fontWeight: searchMode === "title" ? "bold" : "normal"
+              }}
+              onClick={() => { setSearchMode("title"); setSearchMenuOpen(false); }}
+            >
+              Book Name
+            </button>
+            <button
+              type="button"
+              style={{
+                display: "block",
+                width: "100%",
+                background: "none",
+                border: "none",
+                padding: "8px 16px",
+                textAlign: "left",
+                cursor: "pointer",
+                color: searchMode === "author" ? "#b48a00" : "#282621ff",
+                fontWeight: searchMode === "author" ? "bold" : "normal"
+              }}
+              onClick={() => { setSearchMode("author"); setSearchMenuOpen(false); }}
+            >
+              Author
+            </button>
+          </div>
+        )}
+        {searchTerm && (
+          <button
+            type="button"
+            onClick={() => setSearchTerm("")}
+            style={{
+              position: "absolute",
+              right: "12px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "none",
+              border: "none",
+              fontSize: "1.2rem",
+              cursor: "pointer",
+              color: "#b48a00"
+            }}
+            aria-label="Clear search"
+          >
+            ×
+          </button>
+        )}
+      </div>
       <div className='dropdown' ref={dropdownRef} style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
         <button
           className='dropbtn'

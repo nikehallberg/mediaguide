@@ -10,7 +10,7 @@ import Rating from '@mui/material/Rating';
 import FilterBar, { LikeDislike, scrollToContainer } from "../shared/MediaShared";
 
 // Filters books by selected genres
-function filterBooks(books, selectedGenres, searchTerm) {
+function filterBooks(books, selectedGenres, searchTerm, searchMode) {
   let filtered = books;
   if (selectedGenres.length > 0) {
     filtered = filtered.filter((book) =>
@@ -18,9 +18,13 @@ function filterBooks(books, selectedGenres, searchTerm) {
     );
   }
   if (searchTerm) {
-    filtered = filtered.filter((book) =>
-      book.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    filtered = filtered.filter((book) => {
+      if (searchMode === "author") {
+        return book.author.toLowerCase().includes(searchTerm.toLowerCase());
+      } else {
+        return book.title.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+    });
   }
   return filtered;
 }
@@ -41,8 +45,9 @@ const Books = () => {
   const [bookSearch, setBookSearch] = useState("");
   const [sortOption, setSortOption] = useState("");
   const [visibleCount, setVisibleCount] = useState(BOOKS_PER_PAGE);
+  const [searchMode, setSearchMode] = useState("title"); // "title" or "author"
 
-  let filteredBooks = filterBooks(books, selectedGenres, bookSearch);
+  let filteredBooks = filterBooks(books, selectedGenres, bookSearch, searchMode);
   if (sortOption === "alphabetical") {
     filteredBooks = [...filteredBooks].sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortOption === "author") {
@@ -106,7 +111,7 @@ const Books = () => {
           sortOption={sortOption}
           setSortOption={setSortOption}
           sortOptions={sortOptions}
-          searchPlaceholder="Search book name..."
+          searchPlaceholder={searchMode === "author" ? "Search author..." : "Search book name..."}
           inputClass="book-search-input"
         />
       </div>

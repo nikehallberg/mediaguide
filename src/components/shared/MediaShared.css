@@ -1,3 +1,23 @@
+/* Search mode dropdown (author/title) button styles */
+.search-mode-btn {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  text-align: left;
+  cursor: pointer;
+  color: #282621ff;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s;
+}
+.search-mode-btn:hover,
+.search-mode-btn:focus {
+  background: linear-gradient(90deg, #f7c948, #f4e285);
+  color: #b48a00;
+  font-weight: bold;
+  outline: none;
+}
 /* Show More / Show Less button styles */
 .show-more-btn {
   background: linear-gradient(90deg, #f7c948, #f4e285);

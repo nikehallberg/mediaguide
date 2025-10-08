@@ -190,39 +190,21 @@ const FilterBar = ({
             border: "1px solid #b48a00",
             borderRadius: "8px",
             boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-            zIndex: 10,
+            zIndex: 9999,
             minWidth: "120px"
           }}>
             <button
               type="button"
-              style={{
-                display: "block",
-                width: "100%",
-                background: "none",
-                border: "none",
-                padding: "8px 16px",
-                textAlign: "left",
-                cursor: "pointer",
-                color: searchMode === "title" ? "#b48a00" : "#282621ff",
-                fontWeight: searchMode === "title" ? "bold" : "normal"
-              }}
+              className={`search-mode-btn${searchMode === "title" ? "" : ""}`}
+              style={{ color: searchMode === "title" ? "#b48a00" : undefined, fontWeight: searchMode === "title" ? "bold" : undefined }}
               onClick={() => { setSearchMode("title"); setSearchMenuOpen(false); }}
             >
               Book Name
             </button>
             <button
               type="button"
-              style={{
-                display: "block",
-                width: "100%",
-                background: "none",
-                border: "none",
-                padding: "8px 16px",
-                textAlign: "left",
-                cursor: "pointer",
-                color: searchMode === "author" ? "#b48a00" : "#282621ff",
-                fontWeight: searchMode === "author" ? "bold" : "normal"
-              }}
+              className={`search-mode-btn${searchMode === "author" ? "" : ""}`}
+              style={{ color: searchMode === "author" ? "#b48a00" : undefined, fontWeight: searchMode === "author" ? "bold" : undefined }}
               onClick={() => { setSearchMode("author"); setSearchMenuOpen(false); }}
             >
               Author

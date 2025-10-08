@@ -113,6 +113,8 @@ const Books = () => {
           sortOptions={sortOptions}
           searchPlaceholder={searchMode === "author" ? "Search author..." : "Search book name..."}
           inputClass="book-search-input"
+          searchMode={searchMode}
+          setSearchMode={setSearchMode}
         />
       </div>
       <div className="books-container">

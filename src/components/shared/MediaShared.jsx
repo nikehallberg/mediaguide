@@ -154,11 +154,11 @@ const FilterBar = ({
       <div className='media-search-container' style={{ position: "relative", display: "flex", alignItems: "center" }}>
         <input
           type='text'
-          placeholder={searchPlaceholder}
+          placeholder={searchMode === "author" ? "Search author..." : "Search book name..."}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className={inputClass}
-          style={{ flex: 1 }}
+          style={{ flex: 1, minWidth: '180px', paddingLeft: '28px' }}
         />
         {/* Hamburger menu for search mode */}
         <button
@@ -191,7 +191,7 @@ const FilterBar = ({
             borderRadius: "8px",
             boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
             zIndex: 9999,
-            minWidth: "120px"
+            minWidth: "120px",
           }}>
             <button
               type="button"

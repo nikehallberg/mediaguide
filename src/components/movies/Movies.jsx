@@ -5,10 +5,14 @@ import { movies } from "../../data/movies";
 import { useState, useEffect } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from "@mui/material/Rating";
-import FilterBar, { LikeDislike, scrollToContainer } from "../shared/MediaShared";
+import FilterBar, { LikeDislike, scrollToContainer, getSearchModes } from "../shared/MediaShared";
 
-// Utility: Filter movies by selected genres and search term
-function filterMovies(movies, selectedGenres, searchTerm) {
+// Utility: Filter movies by selected genres and search term/mode
+function normalize(str) {
+  return (str || "").replace(/\./g, '').toLowerCase();
+}
+
+function filterMovies(movies, selectedGenres, searchTerm, searchMode) {
   let filtered = movies;
   if (selectedGenres.length > 0) {
     filtered = filtered.filter((movie) =>
@@ -16,12 +20,16 @@ function filterMovies(movies, selectedGenres, searchTerm) {
     );
   }
   if (searchTerm) {
-    const term = searchTerm.toLowerCase();
+    const normSearch = normalize(searchTerm);
     filtered = filtered.filter((movie) => {
-      // Match title or actor name
-      const titleMatch = movie.title.toLowerCase().includes(term);
-      const actorMatch = (movie.actor || "").toLowerCase().includes(term);
-      return titleMatch || actorMatch;
+      if (searchMode === "title") {
+        return normalize(movie.title).includes(normSearch);
+      } else if (searchMode === "director") {
+        return normalize(movie.director).includes(normSearch);
+      } else if (searchMode === "actor") {
+        return normalize(movie.actor).includes(normSearch);
+      }
+      return false;
     });
   }
   return filtered;
@@ -41,9 +49,11 @@ const Movies = () => {
   const [movieSearch, setMovieSearch] = useState("");
   const [sortOption, setSortOption] = useState("");
   const [visibleCount, setVisibleCount] = useState(MOVIES_PER_PAGE);
+  const [searchMode, setSearchMode] = useState("title"); // "title", "director", "actor"
 
   // Filter and sort movies
-  let filteredMovies = filterMovies(movies, selectedGenres, movieSearch);
+  let filteredMovies = filterMovies(movies, selectedGenres, movieSearch, searchMode);
+  const searchModes = getSearchModes(movies);
   if (sortOption === "alphabetical") {
     filteredMovies = [...filteredMovies].sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortOption === "rating-asc") {
@@ -87,8 +97,17 @@ const Movies = () => {
           sortOption={sortOption}
           setSortOption={setSortOption}
           sortOptions={sortOptions}
-          searchPlaceholder="Search movie or actor name..."
+          searchPlaceholder={
+            searchMode === "title" ? "Search movie title..." :
+            searchMode === "director" ? "Search director..." :
+            searchMode === "actor" ? "Search actor..." :
+            "Search..."
+          }
           inputClass="movie-search-input"
+          searchMode={searchMode}
+          setSearchMode={setSearchMode}
+          searchModes={searchModes}
+          data={movies}
         />
       </div>
       <div className='movies-container'>

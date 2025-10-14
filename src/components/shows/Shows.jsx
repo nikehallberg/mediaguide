@@ -6,10 +6,15 @@ import { shows } from "../../data/shows";
 import { useState, useEffect } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from '@mui/material/Rating';
-import FilterBar, { LikeDislike, scrollToContainer } from "../shared/MediaShared";
+import FilterBar, { LikeDislike, scrollToContainer, getSearchModes } from "../shared/MediaShared";
 
 // Filters shows by selected genres
-function filterShows(shows, selectedGenres, searchTerm) {
+// Helper to normalize strings: remove periods and lowercase
+function normalize(str) {
+  return (str || "").replace(/\./g, '').toLowerCase();
+}
+
+function filterShows(shows, selectedGenres, searchTerm, searchMode) {
   let filtered = shows;
   if (selectedGenres.length > 0) {
     filtered = filtered.filter((show) =>
@@ -17,9 +22,14 @@ function filterShows(shows, selectedGenres, searchTerm) {
     );
   }
   if (searchTerm) {
-    filtered = filtered.filter((show) =>
-      show.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const normSearch = normalize(searchTerm);
+    filtered = filtered.filter((show) => {
+      if (searchMode === "actors") {
+        return normalize(show.actors).includes(normSearch);
+      } else {
+        return normalize(show.title).includes(normSearch);
+      }
+    });
   }
   return filtered;
 }
@@ -38,7 +48,9 @@ const Shows = () => {
   const [sortOption, setSortOption] = useState("");
   const [visibleCount, setVisibleCount] = useState(SHOWS_PER_PAGE);
 
-  let filteredShows = filterShows(shows, selectedGenres, showSearch);
+  const [searchMode, setSearchMode] = useState("title");
+  let filteredShows = filterShows(shows, selectedGenres, showSearch, searchMode);
+  const searchModes = getSearchModes(shows);
   if (sortOption === "alphabetical") {
     filteredShows = [...filteredShows].sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortOption === "rating-asc") {
@@ -82,8 +94,12 @@ const Shows = () => {
           sortOption={sortOption}
           setSortOption={setSortOption}
           sortOptions={sortOptions}
-          searchPlaceholder="Search show name..."
+          searchPlaceholder={searchMode === "actors" ? "Search actors/voice-actors..." : "Search show name..."}
           inputClass="show-search-input"
+          searchMode={searchMode}
+          setSearchMode={setSearchMode}
+          searchModes={searchModes}
+          data={shows}
         />
       </div>
       <div className="shows-container">

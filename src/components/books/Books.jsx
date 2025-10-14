@@ -7,10 +7,14 @@ import { books } from "../../data/books";
 import { useState, useEffect } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from '@mui/material/Rating';
-import FilterBar, { LikeDislike, scrollToContainer } from "../shared/MediaShared";
+import FilterBar, { LikeDislike, scrollToContainer, getSearchModes } from "../shared/MediaShared";
 
 // Filters books by selected genres
 function filterBooks(books, selectedGenres, searchTerm, searchMode) {
+  // Helper to normalize strings: remove periods and lowercase
+  function normalize(str) {
+    return str.replace(/\./g, '').toLowerCase();
+  }
   let filtered = books;
   if (selectedGenres.length > 0) {
     filtered = filtered.filter((book) =>
@@ -18,9 +22,10 @@ function filterBooks(books, selectedGenres, searchTerm, searchMode) {
     );
   }
   if (searchTerm) {
+    const normSearch = normalize(searchTerm);
     filtered = filtered.filter((book) => {
       if (searchMode === "author") {
-        return book.author.toLowerCase().includes(searchTerm.toLowerCase());
+        return normalize(book.author).includes(normSearch);
       } else {
         return book.title.toLowerCase().includes(searchTerm.toLowerCase());
       }
@@ -48,6 +53,7 @@ const Books = () => {
   const [searchMode, setSearchMode] = useState("title"); // "title" or "author"
 
   let filteredBooks = filterBooks(books, selectedGenres, bookSearch, searchMode);
+  const searchModes = getSearchModes(books);
   if (sortOption === "alphabetical") {
     filteredBooks = [...filteredBooks].sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortOption === "author") {
@@ -115,6 +121,8 @@ const Books = () => {
           inputClass="book-search-input"
           searchMode={searchMode}
           setSearchMode={setSearchMode}
+          searchModes={searchModes}
+          data={books}
         />
       </div>
       <div className="books-container">

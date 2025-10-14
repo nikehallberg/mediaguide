@@ -1,3 +1,17 @@
+// Shared function: getSearchModes
+// Inspects the data array and returns available search modes based on keys
+export function getSearchModes(data) {
+  if (!Array.isArray(data) || data.length === 0) return ["title"];
+  const keys = Object.keys(data[0]);
+  const modes = [];
+  if (keys.includes("title")) modes.push("title");
+  if (keys.includes("author")) modes.push("author");
+  if (keys.includes("director")) modes.push("director");
+  if (keys.includes("actor")) modes.push("actor");
+  if (keys.includes("actors")) modes.push("actors");
+  if (keys.includes("artist")) modes.push("artist");
+  return modes.length ? modes : ["title"];
+}
 // Utility: Enable endless scrolling for a container
 export function endlessScroll({ enabled, containerClass, visibleCount, setVisibleCount, totalCount, perPage }) {
   useEffect(() => {
@@ -68,9 +82,6 @@ export const LikeDislike = ({ id }) => {
 import "../shared/MediaShared.css";
 
 
-
-
-
 // Add sort dropdown logic and props
 const FilterBar = ({
   genres = [],
@@ -91,6 +102,8 @@ const FilterBar = ({
   sortOptions = [],
   searchMode = "title",
   setSearchMode = () => {},
+  searchModes = ["title", "author"],
+  data = [],
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -149,17 +162,83 @@ const FilterBar = ({
   };
 
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
+  const [autocompleteOptions, setAutocompleteOptions] = useState([]);
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+
+  useEffect(() => {
+    if (!searchTerm || !data) {
+      setAutocompleteOptions([]);
+      setShowAutocomplete(false);
+      return;
+    }
+    // Always autocomplete using 'title' field, only those starting with input
+    const lowerInput = searchTerm.toLowerCase();
+    const options = Array.from(new Set(
+      data
+        .map(item => item.title)
+        .filter(val => typeof val === 'string' && val.toLowerCase().startsWith(lowerInput))
+    ));
+    setAutocompleteOptions(options.length > 0 ? [options[0]] : []);
+    setShowAutocomplete(options.length > 0);
+  }, [searchTerm, data]);
   return (
     <div className='filter-bar'>
       <div className='media-search-container' style={{ position: "relative", display: "flex", alignItems: "center" }}>
         <input
           type='text'
-          placeholder={searchMode === "author" ? "Search author..." : "Search book name..."}
+          autoComplete='off'
+          placeholder={(() => {
+            if (searchMode === "title") return searchPlaceholder || "Search title...";
+            if (searchMode === "director") return searchPlaceholder || "Search director...";
+            if (searchMode === "actor") return searchPlaceholder || "Search actor...";
+            if (searchMode === "actors") return searchPlaceholder || "Search actors/voice-actors...";
+            if (searchMode === "author") return searchPlaceholder || "Search author...";
+            if (searchMode === "artist") return searchPlaceholder || "Search artist...";
+            return searchPlaceholder || "Search...";
+          })()}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className={inputClass}
           style={{ flex: 1, minWidth: '180px', paddingLeft: '28px' }}
+          onFocus={() => setShowAutocomplete(autocompleteOptions.length > 0)}
+          onBlur={() => setTimeout(() => setShowAutocomplete(false), 150)}
         />
+        {showAutocomplete && (
+          <div className='autocomplete-dropdown' style={{
+            position: 'absolute',
+            left: '0',
+            top: '100%',
+            background: '#fffbe6',
+            border: '1px solid #b48a00',
+            borderRadius: '8px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            zIndex: 9999,
+            minWidth: '180px',
+            maxHeight: '180px',
+            overflowY: 'auto',
+          }}>
+            {autocompleteOptions.map(option => (
+              <button
+                key={option}
+                type='button'
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  background: 'none',
+                  border: 'none',
+                  padding: '8px 12px',
+                  cursor: 'pointer',
+                  color: '#b48a00',
+                  fontSize: '1rem',
+                }}
+                onMouseDown={() => { setSearchTerm(option); setShowAutocomplete(false); }}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        )}
         {/* Hamburger menu for search mode */}
         <button
           type="button"
@@ -193,22 +272,17 @@ const FilterBar = ({
             zIndex: 9999,
             minWidth: "120px",
           }}>
-            <button
-              type="button"
-              className={`search-mode-btn${searchMode === "title" ? "" : ""}`}
-              style={{ color: searchMode === "title" ? "#b48a00" : undefined, fontWeight: searchMode === "title" ? "bold" : undefined }}
-              onClick={() => { setSearchMode("title"); setSearchMenuOpen(false); }}
-            >
-              Book Name
-            </button>
-            <button
-              type="button"
-              className={`search-mode-btn${searchMode === "author" ? "" : ""}`}
-              style={{ color: searchMode === "author" ? "#b48a00" : undefined, fontWeight: searchMode === "author" ? "bold" : undefined }}
-              onClick={() => { setSearchMode("author"); setSearchMenuOpen(false); }}
-            >
-              Author
-            </button>
+            {searchModes.map(mode => (
+              <button
+                key={mode}
+                type="button"
+                className={`search-mode-btn${searchMode === mode ? " selected" : ""}`}
+                style={{ color: searchMode === mode ? "#b48a00" : undefined, fontWeight: searchMode === mode ? "bold" : undefined }}
+                onClick={() => { setSearchMode(mode); setSearchMenuOpen(false); }}
+              >
+                {mode.charAt(0).toUpperCase() + mode.slice(1)}
+              </button>
+            ))}
           </div>
         )}
         {searchTerm && (

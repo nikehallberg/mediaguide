@@ -5,10 +5,15 @@ import { songs } from "../../data/songs";
 import { genres2 } from "../../data/genres";
 import { useState, useEffect } from "react";
 import Rating from '@mui/material/Rating';
-import FilterBar, { LikeDislike, scrollToContainer } from "../shared/MediaShared";
+import FilterBar, { LikeDislike, scrollToContainer, getSearchModes } from "../shared/MediaShared";
 
 // Filters songs by selected genres
-function filterSongs(songs, selectedGenres, searchTerm) {
+// Helper to normalize strings: remove periods and lowercase
+function normalize(str) {
+  return (str || "").replace(/\./g, '').toLowerCase();
+}
+
+function filterSongs(songs, selectedGenres, searchTerm, searchMode) {
   let filtered = songs;
   if (selectedGenres.length > 0) {
     filtered = filtered.filter((song) =>
@@ -16,9 +21,14 @@ function filterSongs(songs, selectedGenres, searchTerm) {
     );
   }
   if (searchTerm) {
-    filtered = filtered.filter((song) =>
-      song.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const normSearch = normalize(searchTerm);
+    filtered = filtered.filter((song) => {
+      if (searchMode === "artist") {
+        return normalize(song.artist).includes(normSearch);
+      } else {
+        return normalize(song.title).includes(normSearch);
+      }
+    });
   }
   return filtered;
 }
@@ -37,7 +47,9 @@ const Songs = () => {
   const [sortOption, setSortOption] = useState("");
   const [visibleCount, setVisibleCount] = useState(SONGS_PER_PAGE);
 
-  let filteredSongs = filterSongs(songs, selectedGenres, songSearch);
+  const [searchMode, setSearchMode] = useState("title");
+  let filteredSongs = filterSongs(songs, selectedGenres, songSearch, searchMode);
+  const searchModes = getSearchModes(songs);
   if (sortOption === "alphabetical") {
     filteredSongs = [...filteredSongs].sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortOption === "rating-asc") {
@@ -81,8 +93,12 @@ const Songs = () => {
           sortOption={sortOption}
           setSortOption={setSortOption}
           sortOptions={sortOptions}
-          searchPlaceholder="Search song name..."
+          searchPlaceholder={searchMode === "artist" ? "Search artist..." : "Search song name..."}
           inputClass="song-search-input"
+          searchMode={searchMode}
+          setSearchMode={setSearchMode}
+          searchModes={searchModes}
+          data={songs}
         />
       </div>
       <div className="songs-container">

@@ -166,21 +166,21 @@ const FilterBar = ({
   const [showAutocomplete, setShowAutocomplete] = useState(false);
 
   useEffect(() => {
-    if (!searchTerm || !data) {
+    if (!searchTerm || !data || !searchMode) {
       setAutocompleteOptions([]);
       setShowAutocomplete(false);
       return;
     }
-    // Always autocomplete using 'title' field, only those starting with input
+    // Autocomplete using current search mode field, only those starting with input
     const lowerInput = searchTerm.toLowerCase();
     const options = Array.from(new Set(
       data
-        .map(item => item.title)
+        .map(item => item[searchMode])
         .filter(val => typeof val === 'string' && val.toLowerCase().startsWith(lowerInput))
     ));
     setAutocompleteOptions(options.length > 0 ? [options[0]] : []);
     setShowAutocomplete(options.length > 0);
-  }, [searchTerm, data]);
+  }, [searchTerm, data, searchMode]);
   return (
     <div className='filter-bar'>
       <div className='media-search-container' style={{ position: "relative", display: "flex", alignItems: "center" }}>

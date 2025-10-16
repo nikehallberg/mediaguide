@@ -1,45 +1,3 @@
-// Shared function: getSearchModes
-// Inspects the data array and returns available search modes based on keys
-export function getSearchModes(data) {
-  if (!Array.isArray(data) || data.length === 0) return ["title"];
-  const keys = Object.keys(data[0]);
-  const modes = [];
-  if (keys.includes("title")) modes.push("title");
-  if (keys.includes("author")) modes.push("author");
-  if (keys.includes("director")) modes.push("director");
-  if (keys.includes("actor")) modes.push("actor");
-  if (keys.includes("actors")) modes.push("actors");
-  if (keys.includes("artist")) modes.push("artist");
-  return modes.length ? modes : ["title"];
-}
-// Utility: Enable endless scrolling for a container
-export function endlessScroll({ enabled, containerClass, visibleCount, setVisibleCount, totalCount, perPage }) {
-  useEffect(() => {
-    if (!enabled) return;
-    function handleScroll() {
-      if (
-        window.innerHeight + window.scrollY >=
-        document.body.offsetHeight - 100
-      ) {
-        setVisibleCount((prev) => {
-          if (prev >= totalCount) return prev;
-          return prev + perPage;
-        });
-      }
-    }
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [enabled, totalCount, perPage, setVisibleCount]);
-}
-// Utility: Smooth scroll to a container by class name
-export function scrollToContainer(className) {
-  setTimeout(() => {
-    const container = document.querySelector(`.${className}`);
-    if (container) {
-      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, 100);
-}
 import { useRef, useEffect, useState } from "react";
 export const LikeDislike = ({ id }) => {
   const [likes, setLikes] = useState({});
@@ -47,7 +5,7 @@ export const LikeDislike = ({ id }) => {
   const [voted, setVoted] = useState({});
 
   const handleLike = () => {
-    if (voted[id]) return;
+  if (voted[id]) return;
     setLikes((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
     setVoted((prev) => ({ ...prev, [id]: true }));
   };
@@ -62,16 +20,16 @@ export const LikeDislike = ({ id }) => {
       <button
         type="button"
         onClick={e => { e.stopPropagation(); handleLike(); }}
-        disabled={!!voted[id]}
-        style={{ fontSize: "1.2rem", border: "none", background: "#fffbe6", borderRadius: "10px", cursor: !!voted[id] ? "not-allowed" : "pointer", padding: "0.5rem 1rem", opacity: !!voted[id] ? 0.6 : 1 }}
+  disabled={Boolean(voted[id])}
+  style={{ fontSize: "1.2rem", border: "none", background: "#fffbe6", borderRadius: "10px", cursor: voted[id] ? "not-allowed" : "pointer", padding: "0.5rem 1rem", opacity: voted[id] ? 0.6 : 1 }}
       >
         👍 {likes[id] || 0}
       </button>
       <button
         type="button"
         onClick={e => { e.stopPropagation(); handleDislike(); }}
-        disabled={!!voted[id]}
-        style={{ fontSize: "1.2rem", border: "none", background: "#fffbe6", borderRadius: "10px", cursor: !!voted[id] ? "not-allowed" : "pointer", padding: "0.5rem 1rem", opacity: !!voted[id] ? 0.6 : 1 }}
+        disabled={Boolean(voted[id])}
+        style={{ fontSize: "1.2rem", border: "none", background: "#fffbe6", borderRadius: "10px", cursor: voted[id] ? "not-allowed" : "pointer", padding: "0.5rem 1rem", opacity: voted[id] ? 0.6 : 1 }}
       >
         👎 {dislikes[id] || 0}
       </button>
@@ -90,7 +48,6 @@ const FilterBar = ({
   selectedGenres,
   setSelectedGenres,
   maxGenres = 3,
-  visibleCount,
   setVisibleCount,
   totalCount,
   perPage = 12,
@@ -153,13 +110,7 @@ const FilterBar = ({
 
   const clearGenres = () => setSelectedGenres([]);
 
-  // Show More/Less handlers (for non-infinite scroll)
-  const handleShowMore = () => {
-    setVisibleCount((prev) => prev + perPage);
-  };
-  const handleShowLess = () => {
-    setVisibleCount((prev) => Math.max(perPage, prev - perPage));
-  };
+  // Note: pagination controls (show more/less) are implemented in page components; FilterBar exposes setVisibleCount for that purpose.
 
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
   const [autocompleteOptions, setAutocompleteOptions] = useState([]);
@@ -311,9 +262,26 @@ const FilterBar = ({
           className='dropbtn'
           onClick={() => setDropdownOpen((open) => !open)}
           type='button'
+          aria-expanded={dropdownOpen}
         >
           Filter by Genre
         </button>
+        {/* Render selected genre chips next to the filter button for visibility */}
+        <div className="selected-genres-row" aria-live="polite">
+          {selectedGenres.map(g => (
+            <button
+              key={g}
+              type="button"
+              className="genre-chip"
+              onClick={() => handleGenreClick(g)}
+              aria-pressed={true}
+              title={`Remove ${g}`}
+            >
+              <span className="chip-label">{g}</span>
+              <span className="chip-remove">×</span>
+            </button>
+          ))}
+        </div>
         {selectedGenres.length > 0 && (
           <button
             type="button"
@@ -352,8 +320,12 @@ const FilterBar = ({
                     ? { opacity: 0.5, cursor: "not-allowed" }
                     : {}
                 }
+                aria-pressed={selectedGenres.includes(genre)}
               >
-                {genre}
+                <span className="genre-name">{genre}</span>
+                {selectedGenres.includes(genre) && (
+                  <span className="genre-checked" aria-hidden>✓</span>
+                )}
               </button>
             ))}
             {selectedGenres.length > 0 && (

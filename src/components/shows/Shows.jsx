@@ -6,7 +6,8 @@ import { shows } from "../../data/shows";
 import { useState, useEffect } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from '@mui/material/Rating';
-import FilterBar, { LikeDislike, scrollToContainer, getSearchModes } from "../shared/MediaShared";
+import FilterBar, { LikeDislike } from "../shared/MediaShared";
+import { scrollToContainer, getSearchModes } from "../shared/mediaUtils";
 
 // Filters shows by selected genres
 // Helper to normalize strings: remove periods and lowercase

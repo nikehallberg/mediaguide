@@ -1,5 +1,4 @@
 - responsive design
-- flytta burger menu till vänster på mobil
 
 längre mål
 1. review input field, thank u message

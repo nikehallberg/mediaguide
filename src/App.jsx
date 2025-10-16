@@ -4,7 +4,7 @@ import Books from "./components/books/Books";
 import Movies from "./components/movies/Movies";
 import Shows from "./components/shows/Shows";
 import Songs from "./components/songs/Songs";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Register from "./components/register/Register";
 import { useState } from "react";
 

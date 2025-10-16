@@ -5,7 +5,8 @@ import { movies } from "../../data/movies";
 import { useState, useEffect } from "react";
 import { genres1 } from "../../data/genres";
 import Rating from "@mui/material/Rating";
-import FilterBar, { LikeDislike, scrollToContainer, getSearchModes } from "../shared/MediaShared";
+import FilterBar, { LikeDislike } from "../shared/MediaShared";
+import { scrollToContainer, getSearchModes } from "../shared/mediaUtils";
 
 // Utility: Filter movies by selected genres and search term/mode
 function normalize(str) {

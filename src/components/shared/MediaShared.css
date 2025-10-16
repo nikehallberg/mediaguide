@@ -216,10 +216,11 @@
   transition: background 0.2s, transform 0.2s;
 }
 .dropdown-genre-btn.selected {
-  background: linear-gradient(90deg, #f4e285, #f7c948);
-  color: #2d2300;
+  background: linear-gradient(90deg, #ffd66b, #f7c948);
+  color: #1e1600;
   font-weight: 700;
-  transform: scale(1.08);
+  transform: scale(1.03);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 .dropdown-genre-btn:disabled {
   opacity: 0.5;
@@ -230,6 +231,50 @@
   background: linear-gradient(90deg, #f4e285, #f7c948);
   transform: translateY(-2px) scale(1.05);
   outline: none;
+}
+.dropdown-genre-btn .genre-checked {
+  margin-left: 8px;
+  background: rgba(45,35,0,0.12);
+  border-radius: 50%;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.9rem;
+}
+
+/* Row that displays currently selected genres as chips next to the filter */
+.selected-genres-row {
+  display: flex;
+  gap: 8px;
+  margin-left: 10px;
+  align-items: center;
+}
+
+.genre-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fffbe6;
+  border: 1px solid #f7c948;
+  color: #4a3f0b;
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.genre-chip:hover,
+.genre-chip:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  outline: none;
+}
+.chip-remove {
+  color: #b48a00;
+  font-weight: 900;
+  padding-left: 6px;
+}
+.chip-label {
+  display: inline-block;
+  line-height: 1;
 }
 .dropdown-clear-btn {
   background: #fffbe6;

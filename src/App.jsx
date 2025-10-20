@@ -4,6 +4,7 @@ import Books from "./components/books/Books";
 import Movies from "./components/movies/Movies";
 import Shows from "./components/shows/Shows";
 import Songs from "./components/songs/Songs";
+import Profile from "./components/profile/Profile";
 import { Route, Routes } from "react-router-dom";
 import Register from "./components/register/Register";
 import { useState } from "react";
@@ -38,6 +39,7 @@ const App = () => {
         <Route path="/shows" element={<Shows />} />
         <Route path="/songs" element={<Songs />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );

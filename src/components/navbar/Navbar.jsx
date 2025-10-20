@@ -68,6 +68,9 @@ const Navbar = ({ user, onLogout, onLogin }) => {
             <li>
               <NavLink to="/songs" onClick={() => setMenuOpen(false)}>Songs</NavLink>
             </li>
+            <li>
+              <NavLink to="/profile" onClick={() => setMenuOpen(false)}>Profile</NavLink>
+            </li>
           </ul>
         </div>
         <div className="auth-links" style={{ position: "relative" }}>
@@ -132,6 +135,9 @@ const Navbar = ({ user, onLogout, onLogin }) => {
         </li>
         <li>
           <NavLink to="/songs">Songs</NavLink>
+        </li>
+        <li>
+          <NavLink to="/profile">Profile</NavLink>
         </li>
       </ul>
     </nav>

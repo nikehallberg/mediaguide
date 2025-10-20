@@ -5,6 +5,7 @@ längre mål
 2. read reviews for this item
 3. egen databas, mongodb
 4. api, integrera med imdb
+5. darkmode
 
 
 
@@ -14,3 +15,7 @@ längre mål
 1. spara review enskild review
 2. räkna ihop medelbetyget och visa det som betyget för mediat
 3. ändra view när inloggad, min sida osv
+
+
+
+logo3 = #212121

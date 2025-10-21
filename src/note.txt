@@ -6,6 +6,7 @@ längre mål
 3. egen databas, mongodb
 4. api, integrera med imdb
 5. darkmode
+6. fixa tumme upp tumme ner knappar, ångra sig, ta bort det suddiga
 
 
 

@@ -10,7 +10,7 @@
 }
 
 .modal-content {
-  background: #fffbe6;
+  background: var(--card-bg);
   border-radius: 16px;
   box-shadow: 0 4px 18px rgba(219, 175, 44, 0.18);
   padding: 2rem 2.2rem 1.5rem 2.2rem;
@@ -26,12 +26,12 @@
   background: none;
   border: none;
   font-size: 1.7rem;
-  color: #b48a00;
+  color: var(--accent);
   cursor: pointer;
   font-weight: bold;
   z-index: 2200;
   transition: color 0.2s;
 }
 .modal-close-btn:hover {
-  color: #7c5b13;
+  color: var(--accent);
 }

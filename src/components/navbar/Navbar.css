@@ -4,9 +4,9 @@
     gap: 2.5rem;
     justify-content: center;
     align-items: center;
-    background: #fffbe6;
+    background: var(--desktop-nav-bg);
     border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(219, 175, 44, 0.10);
+    box-shadow: 0 2px 12px var(--muted-shadow);
     padding: 0.7rem 2rem;
     border: none;
     font-size: 1.15rem;
@@ -20,15 +20,15 @@
 }
 
 .desktop-nav li:hover {
-    background: #f7c948;
-    box-shadow: 0 2px 8px rgba(189, 178, 49, 0.13);
+    background: var(--desktop-nav-hover);
+    box-shadow: 0 2px 8px var(--gold-shadow);
     transform: translateY(-2px) scale(1.04);
     list-style: none;
     transition: transform 0.18s, box-shadow 0.18s;
     border-radius: 8px;
     padding: 0.2rem 0.7rem;
-    background: #f7c948;
-    box-shadow: 0 2px 8px rgba(189, 178, 49, 0.13);
+    background: var(--desktop-nav-hover);
+    box-shadow: 0 2px 8px var(--gold-shadow);
     transform: translateY(-2px) scale(1.04);
 }
 @media (max-width: 900px) {
@@ -55,7 +55,7 @@
 .bar {
     width: 30px;
     height: 4px;
-    background: #b48a00;
+    background: var(--accent);
     margin: 4px 0;
     transition: 0.4s;
     border-radius: 2px;
@@ -84,7 +84,7 @@
         left: 0;
         min-width: 180px;
         min-height: 17rem;
-        background: #fff;
+    background: var(--bg);
         box-shadow: 0 4px 16px rgba(0,0,0,0.18);
         z-index: 999;
         padding: 0.5rem 0.5rem;
@@ -100,7 +100,7 @@
         box-shadow: 0 2px 8px rgba(0,0,0,0.10);
     }
     .burger-menu ul li:hover {
-        background: #f7c948;
+        background: var(--desktop-nav-hover);
     }
     .burger-menu.open ul {
         display: flex;
@@ -117,7 +117,7 @@ nav {
     display: flex;
     flex-direction: column;
     box-shadow: 0 16px 64px 0 rgba(189, 178, 49, 0.22), 0 8px 32px 0 rgba(0,0,0,0.18);
-    background: #fff;
+    background: var(--nav-bg);
     border-bottom: none;
     font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
     font-weight: 400;
@@ -141,7 +141,7 @@ ul {
     justify-content: space-evenly;
     align-items: center;
     list-style-type: none;
-    background-color: rgb(255, 255, 255);
+    background-color: transparent;
 }
 
 a {
@@ -154,11 +154,11 @@ a:visited {
 }
 
 a:hover {
-    color:rgb(189, 178, 49);
+    color: var(--accent);
 }
 
 a.active{
-    color: rgb(164, 145, 49);
+    color: var(--accent);
 }
 
 .navbar-header {
@@ -195,7 +195,7 @@ a.active{
 .auth-link {
     font-size: 1rem;
     padding: 0.5rem 1.2rem;
-    color: #b48a00;
+    color: var(--accent);
     text-decoration: none;
     font-weight: 500;
     padding: 0.3rem 0.8rem;
@@ -204,8 +204,30 @@ a.active{
 }
 
 .auth-link:hover {
-    background: #fffbe6;
-    color: #7c5b13;
+        background: var(--card-bg);
+        color: var(--accent);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+        background: transparent;
+        border: 1px solid rgba(0,0,0,0.06);
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}
+.theme-icon {
+    color: var(--accent);
+    transition: transform 0.22s ease, color 0.18s ease;
+    display: inline-block;
+}
+.theme-toggle:active .theme-icon {
+    transform: scale(0.94);
 }
 
 .login-dropdown {

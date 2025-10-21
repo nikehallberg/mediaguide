@@ -1,37 +1,108 @@
 import { useRef, useEffect, useState } from "react";
-export const LikeDislike = ({ id }) => {
-  const [likes, setLikes] = useState({});
-  const [dislikes, setDislikes] = useState({});
-  const [voted, setVoted] = useState({});
+export const LikeDislike = ({ id, onVote }) => {
+  // votes: map id -> 1 (like) | -1 (dislike) | 0/undefined (none)
+  const [votes, setVotes] = useState({});
+  const [counts, setCounts] = useState({});
+  const votesRef = useRef(votes);
+  const countsRef = useRef(counts);
 
-  const handleLike = () => {
-  if (voted[id]) return;
-    setLikes((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
-    setVoted((prev) => ({ ...prev, [id]: true }));
+  // keep refs in sync
+  useEffect(() => { votesRef.current = votes; }, [votes]);
+  useEffect(() => { countsRef.current = counts; }, [counts]);
+
+  // Persist/load votes+counts from localStorage
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(`likeDislikeState:${id}`);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") {
+          const storedVote = parsed.vote ?? undefined;
+          const storedCounts = typeof parsed.likes === 'number' || typeof parsed.dislikes === 'number'
+            ? { likes: parsed.likes || 0, dislikes: parsed.dislikes || 0 }
+            : parsed.counts;
+          // merge into refs/state maps so multiple items can coexist
+          if (typeof storedVote !== 'undefined') {
+            const newVotes = { ...votesRef.current, [id]: storedVote };
+            votesRef.current = newVotes;
+            setVotes(newVotes);
+          }
+          if (storedCounts) {
+            const newCounts = { ...countsRef.current, [id]: storedCounts };
+            countsRef.current = newCounts;
+            setCounts(newCounts);
+          }
+        }
+      }
+    } catch (e) {
+      // ignore parse errors
+    }
+  }, []);
+
+  // Note: per-item persistence is handled in changeVote to avoid different component
+  // instances overwriting a single global localStorage object.
+
+  const changeVote = (newVote) => {
+    const prevVote = votesRef.current[id] || 0;
+    const finalVote = prevVote === newVote ? 0 : newVote;
+
+    // compute new counts deterministically using the refs
+    const prevCounts = countsRef.current[id] || { likes: 0, dislikes: 0 };
+    let likes = prevCounts.likes;
+    let dislikes = prevCounts.dislikes;
+
+    if (prevVote === 1) likes = Math.max(0, likes - 1);
+    if (prevVote === -1) dislikes = Math.max(0, dislikes - 1);
+    if (finalVote === 1) likes = likes + 1;
+    if (finalVote === -1) dislikes = dislikes + 1;
+
+    const newVotes = { ...votesRef.current, [id]: finalVote };
+    const newCounts = { ...countsRef.current, [id]: { likes, dislikes } };
+
+    // update refs and states once
+    votesRef.current = newVotes;
+    countsRef.current = newCounts;
+    setVotes(newVotes);
+    setCounts(newCounts);
+
+    // notify parent (optional) with the final vote and updated counts for this id
+    try {
+      if (typeof onVote === "function") onVote(id, finalVote, { likes, dislikes });
+    } catch (e) {
+      // ignore handler errors
+    }
+    // persist only this item's state to avoid races between instances
+    try {
+      const payload = { vote: finalVote, likes, dislikes };
+      localStorage.setItem(`likeDislikeState:${id}`, JSON.stringify(payload));
+    } catch (e) {
+      // ignore storage errors
+    }
   };
-  const handleDislike = () => {
-    if (voted[id]) return;
-    setDislikes((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
-    setVoted((prev) => ({ ...prev, [id]: true }));
-  };
+
+  const likeCount = counts[id]?.likes || 0;
+  const dislikeCount = counts[id]?.dislikes || 0;
+  const selected = votes[id] || 0;
 
   return (
     <div className="like-dislike-container" style={{ display: "flex", gap: "1rem", justifyContent: "center", marginTop: "1rem" }}>
       <button
         type="button"
-        onClick={e => { e.stopPropagation(); handleLike(); }}
-  disabled={Boolean(voted[id])}
-  style={{ fontSize: "1.2rem", border: "none", background: "#fffbe6", borderRadius: "10px", cursor: voted[id] ? "not-allowed" : "pointer", padding: "0.5rem 1rem", opacity: voted[id] ? 0.6 : 1 }}
+        onClick={(e) => { e.stopPropagation(); changeVote(1); }}
+        className={`thumb-btn like-btn ${selected === 1 ? "selected" : ""}`}
+        aria-pressed={selected === 1}
       >
-        👍 {likes[id] || 0}
+        <span aria-hidden>👍</span>
+        <span className="count"> {likeCount}</span>
       </button>
       <button
         type="button"
-        onClick={e => { e.stopPropagation(); handleDislike(); }}
-        disabled={Boolean(voted[id])}
-        style={{ fontSize: "1.2rem", border: "none", background: "#fffbe6", borderRadius: "10px", cursor: voted[id] ? "not-allowed" : "pointer", padding: "0.5rem 1rem", opacity: voted[id] ? 0.6 : 1 }}
+        onClick={(e) => { e.stopPropagation(); changeVote(-1); }}
+        className={`thumb-btn dislike-btn ${selected === -1 ? "selected" : ""}`}
+        aria-pressed={selected === -1}
       >
-        👎 {dislikes[id] || 0}
+        <span aria-hidden>👎</span>
+        <span className="count"> {dislikeCount}</span>
       </button>
     </div>
   );

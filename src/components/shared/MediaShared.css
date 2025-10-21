@@ -18,6 +18,37 @@
   font-weight: bold;
   outline: none;
 }
+/* Like/dislike buttons */
+.like-dislike-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.thumb-btn {
+  font-size: 1.15rem;
+  border: none;
+  background: #fffbe6;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0.5rem 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+}
+.thumb-btn:focus {
+  outline: 2px solid rgba(180,138,0,0.25);
+}
+.thumb-btn:hover { transform: translateY(-2px); }
+.thumb-btn .count { font-weight: 700; }
+.thumb-btn.selected {
+  background: linear-gradient(90deg, #ffd66b, #f7c948);
+  color: #1e1600;
+  box-shadow: 0 4px 14px rgba(189,178,49,0.16);
+  transform: translateY(-2px) scale(1.02);
+}
+
 /* Show More / Show Less button styles */
 .show-more-btn {
   background: linear-gradient(90deg, #f7c948, #f4e285);

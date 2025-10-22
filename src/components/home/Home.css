@@ -47,6 +47,11 @@
   background: #fff;
 }
 
+/* Dark theme override: ensure homepage uses #212121 for background */
+.dark-theme .home-page {
+  background: #212121;
+}
+
 .recent-section {
   margin: 2rem 0;
   width: 100%;
@@ -89,7 +94,7 @@
   height: 190px;
   object-fit: cover;
   border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  box-shadow: 0 2px 12px rgba(33,33,33,0.10);
   background: #eaeaea;
 }
 

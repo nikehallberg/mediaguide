@@ -85,7 +85,7 @@
         min-width: 180px;
         min-height: 17rem;
     background: var(--bg);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    box-shadow: 0 4px 16px rgba(33,33,33,0.18);
         z-index: 999;
         padding: 0.5rem 0.5rem;
         border-radius: 12px;
@@ -97,7 +97,7 @@
         border-radius: 8px;
         margin: 0.25rem 0;
         transition: background 0.2s, box-shadow 0.2s;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    box-shadow: 0 2px 8px rgba(33,33,33,0.10);
     }
     .burger-menu ul li:hover {
         background: var(--desktop-nav-hover);
@@ -116,7 +116,7 @@ nav {
     height: 6rem;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 16px 64px 0 rgba(189, 178, 49, 0.22), 0 8px 32px 0 rgba(0,0,0,0.18);
+    box-shadow: 0 16px 64px 0 rgba(189, 178, 49, 0.22), 0 8px 32px 0 rgba(33,33,33,0.18);
     background: var(--nav-bg);
     border-bottom: none;
     font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
@@ -211,7 +211,7 @@ a.active{
 /* Theme toggle button */
 .theme-toggle {
         background: transparent;
-        border: 1px solid rgba(0,0,0,0.06);
+        border: 1px solid rgba(33,33,33,0.06);
     width: 40px;
     height: 40px;
     border-radius: 999px;

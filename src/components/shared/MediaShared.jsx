@@ -233,7 +233,7 @@ const FilterBar = ({
             background: '#fffbe6',
             border: '1px solid #b48a00',
             borderRadius: '8px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            boxShadow: '0 2px 8px rgba(33,33,33,0.08)',
             zIndex: 9999,
             minWidth: '180px',
             maxHeight: '180px',
@@ -290,7 +290,7 @@ const FilterBar = ({
             background: "#fffbe6",
             border: "1px solid #b48a00",
             borderRadius: "8px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            boxShadow: "0 2px 8px rgba(33,33,33,0.08)",
             zIndex: 9999,
             minWidth: "120px",
           }}>

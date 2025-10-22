@@ -14,15 +14,15 @@
 
 .dark-theme {
     --logo3: #212121;
-    --bg: #121212;
+    --bg: #212121;
     --text: #e6e6e6;
-    --nav-bg: #181818;
-    --desktop-nav-bg: #1f1f1f;
+    --nav-bg: #212121;
+    --desktop-nav-bg: #212121;
     --desktop-nav-hover: #2b2b2b;
     --accent: var(--logo3);
     --card-bg: #171717;
-    --muted-shadow: rgba(0,0,0,0.45);
-    --gold-shadow: rgba(0,0,0,0.3);
+    --muted-shadow: rgba(33,33,33,0.45);
+    --gold-shadow: rgba(33,33,33,0.3);
 }
 
 html {

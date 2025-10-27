@@ -3,52 +3,145 @@ import person from '../../assets/person.png'
 import password from '../../assets/password.png'
 import { useState } from 'react'
 
-
 // Login component handles user login logic and UI
 const Login = ({ onLogin }) => {
   // State for form fields
-  const [username, setUsername] = useState("")
+  // `identifier` accepts either username or email
+  const [identifier, setIdentifier] = useState("")
   const [passwordVal, setPasswordVal] = useState("")
   // State for error and success messages
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  // Forgot-password states
+  const [showForgot, setShowForgot] = useState(false)
+  const [forgotIdentifier, setForgotIdentifier] = useState("")
+  const [forgotFound, setForgotFound] = useState(null)
+  const [forgotMsg, setForgotMsg] = useState("")
+  const [forgotNew, setForgotNew] = useState("")
+  const [forgotConfirm, setForgotConfirm] = useState("")
 
   // Handles login form submission
   const handleLogin = (e) => {
     e.preventDefault()
+    setError("")
+    setSuccess("")
+
     // Retrieve users from localStorage or initialize as empty array
     const users = JSON.parse(localStorage.getItem("users") || "[]")
-    // Find user with matching username and password
-    const user = users.find(u => u.username === username && u.password === passwordVal)
+
+    const id = (identifier || "").trim().toLowerCase()
+    const pw = passwordVal || ""
+
+    if (!id || !pw) {
+      setError("Please enter username/email and password")
+      return
+    }
+
+    // Find user with matching username or email (case-insensitive) and matching password
+    const user = users.find(u => {
+      const uname = (u.username || "").toString().toLowerCase()
+      const mail = (u.email || "").toString().toLowerCase()
+      return (uname === id || mail === id) && u.password === pw
+    })
+
     if (user) {
-      // Successful login
+      // Successful login: pass canonical username up and set currentUser for Profile
       setSuccess("Login successful!")
       setError("")
-      if (onLogin) onLogin(username)
+      try {
+        localStorage.setItem("currentUser", JSON.stringify(user))
+      } catch (err) {
+        // ignore localStorage errors
+      }
+      if (onLogin) onLogin(user.username)
     } else {
       // Invalid credentials
-      setError("Invalid username or password")
+      setError("Invalid username/email or password")
       setSuccess("")
     }
+  }
+
+  const handleFindAccount = (e) => {
+    e && e.preventDefault()
+    setForgotMsg("")
+    const id = (forgotIdentifier || "").trim().toLowerCase()
+    if (!id) {
+      setForgotMsg('Enter username or email')
+      return
+    }
+    const users = JSON.parse(localStorage.getItem('users') || '[]')
+    const user = users.find(u => {
+      const uname = (u.username || '').toString().toLowerCase()
+      const mail = (u.email || '').toString().toLowerCase()
+      return uname === id || mail === id
+    })
+    if (user) {
+      setForgotFound(user)
+      setForgotMsg('Account found — enter a new password')
+    } else {
+      setForgotFound(null)
+      setForgotMsg('Account not found')
+    }
+  }
+
+  const handleResetPassword = (e) => {
+    e && e.preventDefault()
+    setForgotMsg('')
+    if (!forgotNew || forgotNew.length < 6) {
+      setForgotMsg('New password must be at least 6 characters')
+      return
+    }
+    if (forgotNew !== forgotConfirm) {
+      setForgotMsg('Passwords do not match')
+      return
+    }
+
+    // update users array if present
+    const usersRaw = localStorage.getItem('users')
+    if (usersRaw) {
+      try {
+        const users = JSON.parse(usersRaw)
+        const idx = users.findIndex(u => (u.username === forgotFound.username) || (u.email === forgotFound.email))
+        if (idx > -1) {
+          users[idx].password = forgotNew
+          localStorage.setItem('users', JSON.stringify(users))
+        }
+      } catch (err) {
+        // ignore
+      }
+    }
+
+    // update currentUser as well
+    const saved = JSON.parse(localStorage.getItem('currentUser') || 'null')
+    const updated = { ...(saved || {}), password: forgotNew }
+    localStorage.setItem('currentUser', JSON.stringify(updated))
+
+    setForgotMsg('Password has been reset')
+    // clear and close after a short moment
+    setTimeout(() => {
+      setShowForgot(false)
+      setForgotIdentifier('')
+      setForgotFound(null)
+      setForgotNew('')
+      setForgotConfirm('')
+      setForgotMsg('')
+    }, 1400)
   }
 
   // Render login form
   return (
     <div className='login-container'>
-      {/* Title */}
       <p>Login</p>
       <form onSubmit={handleLogin}>
-        {/* Username input */}
         <div className='user-input'>
           <img src={person} alt="person"/>
           <input
             type='text'
-            placeholder='Username'
-            value={username}
-            onChange={e => setUsername(e.target.value)}
+            placeholder='Username or email'
+            value={identifier}
+            onChange={e => setIdentifier(e.target.value)}
           />
         </div>
-        {/* Password input */}
         <div className='user-input'>
           <img src={password} alt="password"/>
           <input
@@ -58,12 +151,53 @@ const Login = ({ onLogin }) => {
             onChange={e => setPasswordVal(e.target.value)}
           />
         </div>
-        {/* Error and success messages */}
         {error && <div style={{color:"red"}}>{error}</div>}
         {success && <div style={{color:"green"}}>{success}</div>}
-        {/* Submit button */}
         <button type="submit">Login</button>
+        <div style={{marginTop: '0.5rem'}}>
+          <button type="button" className="forgot-link" onClick={() => { setShowForgot(s => !s); setForgotMsg(''); setForgotFound(null) }} style={{background: 'transparent', border: 'none', color: '#4f46e5', cursor: 'pointer', padding: 0}}>Forgot password?</button>
+        </div>
       </form>
+
+      {showForgot && (
+        <div style={{marginTop: '0.75rem'}}>
+          {!forgotFound ? (
+            <form onSubmit={handleFindAccount} className="forgot-form">
+              <div className='user-input'>
+                <img src={person} alt="person"/>
+                <input
+                  type='text'
+                  placeholder='Enter username or email'
+                  value={forgotIdentifier}
+                  onChange={e => setForgotIdentifier(e.target.value)}
+                />
+              </div>
+              <div style={{display: 'flex', gap: '.5rem', marginTop: '.5rem'}}>
+                <button type="submit">Find account</button>
+                <button type="button" onClick={() => { setShowForgot(false); setForgotIdentifier(''); setForgotMsg('') }}>Cancel</button>
+              </div>
+              {forgotMsg && <div style={{marginTop: '0.5rem', color: forgotMsg.includes('found') ? 'green' : 'red'}}>{forgotMsg}</div>}
+            </form>
+          ) : (
+            <form onSubmit={handleResetPassword} className="forgot-form">
+              <div style={{marginBottom: '.25rem'}}>Resetting password for <strong>{forgotFound.username || forgotFound.email}</strong></div>
+              <div className='user-input'>
+                <img src={password} alt="password"/>
+                <input type="password" placeholder="New password" value={forgotNew} onChange={e => setForgotNew(e.target.value)} />
+              </div>
+              <div className='user-input'>
+                <img src={password} alt="password"/>
+                <input type="password" placeholder="Confirm new password" value={forgotConfirm} onChange={e => setForgotConfirm(e.target.value)} />
+              </div>
+              <div style={{display: 'flex', gap: '.5rem', marginTop: '.5rem'}}>
+                <button type="submit">Set new password</button>
+                <button type="button" onClick={() => { setForgotFound(null); setForgotNew(''); setForgotConfirm(''); setForgotMsg('') }}>Back</button>
+              </div>
+              {forgotMsg && <div style={{marginTop: '0.5rem', color: forgotMsg.includes('reset') ? 'green' : 'red'}}>{forgotMsg}</div>}
+            </form>
+          )}
+        </div>
+      )}
     </div>
   )
 }

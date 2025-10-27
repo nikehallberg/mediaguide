@@ -1,12 +1,11 @@
 - responsive design
 
 längre mål
-1. review input field, thank u message
+1. review input field, thank u message, popup som man kan scrolla i, inuti card med tillbaka 
+knapp, sortera efter nyaste, populärast, 
 2. read reviews for this item
 3. egen databas, mongodb
 4. api, integrera med imdb
-5. darkmode
-6. fixa tumme upp tumme ner knappar, ångra sig, ta bort det suddiga
 
 
 

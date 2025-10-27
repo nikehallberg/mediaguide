@@ -2,6 +2,7 @@ import './Login.css'
 import person from '../../assets/person.png'
 import password from '../../assets/password.png'
 import { useState } from 'react'
+import { login } from '../../services/authService'
 
 // Login component handles user login logic and UI
 const Login = ({ onLogin }) => {
@@ -20,43 +21,30 @@ const Login = ({ onLogin }) => {
   const [forgotNew, setForgotNew] = useState("")
   const [forgotConfirm, setForgotConfirm] = useState("")
 
-  // Handles login form submission
-  const handleLogin = (e) => {
+  // Handles login form submission. Uses the centralized auth service which
+  // will try a backend call and fall back to localStorage-based auth when
+  // no server is available (good for demos and local dev).
+  const handleLogin = async (e) => {
     e.preventDefault()
     setError("")
     setSuccess("")
 
-    // Retrieve users from localStorage or initialize as empty array
-    const users = JSON.parse(localStorage.getItem("users") || "[]")
-
-    const id = (identifier || "").trim().toLowerCase()
+    const id = (identifier || "").trim()
     const pw = passwordVal || ""
-
     if (!id || !pw) {
       setError("Please enter username/email and password")
       return
     }
 
-    // Find user with matching username or email (case-insensitive) and matching password
-    const user = users.find(u => {
-      const uname = (u.username || "").toString().toLowerCase()
-      const mail = (u.email || "").toString().toLowerCase()
-      return (uname === id || mail === id) && u.password === pw
-    })
-
-    if (user) {
-      // Successful login: pass canonical username up and set currentUser for Profile
+    try {
+      // login will either return a user object or throw an Error
+      const user = await login(id, pw)
       setSuccess("Login successful!")
       setError("")
-      try {
-        localStorage.setItem("currentUser", JSON.stringify(user))
-      } catch (err) {
-        // ignore localStorage errors
-      }
-      if (onLogin) onLogin(user.username)
-    } else {
-      // Invalid credentials
-      setError("Invalid username/email or password")
+      try { localStorage.setItem('currentUser', JSON.stringify(user)) } catch (err) { /* ignore */ }
+      if (onLogin) onLogin(user.username || user.email || user.id)
+    } catch (err) {
+      setError(err.message || 'Login failed')
       setSuccess("")
     }
   }

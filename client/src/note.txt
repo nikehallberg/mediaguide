@@ -9,7 +9,7 @@ knapp, sortera efter nyaste, populärast,
 
 
 
-reset password
+fixa reset password, skickas till mail
 
 
 1. spara review enskild review

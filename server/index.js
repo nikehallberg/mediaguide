@@ -6,4 +6,4 @@ import cookieParser from "cookie-parser";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-dotenv.config
+dotenv.config();

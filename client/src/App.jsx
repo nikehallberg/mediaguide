@@ -7,42 +7,49 @@ import Songs from "./components/songs/Songs";
 import Profile from "./components/profile/Profile";
 import { Route, Routes } from "react-router-dom";
 import Register from "./components/register/Register";
-import { useState } from "react";
-
-// Main App component
+import { useState, useEffect } from "react";
+import { getMe, logout as logoutApi } from "./services/authService";
+ 
 const App = () => {
-  // State to keep track of the logged-in user (from localStorage if available)
-  const [user, setUser] = useState(localStorage.getItem("loggedInUser") || null);
-
-  // Function to handle user login
-  const handleLogin = (username) => {
-    setUser(username); // Set user state
-    localStorage.setItem("loggedInUser", username); // Persist user in localStorage
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+ 
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { user } = await getMe();
+      setUser(user);
+      setLoading(false);
+    };
+    checkAuth();
+  }, []);
+ 
+  const handleLogin = (userData) => {
+    setUser(userData);
   };
-
-  // Function to handle user logout
-  const handleLogout = () => {
-    setUser(null); // Clear user state
-    localStorage.removeItem("loggedInUser"); // Remove user from localStorage
+ 
+  const handleLogout = async () => {
+    await logoutApi();
+    setUser(null);
   };
-
-  // Render the app UI
+ 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+ 
   return (
     <div>
-      {/* Navbar receives user info and login/logout handlers as props */}
       <Navbar user={user} onLogout={handleLogout} onLogin={handleLogin} />
-      {/* Define routes for different pages */}
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/books" element={<Books />} />
-        <Route path="/movies" element={<Movies />} />
-        <Route path="/shows" element={<Shows />} />
-        <Route path="/songs" element={<Songs />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/books' element={<Books />} />
+        <Route path='/movies' element={<Movies />} />
+        <Route path='/shows' element={<Shows />} />
+        <Route path='/songs' element={<Songs />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/profile' element={<Profile user={user} />} />
       </Routes>
     </div>
   );
 };
-
+ 
 export default App;

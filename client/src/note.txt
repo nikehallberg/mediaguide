@@ -19,3 +19,6 @@ fixa reset password, skickas till mail
 
 
 logo3 = #212121
+
+
+node index.js

@@ -31,7 +31,7 @@ export const register = async (username, email, password) => {
     );
     if (exists) throw new Error("User with that username or email already exists");
 
-    const newUser = { username, email, password };
+    const newUser = { username, email, password, dateJoined: new Date().toISOString() };
     users.push(newUser);
     localStorage.setItem("users", JSON.stringify(users));
     return newUser;
@@ -56,7 +56,13 @@ export const login = async (username, password) => {
     const found = users.find(
       (u) => ((u.username || "").toLowerCase() === id || (u.email || "").toLowerCase() === id) && u.password === password
     );
-    if (found) return found;
+    if (found) {
+      // Add dateJoined if it doesn't exist (for backward compatibility)
+      if (!found.dateJoined) {
+        found.dateJoined = new Date().toISOString();
+      }
+      return found;
+    }
     throw new Error("Invalid username/email or password");
   }
 };

@@ -3,6 +3,9 @@ import "./Profile.css";
 import "../shared/MediaShared.css";
  
 const Profile = ({ user }) => {
+  // Debug: Log the user object to see what data we're receiving
+  console.log('Profile component received user:', user);
+  
   if (!user) {
     return (
       <div className='profile-container'>
@@ -10,15 +13,38 @@ const Profile = ({ user }) => {
       </div>
     );
   }
- 
+
   const initials = user.username
     .split(" ")
     .map((n) => n[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();
- 
-  return (
+
+  // Calculate membership duration
+  const getMembershipDuration = (dateJoined) => {
+    if (!dateJoined) return null;
+    const joinDate = new Date(dateJoined);
+    const now = new Date();
+    const diffTime = Math.abs(now - joinDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 30) {
+      return `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+    } else if (diffDays < 365) {
+      const months = Math.floor(diffDays / 30);
+      return `${months} month${months !== 1 ? 's' : ''}`;
+    } else {
+      const years = Math.floor(diffDays / 365);
+      const remainingMonths = Math.floor((diffDays % 365) / 30);
+      if (remainingMonths === 0) {
+        return `${years} year${years !== 1 ? 's' : ''}`;
+      }
+      return `${years}y ${remainingMonths}m`;
+    }
+  };
+
+  const membershipDuration = getMembershipDuration(user.dateJoined);  return (
     <div className='profile-container'>
       <div
         style={{
@@ -42,6 +68,24 @@ const Profile = ({ user }) => {
         <div className='profile-info-item'>
           <span className='label'>Email:</span>
           <span className='value'>{user.email}</span>
+        </div>
+        <div className='profile-info-item date-joined'>
+          <span className='label'>Date Joined:</span>
+          <span className='value'>
+            {user.dateJoined 
+              ? new Date(user.dateJoined).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })
+              : 'Not available'
+            }
+            {membershipDuration && (
+              <span className='member-badge'>
+                📅 {membershipDuration}
+              </span>
+            )}
+          </span>
         </div>
         <div className='profile-info-item'>
           <span className='label'>User ID:</span>

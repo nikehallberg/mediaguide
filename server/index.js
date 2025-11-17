@@ -22,6 +22,7 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  dateJoined: { type: Date, default: Date.now },
 });
 const User = mongoose.model("User", UserSchema);
  
@@ -31,36 +32,48 @@ const createToken = (userId) =>
  
 // REGISTER skapa konto och skapa token till kontot, request response
 app.post("/api/auth/register", async (req, res) => {
-  const { username, email, password } = req.body;
-  const hash = await bcrypt.hash(password, 10);
-  const user = await User.create({ username, email, password: hash });
- 
-  const token = createToken(user._id);
-  res.cookie("token", token, { httpOnly: true });
-  res.json({ id: user._id, username: user.username, email: user.email });
+  try {
+    const { username, email, password } = req.body;
+    const hash = await bcrypt.hash(password, 10);
+    const user = await User.create({ username, email, password: hash });
+   
+    const token = createToken(user._id);
+    res.cookie("token", token, { httpOnly: true });
+    res.json({ _id: user._id, username: user.username, email: user.email, dateJoined: user.dateJoined });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
  
 // LOGIN logga in på sitt konto, om rätt uppgifter ge token, om fel uppgifter ge 'felaktiga uppgifter' och invänta rätt uppgifter
 app.post("/api/auth/login", async (req, res) => {
-  const { username, password } = req.body;
-  const user = await User.findOne({ username });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(400).json({ error: "Felaktiga uppgifter" });
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(400).json({ error: "Felaktiga uppgifter" });
+    }
+   
+    const token = createToken(user._id);
+    res.cookie("token", token, { httpOnly: true });
+    res.json({ _id: user._id, username: user.username, email: user.email, dateJoined: user.dateJoined });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
- 
-  const token = createToken(user._id);
-  res.cookie("token", token, { httpOnly: true });
-  res.json({ id: user._id, username: user.username, email: user.email });
 });
  
 // ME 
 app.get("/api/auth/me", async (req, res) => {
-  const token = req.cookies.token;
-  if (!token) return res.json({ user: null });
- 
-  const { userId } = jwt.verify(token, JWT_SECRET);
-  const user = await User.findById(userId).select("-password");
-  res.json({ user: user || null });
+  try {
+    const token = req.cookies.token;
+    if (!token) return res.json({ user: null });
+   
+    const { userId } = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(userId).select("-password");
+    res.json({ user: user || null });
+  } catch (error) {
+    res.json({ user: null });
+  }
 });
  
 // LOGOUT endast response, ta bort cookie/token
@@ -70,8 +83,22 @@ app.post("/api/auth/logout", (req, res) => {
 });
  
 // Start starta mongo, konsoll logga vart mongodbb är hostad
-mongoose.connect(process.env.MONGO_URI).then(() => {
+mongoose.connect(process.env.MONGO_URI).then(async () => {
   console.log("✅ MongoDB ansluten");
+  
+  // Add dateJoined to existing users who don't have it
+  try {
+    const usersWithoutDate = await User.updateMany(
+      { dateJoined: { $exists: false } },
+      { $set: { dateJoined: new Date() } }
+    );
+    if (usersWithoutDate.modifiedCount > 0) {
+      console.log(`📅 Updated ${usersWithoutDate.modifiedCount} users with dateJoined field`);
+    }
+  } catch (error) {
+    console.log("Error updating users:", error.message);
+  }
+  
   app.listen(PORT, () => console.log(`🚀 Server på http://localhost:${PORT}`));
 });
  

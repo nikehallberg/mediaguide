@@ -1,0 +1,125 @@
+/* Reviews: combined styles for ReviewButton (modal) and ReviewList */
+
+/* Modal backdrop + panel */
+.review-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 10, 0.45);
+  z-index: 2000;
+}
+.review-panel {
+  width: 90%;
+  max-width: 640px;
+  background: #fffbe6;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Modal layout */
+.review-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+.review-text {
+  width: 100%;
+  min-height: 120px;
+  border-radius: 8px;
+  padding: 0.6rem;
+  border: 1px solid #f0e0a0;
+  background: #fffdf2;
+  resize: vertical;
+  font-size: 0.95rem;
+}
+.review-actions {
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Buttons inside review modal */
+.review-actions .btn-cancel {
+  margin-left: 12px;
+  background: #fffbe6;
+  color: #4a3f0b;
+  border-color: #f7c948;
+}
+.review-actions .btn-delete {
+  margin-left: 12px;
+  background: #fff6f6;
+  color: #b00;
+  border-color: #f7c948;
+}
+
+/* Review list */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.review-item {
+  background: #fffbe6;
+  border: 1px solid #f7c948;
+  padding: 0.8rem;
+  border-radius: 8px;
+}
+.review-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.review-title {
+  font-weight: 700;
+}
+.review-text-block {
+  margin-top: 0.5rem;
+  color: #333;
+}
+.review-meta {
+  margin-top: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+}
+
+/* Small helper states */
+.review-loading,
+.review-empty {
+  padding: 0.6rem;
+  color: #666;
+}
+
+/* Watchlist / review toggle button (keeps size consistent) */
+.watch-btn.review-toggle {
+  width: 44px;
+  height: 36px;
+  padding: 0;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* Generic "show more" style reused across app */
+.show-more-btn {
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #f7c948;
+  background: linear-gradient(90deg, #fffbe6, #fffdf2);
+  cursor: pointer;
+}
+
+/* Remove button used in ReviewList (replaces inline margin) */
+.btn-remove {
+  margin-left: 12px;
+}
+
+/* show less variant if used */
+.show-more-btn.show-less-btn {
+  margin-left: 1rem;
+  background: linear-gradient(90deg, #f4e285, #f7c948);
+}

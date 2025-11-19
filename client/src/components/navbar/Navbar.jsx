@@ -3,7 +3,7 @@ import "./Navbar.css";
 import Logo from "../../assets/logo.png";
 import Logo3 from "../../assets/logo3.png";
 import { useState, useRef, useEffect } from "react";
-import Login from "../login/Login";
+import Login from "../logIn/Login";
 import Register from "../register/Register";
 
 const Navbar = ({ user, onLogout, onLogin }) => {

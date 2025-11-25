@@ -1,25 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import "../shared/MediaShared.css";
- 
-const Profile = ({ user }) => {
-  // Debug: Log the user object to see what data we're receiving
-  console.log('Profile component received user:', user);
-  
-  if (!user) {
-    return (
-      <div className='profile-container'>
-        <h1 className='profile-title'>Please log in to view your profile</h1>
-      </div>
-    );
-  }
+import ReviewList from "../reviews/ReviewList";
+import WatchlistPanel from "../watchList/WatchlistPanel";
 
-  const initials = user.username
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+const Profile = () => {
+  const [user, setUser] = useState({ username: "", email: "", dateJoined: null, _id: "" });
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [watchOpen, setWatchOpen] = useState(false);
+  const [reviewsOpen, setReviewsOpen] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      setLoadingProfile(true);
+      try {
+        // backend provides /api/auth/me
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        if (!mounted) return;
+        if (!res.ok) {
+          const username = localStorage.getItem("loggedInUser") || "";
+          setUser({ username, email: "", dateJoined: null, _id: "" });
+          setLoadingProfile(false);
+          return;
+        }
+        const data = await res.json().catch(() => ({}));
+        // backend returns { user }
+        const u = data.user || data || {};
+        setUser({
+          username: u.username || u.name || localStorage.getItem("loggedInUser") || "",
+          email: u.email || "",
+          dateJoined: u.dateJoined || null,
+          _id: u._id || ""
+        });
+      } catch (err) {
+        console.error("Failed to load profile", err);
+        const username = localStorage.getItem("loggedInUser") || "";
+        setUser({ username, email: "", dateJoined: null, _id: "" });
+      } finally {
+        if (mounted) setLoadingProfile(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Calculate membership duration
   const getMembershipDuration = (dateJoined) => {
@@ -44,58 +69,142 @@ const Profile = ({ user }) => {
     }
   };
 
-  const membershipDuration = getMembershipDuration(user.dateJoined);  return (
-    <div className='profile-container'>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "0.75rem",
-        }}
-      >
-        <div className='profile-avatar' aria-hidden>
-          {initials}
-        </div>
-        <h1 className='profile-title'>User Profile</h1>
+  const membershipDuration = getMembershipDuration(user.dateJoined);
+
+  const initials = user.username
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  // Implemented but minimal callbacks
+  const onWatchItemRemoved = ({ id, key }) => {
+    // could refresh counts or UI if you keep them in Profile
+    console.debug("onWatchItemRemoved", id, key);
+  };
+  const onReviewRemoved = (id) => {
+    console.debug("onReviewRemoved", id);
+  };
+
+  if (!user.username && !loadingProfile) {
+    return (
+      <div className='profile-container'>
+        <h1 className='profile-title'>Please log in to view your profile</h1>
       </div>
- 
-      <div className='profile-info'>
-        <div className='profile-info-item'>
-          <span className='label'>Username:</span>
-          <span className='value'>{user.username}</span>
+    );
+  }
+
+  return (
+    <div className='profile-root'>
+      <div className='profile-grid'>
+        <div className='profile-info box'>
+          <div className='profile-header'>
+            <div className='profile-avatar' aria-hidden>
+              {initials}
+            </div>
+            <h2>User Profile</h2>
+          </div>
+          {loadingProfile ? (
+            <div className='profile-loading'>Loading profile…</div>
+          ) : (
+            <div className='profile-details'>
+              <div className='profile-info-item'>
+                <span className='label'>Username:</span>
+                <span className='value'>{user.username}</span>
+              </div>
+              {user.email && (
+                <div className='profile-info-item'>
+                  <span className='label'>Email:</span>
+                  <span className='value'>{user.email}</span>
+                </div>
+              )}
+              {user.dateJoined && (
+                <div className='profile-info-item date-joined'>
+                  <span className='label'>Date Joined:</span>
+                  <span className='value'>
+                    {new Date(user.dateJoined).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                    {membershipDuration && (
+                      <span className='member-badge'>
+                        📅 {membershipDuration}
+                      </span>
+                    )}
+                  </span>
+                </div>
+              )}
+              {user._id && (
+                <div className='profile-info-item'>
+                  <span className='label'>User ID:</span>
+                  <span className='value'>{user._id}</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
-        <div className='profile-info-item'>
-          <span className='label'>Email:</span>
-          <span className='value'>{user.email}</span>
-        </div>
-        <div className='profile-info-item date-joined'>
-          <span className='label'>Date Joined:</span>
-          <span className='value'>
-            {user.dateJoined 
-              ? new Date(user.dateJoined).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })
-              : 'Not available'
-            }
-            {membershipDuration && (
-              <span className='member-badge'>
-                📅 {membershipDuration}
-              </span>
-            )}
-          </span>
-        </div>
-        <div className='profile-info-item'>
-          <span className='label'>User ID:</span>
-          <span className='value'>{user._id}</span>
+
+        <div className='profile-side'>
+          <div className='box watchlist-box'>
+            <div className='box-header'>
+              <h3>Watchlist</h3>
+              <button
+                className='show-more-btn'
+                onClick={() => setWatchOpen(true)}
+              >
+                Open
+              </button>
+            </div>
+            <div className='box-body'>
+              <p>Open your watchlist to view and manage your saved items.</p>
+            </div>
+          </div>
+
+          <div className='box reviews-box'>
+            <div className='box-header'>
+              <h3>Reviews</h3>
+              <button
+                className='show-more-btn'
+                onClick={() => setReviewsOpen(true)}
+              >
+                Open
+              </button>
+            </div>
+            <div className='box-body'>
+              <p>View all your reviews and manage them by opening the list.</p>
+            </div>
+          </div>
         </div>
       </div>
+
+      <WatchlistPanel
+        open={watchOpen}
+        onClose={() => setWatchOpen(false)}
+        onRemoved={onWatchItemRemoved}
+      />
+
+      {reviewsOpen && (
+        <div className='review-modal' onClick={() => setReviewsOpen(false)}>
+          <div className='review-panel' onClick={(e) => e.stopPropagation()}>
+            <h3>Your Reviews</h3>
+            <ReviewList onDeleted={onReviewRemoved} />
+            <div className='review-actions'>
+              <button
+                className='show-more-btn'
+                onClick={() => setReviewsOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
- 
+
 export default Profile;
  
 

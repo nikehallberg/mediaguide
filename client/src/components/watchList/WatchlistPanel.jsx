@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./Watchlist.css";
 import "./../reviews/Reviews.css"; // reuse modal styles
 import "./../shared/MediaShared.css";
 

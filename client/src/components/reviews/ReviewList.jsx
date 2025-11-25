@@ -13,7 +13,7 @@ const ReviewList = ({ onDeleted }) => {
     setLoading(true);
     setError("");
     try {
-      const url = `${API_ROOT}/api/reviews/all`;
+      const url = `${API_ROOT}/api/reviews`;
       console.debug("[ReviewList] GET", url);
       const res = await fetch(url, { credentials: "include" });
       console.debug("[ReviewList] status", res.status);
@@ -23,8 +23,8 @@ const ReviewList = ({ onDeleted }) => {
         setReviews([]);
         setError(
           res.status === 401
-            ? "Logga in för att se dina reviews."
-            : "Kunde inte ladda dina reviews."
+            ? "Please log in to see your reviews."
+            : "Could not load your reviews."
         );
         setLoading(false);
         return;
@@ -34,7 +34,7 @@ const ReviewList = ({ onDeleted }) => {
       setReviews(list);
     } catch (err) {
       console.error("[ReviewList] Failed to load reviews", err);
-      setError("Nätverksfel vid inläsning av reviews.");
+      setError("Network error while loading reviews.");
       setReviews([]);
     } finally {
       setLoading(false);
@@ -51,7 +51,7 @@ const ReviewList = ({ onDeleted }) => {
   };
 
   const handleRemove = async (review) => {
-    if (!confirm("Ta bort denna review?")) return;
+    if (!confirm("Delete this review?")) return;
     const id = review._id || review.id;
     if (!id) {
       handleDeleteLocal(null);
@@ -73,21 +73,21 @@ const ReviewList = ({ onDeleted }) => {
         } catch (parseErr) {
           console.warn("[ReviewList] DELETE parse error", parseErr);
         }
-        alert(body.error || "Kunde inte ta bort review.");
+        alert(body.error || "Could not delete review.");
         return;
       }
       handleDeleteLocal(id);
     } catch (err) {
       console.error("[ReviewList] Network error removing review", err);
-      alert("Nätverksfel vid borttagning.");
+      alert("Network error while deleting.");
     }
   };
 
   if (loading)
-    return <div className='review-loading'>Laddar dina reviews…</div>;
+    return <div className='review-loading'>Loading your reviews…</div>;
   if (error) return <div className='review-empty'>{error}</div>;
   if (!reviews.length)
-    return <div className='review-empty'>Du har inga reviews ännu.</div>;
+    return <div className='review-empty'>You don't have any reviews yet.</div>;
 
   return (
     <div className='review-list'>
@@ -98,7 +98,7 @@ const ReviewList = ({ onDeleted }) => {
           <div className='review-item' key={key}>
             <div className='review-item-top'>
               <div className='review-title'>
-                {r.itemTitle || r.itemId || "Okänt"}
+                {r.itemTitle || r.itemId || "Unknown"}
               </div>
               <div className='review-rating'>
                 <Rating
@@ -110,15 +110,23 @@ const ReviewList = ({ onDeleted }) => {
               </div>
             </div>
             <div className='review-text-block'>
-              {r.content || r.text || r.comment || ""}
+              {r.reviewText || r.content || r.text || r.comment || ""}
             </div>
             <div className='review-meta'>
-              <small>{r.updatedAt || r.createdAt || ""}</small>
+              <small>
+                {r.dateCreated 
+                  ? new Date(r.dateCreated).toLocaleDateString() 
+                  : r.updatedAt 
+                  ? new Date(r.updatedAt).toLocaleDateString()
+                  : r.createdAt
+                  ? new Date(r.createdAt).toLocaleDateString()
+                  : ""}
+              </small>
               <button
                 className='show-more-btn btn-remove'
                 onClick={() => handleRemove(r)}
               >
-                Ta bort
+                Remove
               </button>
             </div>
           </div>

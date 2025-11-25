@@ -23,10 +23,10 @@ const ReviewButton = ({
     let mounted = true;
     (async () => {
       try {
-        const url = `${API_ROOT}/api/reviews/mine`;
-        console.debug("[ReviewButton] GET mine", url);
+        const url = `${API_ROOT}/api/reviews/${itemType}/${encodeURIComponent(itemKey)}`;
+        console.debug("[ReviewButton] GET existing review", url);
         const res = await fetch(url, { credentials: "include" });
-        console.debug("[ReviewButton] GET mine status", res.status);
+        console.debug("[ReviewButton] GET status", res.status);
         if (!mounted) return;
         if (!res.ok) {
           setExistingId(null);
@@ -34,13 +34,12 @@ const ReviewButton = ({
           setText("");
           return;
         }
-        const data = await res.json().catch(() => ({ reviews: [] }));
-        const list = Array.isArray(data) ? data : data.reviews || [];
-        const review = list.find((r) => String(r.itemId) === String(itemKey));
+        const data = await res.json().catch(() => ({ review: null }));
+        const review = data.review;
         if (review) {
           setExistingId(review._id || review.id || null);
           setRating(review.rating || 3);
-          setText(review.content || review.text || review.comment || "");
+          setText(review.reviewText || review.content || review.text || "");
         } else {
           setExistingId(null);
           setRating(3);
@@ -56,7 +55,7 @@ const ReviewButton = ({
     return () => {
       mounted = false;
     };
-  }, [open, itemKey]);
+  }, [open, itemKey, itemType]);
 
   const close = (e) => {
     if (e && e.stopPropagation) e.stopPropagation();
@@ -75,92 +74,56 @@ const ReviewButton = ({
     if (e && e.stopPropagation) e.stopPropagation();
     setLoading(true);
     try {
-      // Send both content and text for compatibility with different backend field names
       const body = {
         itemType,
         itemId: itemKey,
         itemTitle: itemTitle || itemKey,
         rating,
-        content: text,
-        text,
+        reviewText: text,
       };
 
-      if (existingId) {
-        // Update existing review (PATCH)
-        const url = `${API_ROOT}/api/reviews/${existingId}`;
-        console.debug("[ReviewButton] PATCH", url, body);
-        const res = await fetch(url, {
-          method: "PATCH",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-        const resText = await res.text().catch(() => "");
-        console.debug("[ReviewButton] PATCH status", res.status, resText);
-        if (!res.ok) {
-          let data = {};
-          try {
-            data = resText ? JSON.parse(resText) : {};
-          } catch (parseErr) {
-            console.warn("PATCH parse error", parseErr);
-          }
-          if (res.status === 401) {
-            alert("Logga in för att uppdatera review.");
-            setLoading(false);
-            return;
-          }
-          alert(data.error || "Kunde inte uppdatera review.");
+      // Always use POST - the backend will handle create/update
+      const url = `${API_ROOT}/api/reviews`;
+      console.debug("[ReviewButton] POST", url, body);
+      const res = await fetch(url, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const resText = await res.text().catch(() => "");
+      console.debug("[ReviewButton] POST status", res.status, resText);
+      if (!res.ok) {
+        let data = {};
+        try {
+          data = resText ? JSON.parse(resText) : {};
+        } catch (parseErr) {
+          console.warn("POST parse error", parseErr);
+        }
+        if (res.status === 401) {
+          alert("Please log in to save your review.");
           setLoading(false);
           return;
         }
-        // success
-        dispatchUpdate({ id: existingId, action: "updated" });
-        if (typeof onSaved === "function")
-          onSaved({ id: existingId, key: itemKey, review: { rating, text } });
-      } else {
-        // Create new review (POST)
-        const url = `${API_ROOT}/api/reviews`;
-        console.debug("[ReviewButton] POST", url, body);
-        const res = await fetch(url, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-        const resText = await res.text().catch(() => "");
-        console.debug("[ReviewButton] POST status", res.status, resText);
-        if (!res.ok) {
-          let data = {};
-          try {
-            data = resText ? JSON.parse(resText) : {};
-          } catch (parseErr) {
-            console.warn("POST parse error", parseErr);
-          }
-          if (res.status === 401) {
-            alert("Logga in för att lämna en review.");
-            setLoading(false);
-            return;
-          }
-          alert(data.error || "Kunde inte spara din review.");
-          setLoading(false);
-          return;
-        }
-        const data = resText ? JSON.parse(resText) : {};
-        const newId = data.review?._id || data._id || data.id || null;
-        setExistingId(newId || true);
-        dispatchUpdate({ id: newId, action: "created" });
-        if (typeof onSaved === "function")
-          onSaved({
-            id: newId || true,
-            key: itemKey,
-            review: { rating, text },
-          });
+        alert(data.error || "Could not save your review.");
+        setLoading(false);
+        return;
       }
+      const data = resText ? JSON.parse(resText) : {};
+      const newId = data.review?._id || data._id || data.id || null;
+      setExistingId(newId || true);
+      dispatchUpdate({ id: newId, action: existingId ? "updated" : "created" });
+      if (typeof onSaved === "function")
+        onSaved({
+          id: newId || true,
+          key: itemKey,
+          review: { rating, text },
+        });
 
       setOpen(false);
     } catch (err) {
       console.error("[ReviewButton] Network error saving review", err);
-      alert("Nätverksfel vid sparning av review.");
+      alert("Network error while saving review.");
     } finally {
       setLoading(false);
     }
@@ -221,7 +184,7 @@ const ReviewButton = ({
           e.stopPropagation();
           setOpen(true);
         }}
-        title={added ? "Redigera din review" : "Lägg till review"}
+        title={added ? "Edit your review" : "Add review"}
         aria-pressed={added}
       >
         {added ? "★" : "✚"}
@@ -242,7 +205,7 @@ const ReviewButton = ({
             </div>
             <textarea
               className='review-text'
-              placeholder='Skriv din recension...'
+              placeholder='Write your review...'
               value={text}
               onChange={(e) => setText(e.target.value)}
             />
@@ -252,10 +215,10 @@ const ReviewButton = ({
                 onClick={handleSave}
                 disabled={loading}
               >
-                {loading ? "Sparar…" : "Spara"}
+                {loading ? "Saving..." : "Save"}
               </button>
               <button className='show-more-btn btn-cancel' onClick={close}>
-                Avbryt
+                Cancel
               </button>
               {existingId && (
                 <button
@@ -263,7 +226,7 @@ const ReviewButton = ({
                   onClick={handleDelete}
                   disabled={loading}
                 >
-                  {loading ? "Tar bort…" : "Ta bort"}
+                  {loading ? "Deleting..." : "Delete"}
                 </button>
               )}
             </div>

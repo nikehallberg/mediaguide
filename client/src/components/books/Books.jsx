@@ -9,6 +9,8 @@ import { genres1 } from "../../data/genres";
 import Rating from '@mui/material/Rating';
 import FilterBar, { LikeDislike } from "../shared/MediaShared";
 import { scrollToContainer, getSearchModes } from "../shared/mediaUtils";
+import WatchlistButton from "../watchList/WatchlistButton"; // reusable button
+import ReviewButton from "../reviews/ReviewButton"; // reusable review button
 
 // Filters books by selected genres
 function filterBooks(books, selectedGenres, searchTerm, searchMode) {
@@ -53,6 +55,9 @@ const Books = () => {
   const [visibleCount, setVisibleCount] = useState(BOOKS_PER_PAGE);
   const [searchMode, setSearchMode] = useState("title"); // "title" or "author"
 
+  // Parent cache: key -> watchlist item id (or true)
+  const [watchMap, setWatchMap] = useState({});
+
   let filteredBooks = filterBooks(books, selectedGenres, bookSearch, searchMode);
   const searchModes = getSearchModes(books);
   if (sortOption === "alphabetical") {
@@ -82,6 +87,55 @@ const Books = () => {
       scrollToContainer('books-container');
     }
   }, [selectedGenres, bookSearch, sortOption]);
+
+  // Load user's watchlist once and build a map key -> _id
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await fetch("/api/watchlist", { credentials: "include" });
+        if (!mounted) return;
+        if (!res.ok) {
+          setWatchMap({});
+          return;
+        }
+        const data = await res.json().catch(() => ({}));
+        const items = data.items || data || [];
+        const map = {};
+        items.forEach((it) => {
+          const key = it.itemId || it.itemTitle || it.title;
+          if (key) map[key] = it._id || it.id || true;
+        });
+        if (mounted) setWatchMap(map);
+      } catch (err) {
+        console.error("Failed to load watchlist", err);
+        if (mounted) setWatchMap({});
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const handleAdded = ({ id, key }) => {
+    setWatchMap((prev) => ({ ...prev, [key]: id || true }));
+  };
+
+  const handleRemoved = ({ key }) => {
+    setWatchMap((prev) => {
+      const copy = { ...prev };
+      delete copy[key];
+      return copy;
+    });
+  };
+
+  // Reviews callbacks placeholders
+  const handleReviewSaved = ({ id, key, review }) => {
+    /* optional sync */
+  };
+  const handleReviewRemoved = ({ id, key }) => {
+    /* optional sync */
+  };
 
   // Endless scroll when a genre is chosen
   useEffect(() => {
@@ -118,7 +172,7 @@ const Books = () => {
           sortOption={sortOption}
           setSortOption={setSortOption}
           sortOptions={sortOptions}
-          searchPlaceholder={searchMode === "author" ? "Search author..." : "Search book name..."}
+          searchPlaceholder={searchMode === "author" ? "Search author..." : "Search book title..."}
           inputClass="book-search-input"
           searchMode={searchMode}
           setSearchMode={setSearchMode}
@@ -126,27 +180,49 @@ const Books = () => {
           data={books}
         />
       </div>
-      <div className="books-container">
-        {filteredBooks.slice(0, visibleCount).map((book) => (
-          <div
-            className={`book-card${flipped[book.title] ? " flipped" : ""}`}
-            key={book.title}
-            onClick={() => handleFlip(book.title)}
-          >
-            <div className="card-inner">
-              <div className="card-front">
-                <h3>{book.title}</h3>
-                <img src={book.image} alt="A book cover" />
-                <p>{book.genre}</p>
-              </div>
-              <div className="card-back">
-                <p>{book.about}</p>
-                <Rating name="half-rating-read" value={book.review} precision={0.5} readOnly />
-                <LikeDislike id={book.title} />
+      <div className="books-container" id="books-container">
+        {filteredBooks.slice(0, visibleCount).map((book) => {
+          const initialId = watchMap[book.title] || null;
+          return (
+            <div
+              className={`book-card${flipped[book.title] ? " flipped" : ""}`}
+              key={book.title}
+              onClick={() => handleFlip(book.title)}
+            >
+              <div className="card-inner">
+                <div className="card-front">
+                  <h3>{book.title}</h3>
+                  <img src={book.image} alt="A book cover" />
+                  <p>{book.genre}</p>
+                </div>
+                <div className="card-back">
+                  <p>{book.about}</p>
+                  <Rating name="half-rating-read" value={book.review} precision={0.5} readOnly />
+                  <LikeDislike id={book.title} />
+                  
+                  <div className="card-actions">
+                    <WatchlistButton
+                      itemKey={book.title}
+                      itemType="book"
+                      itemTitle={book.title}
+                      initialId={initialId}
+                      onAdd={handleAdded}
+                      onRemove={handleRemoved}
+                    />
+
+                    <ReviewButton
+                      itemKey={book.title}
+                      itemType="book"
+                      itemTitle={book.title}
+                      onSaved={handleReviewSaved}
+                      onRemoved={handleReviewRemoved}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       {/* Show More/Less buttons below the card grid */}
       {!selectedGenres.length && filteredBooks.length > BOOKS_PER_PAGE && (

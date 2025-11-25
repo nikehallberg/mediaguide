@@ -152,7 +152,7 @@ const Shows = () => {
           searchPlaceholder={
             searchMode === "actors"
               ? "Search actors/voice-actors..."
-              : "Search show name..."
+              : "Search show title..."
           }
           inputClass='show-search-input'
           searchMode={searchMode}

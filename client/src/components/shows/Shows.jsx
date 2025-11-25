@@ -7,7 +7,7 @@ import { genres1 } from "../../data/genres";
 import Rating from "@mui/material/Rating";
 import FilterBar, { LikeDislike } from "../shared/MediaShared";
 import { scrollToContainer, getSearchModes } from "../shared/mediaUtils";
-import WatchlistButton from "./watchList/WatchlistButton";
+import WatchlistButton from "../watchList/WatchlistButton";
 import ReviewButton from "../reviews/ReviewButton";
 
 // Helper to normalize strings: remove periods and lowercase

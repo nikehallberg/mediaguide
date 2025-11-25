@@ -8,7 +8,7 @@ import { genres1 } from "../../data/genres";
 import Rating from "@mui/material/Rating";
 import FilterBar, { LikeDislike } from "../shared/MediaShared";
 import { scrollToContainer, getSearchModes } from "../shared/mediaUtils";
-import WatchlistButton from "./watchlist/WatchlistButton"; // reusable button
+import WatchlistButton from "../watchList/WatchlistButton"; // reusable button
 import ReviewButton from "../reviews/ReviewButton"; // reusable review button
 
 // Utility: Filter movies by selected genres and search term/mode

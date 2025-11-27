@@ -9,6 +9,9 @@ const Profile = () => {
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [watchOpen, setWatchOpen] = useState(false);
   const [reviewsOpen, setReviewsOpen] = useState(false);
+  const [watchlistPreview, setWatchlistPreview] = useState(null);
+  const [reviewPreview, setReviewPreview] = useState(null);
+  const [loadingPreviews, setLoadingPreviews] = useState(true);
 
   useEffect(() => {
     let mounted = true;
@@ -46,6 +49,44 @@ const Profile = () => {
     };
   }, []);
 
+  // Load preview data
+  const loadPreviews = async () => {
+    if (!user._id) return; // Only load if user is authenticated
+    
+    try {
+      // Load watchlist preview (first item)
+      const watchRes = await fetch("/api/watchlist", { credentials: "include" });
+      if (watchRes.ok) {
+        const watchData = await watchRes.json();
+        const items = watchData.items || [];
+        if (items.length > 0) {
+          setWatchlistPreview(items[0]);
+        }
+      }
+      
+      // Load reviews preview (first item)
+      const reviewRes = await fetch("/api/reviews", { credentials: "include" });
+      if (reviewRes.ok) {
+        const reviewData = await reviewRes.json();
+        const reviews = reviewData.reviews || [];
+        if (reviews.length > 0) {
+          setReviewPreview(reviews[0]);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to load previews", err);
+    } finally {
+      setLoadingPreviews(false);
+    }
+  };
+
+  // Load previews when user data is available
+  useEffect(() => {
+    if (user._id && !loadingProfile) {
+      loadPreviews();
+    }
+  }, [user._id, loadingProfile]);
+
   // Calculate membership duration
   const getMembershipDuration = (dateJoined) => {
     if (!dateJoined) return null;
@@ -82,9 +123,17 @@ const Profile = () => {
   const onWatchItemRemoved = ({ id, key }) => {
     // could refresh counts or UI if you keep them in Profile
     console.debug("onWatchItemRemoved", id, key);
+    // Refresh preview to show updated state
+    if (user._id) {
+      loadPreviews();
+    }
   };
   const onReviewRemoved = (id) => {
     console.debug("onReviewRemoved", id);
+    // Refresh preview to show updated state
+    if (user._id) {
+      loadPreviews();
+    }
   };
 
   if (!user.username && !loadingProfile) {
@@ -158,7 +207,19 @@ const Profile = () => {
               </button>
             </div>
             <div className='box-body'>
-              <p>Open your watchlist to view and manage your saved items.</p>
+              {loadingPreviews ? (
+                <p>Loading preview...</p>
+              ) : watchlistPreview ? (
+                <div className='preview-item'>
+                  <div className='preview-title'>{watchlistPreview.itemTitle}</div>
+                  <div className='preview-type'>{watchlistPreview.itemType}</div>
+                  <div className='preview-date'>
+                    Added {new Date(watchlistPreview.dateAdded).toLocaleDateString()}
+                  </div>
+                </div>
+              ) : (
+                <p>No items in your watchlist yet.</p>
+              )}
             </div>
           </div>
 
@@ -173,7 +234,28 @@ const Profile = () => {
               </button>
             </div>
             <div className='box-body'>
-              <p>View all your reviews and manage them by opening the list.</p>
+              {loadingPreviews ? (
+                <p>Loading preview...</p>
+              ) : reviewPreview ? (
+                <div className='preview-item'>
+                  <div className='preview-title'>{reviewPreview.itemTitle}</div>
+                  <div className='preview-rating'>
+                    {'★'.repeat(Math.floor(reviewPreview.rating || 0))}{'☆'.repeat(5 - Math.floor(reviewPreview.rating || 0))}
+                    <span className='rating-number'>({reviewPreview.rating}/5)</span>
+                  </div>
+                  <div className='preview-text'>
+                    {reviewPreview.reviewText && reviewPreview.reviewText.length > 50
+                      ? reviewPreview.reviewText.substring(0, 50) + '...'
+                      : reviewPreview.reviewText || 'No review text'
+                    }
+                  </div>
+                  <div className='preview-date'>
+                    {new Date(reviewPreview.dateCreated).toLocaleDateString()}
+                  </div>
+                </div>
+              ) : (
+                <p>No reviews written yet.</p>
+              )}
             </div>
           </div>
         </div>

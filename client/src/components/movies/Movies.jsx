@@ -10,6 +10,7 @@ import FilterBar, { LikeDislike } from "../shared/MediaShared";
 import { scrollToContainer, getSearchModes } from "../shared/mediaUtils";
 import WatchlistButton from "../watchList/WatchlistButton"; // reusable button
 import ReviewButton from "../reviews/ReviewButton"; // reusable review button
+import MediaRating from "../shared/MediaRating"; // rating display component
 
 // Utility: Filter movies by selected genres and search term/mode
 function normalize(str) {
@@ -200,6 +201,14 @@ const Movies = () => {
                     precision={0.5}
                     readOnly
                   />
+                  
+                  {/* Community Rating */}
+                  <MediaRating 
+                    itemType="movie"
+                    itemId={movie.title}
+                    itemTitle={movie.title}
+                  />
+                  
                   <LikeDislike id={movie.title} />
 
                   <div className='card-actions'>

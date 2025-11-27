@@ -4,7 +4,6 @@ längre mål
 1. review input field, thank u message, popup som man kan scrolla i, inuti card med tillbaka 
 knapp, sortera efter nyaste, populärast, 
 2. read reviews for this item
-3. egen databas, mongodb
 4. api, integrera med imdb
 
 
@@ -12,10 +11,7 @@ knapp, sortera efter nyaste, populärast,
 fixa reset password, skickas till mail
 
 
-1. spara review enskild review
 2. räkna ihop medelbetyget och visa det som betyget för mediat
-3. ändra view när inloggad, min sida osv
-
 
 
 logo3 = #212121

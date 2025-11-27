@@ -282,6 +282,119 @@ app.get("/api/reviews/:itemType/:itemId", verifyAuth, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Test endpoint
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Server is working", timestamp: new Date().toISOString() });
+});
+
+// Get aggregated ratings for a specific item (public endpoint)
+app.get("/api/ratings/:itemType/:itemId", async (req, res) => {
+  try {
+    const { itemType, itemId } = req.params;
+    
+    // Get all ratings for this item
+    const reviews = await Review.find({ itemType, itemId }).select('rating');
+    
+    if (reviews.length === 0) {
+      return res.json({ 
+        itemType, 
+        itemId, 
+        median: null, 
+        average: null, 
+        count: 0,
+        ratings: []
+      });
+    }
+    
+    const ratings = reviews.map(r => r.rating).filter(r => r != null);
+    
+    if (ratings.length === 0) {
+      return res.json({ 
+        itemType, 
+        itemId, 
+        median: null, 
+        average: null, 
+        count: 0,
+        ratings: []
+      });
+    }
+    
+    // Calculate median
+    const sortedRatings = ratings.sort((a, b) => a - b);
+    const median = sortedRatings.length % 2 === 0
+      ? (sortedRatings[sortedRatings.length / 2 - 1] + sortedRatings[sortedRatings.length / 2]) / 2
+      : sortedRatings[Math.floor(sortedRatings.length / 2)];
+    
+    // Calculate average
+    const average = ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+    
+    // Count distribution
+    const distribution = [1, 2, 3, 4, 5].map(star => 
+      ratings.filter(r => r === star).length
+    );
+    
+    res.json({
+      itemType,
+      itemId,
+      median: Math.round(median * 10) / 10, // Round to 1 decimal
+      average: Math.round(average * 10) / 10,
+      count: ratings.length,
+      distribution, // [count of 1s, count of 2s, count of 3s, count of 4s, count of 5s]
+      ratings: ratings
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get aggregated ratings for multiple items (bulk endpoint)
+app.post("/api/ratings/bulk", async (req, res) => {
+  try {
+    const { items } = req.body; // Array of {itemType, itemId}
+    
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Items array is required" });
+    }
+    
+    const results = [];
+    
+    for (const { itemType, itemId } of items) {
+      const reviews = await Review.find({ itemType, itemId }).select('rating');
+      const ratings = reviews.map(r => r.rating).filter(r => r != null);
+      
+      if (ratings.length === 0) {
+        results.push({
+          itemType,
+          itemId,
+          median: null,
+          average: null,
+          count: 0
+        });
+        continue;
+      }
+      
+      const sortedRatings = ratings.sort((a, b) => a - b);
+      const median = sortedRatings.length % 2 === 0
+        ? (sortedRatings[sortedRatings.length / 2 - 1] + sortedRatings[sortedRatings.length / 2]) / 2
+        : sortedRatings[Math.floor(sortedRatings.length / 2)];
+      
+      const average = ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+      
+      results.push({
+        itemType,
+        itemId,
+        median: Math.round(median * 10) / 10,
+        average: Math.round(average * 10) / 10,
+        count: ratings.length
+      });
+    }
+    
+    res.json({ ratings: results });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
  
 // Start starta mongo, konsoll logga vart mongodbb är hostad
 mongoose.connect(process.env.MONGO_URI).then(async () => {

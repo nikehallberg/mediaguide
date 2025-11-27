@@ -1,0 +1,151 @@
+/* MediaRating.css - Styles for the MediaRating component */
+
+.media-rating {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 8px;
+}
+
+.rating-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.1rem;
+  color: var(--text-primary, #1f2937);
+}
+
+.rating-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.median-rating,
+.average-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.median-rating label,
+.average-rating label {
+  font-weight: 600;
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.9rem;
+  min-width: 110px;
+}
+
+.rating-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stars {
+  font-size: 1.2rem;
+  color: #fbbf24; /* Gold */
+  letter-spacing: 1px;
+}
+
+.rating-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.rating-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary, #1f2937);
+}
+
+.no-rating {
+  font-size: 0.9rem;
+  color: var(--muted, #9ca3af);
+  font-style: italic;
+}
+
+.rating-loading {
+  padding: 0.5rem;
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.9rem;
+}
+
+.rating-error {
+  padding: 0.5rem;
+  color: #ef4444;
+  font-size: 0.9rem;
+}
+
+/* Rating Distribution Styles */
+.rating-distribution {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+}
+
+.rating-distribution h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
+  color: var(--text-primary, #1f2937);
+}
+
+.distribution-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.star-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6b7280);
+  min-width: 25px;
+}
+
+.bar-container {
+  flex: 1;
+  height: 8px;
+  background: var(--border-color, #e5e7eb);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.count-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6b7280);
+  min-width: 20px;
+  text-align: right;
+}
+
+/* Compact version for media cards */
+.media-rating.compact {
+  padding: 0.5rem;
+  margin: 0.25rem 0;
+  background: transparent;
+  border: none;
+}
+
+.media-rating.compact .rating-summary {
+  flex-direction: row;
+  align-items: center;
+}
+
+.media-rating.compact .median-rating label {
+  font-size: 0.8rem;
+  min-width: auto;
+}
+
+.media-rating.compact .stars {
+  font-size: 1rem;
+}
+
+.media-rating.compact .rating-text {
+  font-size: 0.8rem;
+}

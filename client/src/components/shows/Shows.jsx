@@ -9,6 +9,7 @@ import FilterBar, { LikeDislike } from "../shared/MediaShared";
 import { scrollToContainer, getSearchModes } from "../shared/mediaUtils";
 import WatchlistButton from "../watchList/WatchlistButton";
 import ReviewButton from "../reviews/ReviewButton";
+import MediaRating from "../shared/MediaRating";
 
 // Helper to normalize strings: remove periods and lowercase
 function normalize(str = "") {
@@ -186,6 +187,14 @@ const Shows = () => {
                     precision={0.5}
                     readOnly
                   />
+                  
+                  {/* Community Rating */}
+                  <MediaRating 
+                    itemType="show"
+                    itemId={show.title}
+                    itemTitle={show.title}
+                  />
+                  
                   <LikeDislike id={show.title} />
 
                   <div className='card-actions'>

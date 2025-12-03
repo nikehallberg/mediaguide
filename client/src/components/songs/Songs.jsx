@@ -9,6 +9,7 @@ import FilterBar, { LikeDislike } from "../shared/MediaShared";
 import { scrollToContainer, getSearchModes } from "../shared/mediaUtils";
 import WatchlistButton from "../watchList/WatchlistButton";
 import ReviewButton from "../reviews/ReviewButton";
+import MediaRating from "../shared/MediaRating";
 
 // Filters songs by selected genres
 // Helper to normalize strings: remove periods and lowercase
@@ -174,6 +175,14 @@ const Songs = () => {
                 <div className="card-back">
                   <p>{song.about}</p>
                   <Rating name="half-rating-read" value={song.review} precision={0.5} readOnly />
+                  
+                  {/* Community Rating */}
+                  <MediaRating 
+                    itemType="song"
+                    itemId={song.title}
+                    itemTitle={song.title}
+                  />
+                  
                   <LikeDislike id={song.title} />
                   
                   <div className="card-actions">

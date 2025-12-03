@@ -62,6 +62,21 @@ const ReviewSchema = new mongoose.Schema({
   dateCreated: { type: Date, default: Date.now },
 });
 const Review = mongoose.model("Review", ReviewSchema);
+
+// Thumbs Up/Down Model
+const ThumbsSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  itemType: { type: String, required: true }, // "movie", "show", "book", "song"
+  itemId: { type: String, required: true }, // unique identifier
+  itemTitle: { type: String, required: true },
+  voteType: { type: String, enum: ['up', 'down'], required: true },
+  dateCreated: { type: Date, default: Date.now },
+});
+
+// Ensure a user can only vote once per item
+ThumbsSchema.index({ userId: 1, itemType: 1, itemId: 1 }, { unique: true });
+
+const Thumbs = mongoose.model("Thumbs", ThumbsSchema);
  
 // Hjälpfunktion skapa token för att bestämma hur länge man har tillgång till att vara kvar inloggad
 const createToken = (userId) =>
@@ -343,6 +358,162 @@ app.get("/api/ratings/:itemType/:itemId", async (req, res) => {
       distribution, // [count of 1s, count of 2s, count of 3s, count of 4s, count of 5s]
       ratings: ratings
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// THUMBS UP/DOWN ENDPOINTS
+
+// Get thumbs up/down counts for a specific item (public endpoint)
+app.get("/api/thumbs/:itemType/:itemId", async (req, res) => {
+  try {
+    const { itemType, itemId } = req.params;
+    
+    const thumbsUp = await Thumbs.countDocuments({ itemType, itemId, voteType: 'up' });
+    const thumbsDown = await Thumbs.countDocuments({ itemType, itemId, voteType: 'down' });
+    
+    res.json({
+      itemType,
+      itemId,
+      thumbsUp,
+      thumbsDown,
+      total: thumbsUp + thumbsDown,
+      ratio: thumbsUp + thumbsDown > 0 ? thumbsUp / (thumbsUp + thumbsDown) : 0
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get user's vote for a specific item
+app.get("/api/thumbs/:itemType/:itemId/user", verifyAuth, async (req, res) => {
+  try {
+    const { itemType, itemId } = req.params;
+    
+    const userVote = await Thumbs.findOne({
+      userId: req.userId,
+      itemType,
+      itemId
+    });
+    
+    res.json({
+      userVote: userVote ? userVote.voteType : null
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Add or update thumbs up/down vote
+app.post("/api/thumbs", verifyAuth, async (req, res) => {
+  try {
+    const { itemType, itemId, itemTitle, voteType } = req.body;
+    
+    if (!['up', 'down'].includes(voteType)) {
+      return res.status(400).json({ error: "voteType must be 'up' or 'down'" });
+    }
+    
+    // Check if user already voted
+    let existingVote = await Thumbs.findOne({
+      userId: req.userId,
+      itemType,
+      itemId
+    });
+    
+    if (existingVote) {
+      if (existingVote.voteType === voteType) {
+        // Same vote - remove it (toggle off)
+        await Thumbs.deleteOne({ _id: existingVote._id });
+        return res.json({ 
+          action: 'removed',
+          previousVote: voteType,
+          currentVote: null
+        });
+      } else {
+        // Different vote - update it
+        existingVote.voteType = voteType;
+        existingVote.dateCreated = new Date();
+        await existingVote.save();
+        return res.json({ 
+          action: 'updated',
+          previousVote: existingVote.voteType === 'up' ? 'down' : 'up',
+          currentVote: voteType,
+          vote: existingVote
+        });
+      }
+    } else {
+      // New vote
+      const newVote = await Thumbs.create({
+        userId: req.userId,
+        itemType,
+        itemId,
+        itemTitle,
+        voteType
+      });
+      
+      return res.json({ 
+        action: 'created',
+        previousVote: null,
+        currentVote: voteType,
+        vote: newVote
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Remove thumbs vote
+app.delete("/api/thumbs/:itemType/:itemId", verifyAuth, async (req, res) => {
+  try {
+    const { itemType, itemId } = req.params;
+    
+    const deletedVote = await Thumbs.findOneAndDelete({
+      userId: req.userId,
+      itemType,
+      itemId
+    });
+    
+    if (!deletedVote) {
+      return res.status(404).json({ error: "Vote not found" });
+    }
+    
+    res.json({ 
+      action: 'removed',
+      deletedVote: deletedVote.voteType
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get bulk thumbs data for multiple items
+app.post("/api/thumbs/bulk", async (req, res) => {
+  try {
+    const { items } = req.body; // Array of {itemType, itemId}
+    
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Items array is required" });
+    }
+    
+    const results = [];
+    
+    for (const { itemType, itemId } of items) {
+      const thumbsUp = await Thumbs.countDocuments({ itemType, itemId, voteType: 'up' });
+      const thumbsDown = await Thumbs.countDocuments({ itemType, itemId, voteType: 'down' });
+      
+      results.push({
+        itemType,
+        itemId,
+        thumbsUp,
+        thumbsDown,
+        total: thumbsUp + thumbsDown,
+        ratio: thumbsUp + thumbsDown > 0 ? thumbsUp / (thumbsUp + thumbsDown) : 0
+      });
+    }
+    
+    res.json({ thumbs: results });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

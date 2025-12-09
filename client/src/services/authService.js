@@ -8,6 +8,50 @@
 
 const API = "http://localhost:4000/api/auth";
 
+// Activity tracking for 30-minute timeout
+const THIRTY_MINUTES = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+// Update last activity timestamp
+const updateActivity = () => {
+  localStorage.setItem('lastActivity', Date.now().toString());
+};
+
+// Check if session has expired (30 minutes of inactivity)
+const isSessionExpired = () => {
+  const lastActivity = localStorage.getItem('lastActivity');
+  if (!lastActivity) return true;
+  
+  const timeSinceActivity = Date.now() - parseInt(lastActivity);
+  return timeSinceActivity > THIRTY_MINUTES;
+};
+
+// Set up activity listeners to track user interaction
+const setupActivityTracking = () => {
+  const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+  
+  const activityHandler = () => {
+    updateActivity();
+  };
+  
+  // Add event listeners for user activity
+  events.forEach(event => {
+    document.addEventListener(event, activityHandler, true);
+  });
+  
+  // Return cleanup function
+  return () => {
+    events.forEach(event => {
+      document.removeEventListener(event, activityHandler, true);
+    });
+  };
+};
+
+// Initialize activity tracking when module loads
+if (typeof window !== 'undefined') {
+  setupActivityTracking();
+  updateActivity(); // Set initial activity timestamp
+}
+
 export const register = async (username, email, password) => {
   const body = { username, email, password };
   try {
@@ -20,6 +64,18 @@ export const register = async (username, email, password) => {
 
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || "Registration failed");
+    
+    // Update activity on successful registration
+    updateActivity();
+    
+    // Dispatch custom event to notify components that user registered/logged in
+    window.dispatchEvent(new CustomEvent('auth-register', { detail: data }));
+    
+    // Refresh the page after successful registration
+    setTimeout(() => {
+      window.location.reload();
+    }, 100); // Small delay to allow event handlers to process
+    
     return data;
   } catch (err) {
     // fallback to localStorage for development/offline
@@ -34,6 +90,19 @@ export const register = async (username, email, password) => {
     const newUser = { username, email, password, dateJoined: new Date().toISOString() };
     users.push(newUser);
     localStorage.setItem("users", JSON.stringify(users));
+    localStorage.setItem("currentUser", JSON.stringify(newUser));
+    
+    // Update activity on successful registration
+    updateActivity();
+    
+    // Dispatch custom event for localStorage registration
+    window.dispatchEvent(new CustomEvent('auth-register', { detail: newUser }));
+    
+    // Refresh the page after successful registration
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+    
     return newUser;
   }
 };
@@ -48,6 +117,18 @@ export const login = async (username, password) => {
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || "Login failed");
+    
+    // Update activity on successful login
+    updateActivity();
+    
+    // Dispatch custom event to notify components that user logged in
+    window.dispatchEvent(new CustomEvent('auth-login', { detail: data }));
+    
+    // Refresh the page after successful login
+    setTimeout(() => {
+      window.location.reload();
+    }, 100); // Small delay to allow event handlers to process
+    
     return data;
   } catch (err) {
     // localStorage fallback
@@ -61,6 +142,21 @@ export const login = async (username, password) => {
       if (!found.dateJoined) {
         found.dateJoined = new Date().toISOString();
       }
+      
+      // Store current user in localStorage for persistence
+      localStorage.setItem("currentUser", JSON.stringify(found));
+      
+      // Update activity on successful login
+      updateActivity();
+      
+      // Dispatch custom event for localStorage login
+      window.dispatchEvent(new CustomEvent('auth-login', { detail: found }));
+      
+      // Refresh the page after successful login
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+      
       return found;
     }
     throw new Error("Invalid username/email or password");
@@ -70,19 +166,67 @@ export const login = async (username, password) => {
 export const logout = async () => {
   try {
     await fetch(`${API}/logout`, { method: "POST", credentials: "include" });
+    
+    // Clear activity tracking and current user
+    localStorage.removeItem('lastActivity');
+    localStorage.removeItem('currentUser');
+    
+    // Dispatch custom event to notify components that user logged out
+    window.dispatchEvent(new CustomEvent('auth-logout'));
+    
+    // Refresh the page after logout
+    setTimeout(() => {
+      window.location.reload();
+    }, 100); // Small delay to allow event handlers to process
+    
   } catch (err) {
-    // no-op for local fallback
-    return;
+    // Clear activity tracking and current user for local fallback
+    localStorage.removeItem('lastActivity');
+    localStorage.removeItem('currentUser');
+    
+    // Dispatch logout event even for local fallback
+    window.dispatchEvent(new CustomEvent('auth-logout'));
+    
+    // Refresh the page
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   }
 };
 
 export const getMe = async () => {
+  // Check if session has expired due to inactivity
+  if (isSessionExpired()) {
+    // Clear expired session data
+    localStorage.removeItem('lastActivity');
+    localStorage.removeItem('currentUser');
+    
+    // Try to logout from server as well
+    try {
+      await fetch(`${API}/logout`, { method: "POST", credentials: "include" });
+    } catch (err) {
+      // Ignore server errors during cleanup
+    }
+    
+    return { user: null };
+  }
+  
+  // Update activity since user is actively using the app
+  updateActivity();
+  
   try {
     const res = await fetch(`${API}/me`, { credentials: "include" });
-    return await res.json();
+    const data = await res.json();
+    
+    // If server says no user but we have localStorage data, respect server
+    if (!data.user) {
+      localStorage.removeItem('currentUser');
+    }
+    
+    return data;
   } catch (err) {
-    // fallback: return the currentUser from localStorage if present
+    // fallback: return the currentUser from localStorage if present and not expired
     const user = JSON.parse(localStorage.getItem("currentUser") || "null");
-    return user;
+    return { user };
   }
 };

@@ -3,14 +3,17 @@ import "./Profile.css";
 import "../shared/MediaShared.css";
 import ReviewList from "../reviews/ReviewList";
 import WatchlistPanel from "../watchList/WatchlistPanel";
+import ThumbsList from "./ThumbsList";
 
 const Profile = () => {
   const [user, setUser] = useState({ username: "", email: "", dateJoined: null, _id: "" });
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [watchOpen, setWatchOpen] = useState(false);
   const [reviewsOpen, setReviewsOpen] = useState(false);
+  const [thumbsOpen, setThumbsOpen] = useState(false);
   const [watchlistPreview, setWatchlistPreview] = useState(null);
   const [reviewPreview, setReviewPreview] = useState(null);
+  const [thumbsPreview, setThumbsPreview] = useState(null);
   const [loadingPreviews, setLoadingPreviews] = useState(true);
 
   useEffect(() => {
@@ -72,6 +75,21 @@ const Profile = () => {
         if (reviews.length > 0) {
           setReviewPreview(reviews[0]);
         }
+      }
+      
+      // Load thumbs votes preview (first item)
+      try {
+        const thumbsRes = await fetch("/api/thumbs/user", { credentials: "include" });
+        if (thumbsRes.ok) {
+          const thumbsData = await thumbsRes.json();
+          const votes = thumbsData.votes || [];
+          if (votes.length > 0) {
+            setThumbsPreview(votes[0]);
+          }
+        }
+      } catch (thumbsErr) {
+        // Thumbs endpoint might not exist yet, ignore error
+        console.log("Thumbs endpoint not available yet");
       }
     } catch (err) {
       console.error("Failed to load previews", err);
@@ -258,6 +276,36 @@ const Profile = () => {
               )}
             </div>
           </div>
+
+          <div className='box thumbs-box'>
+            <div className='box-header'>
+              <h3>My Votes</h3>
+              <button
+                className='show-more-btn'
+                onClick={() => setThumbsOpen(true)}
+              >
+                Open
+              </button>
+            </div>
+            <div className='box-body'>
+              {loadingPreviews ? (
+                <p>Loading preview...</p>
+              ) : thumbsPreview ? (
+                <div className='preview-item'>
+                  <div className='preview-title'>{thumbsPreview.itemTitle}</div>
+                  <div className='preview-type'>{thumbsPreview.itemType}</div>
+                  <div className='preview-vote'>
+                    {thumbsPreview.voteType === 'up' ? '👍 Thumbs Up' : '👎 Thumbs Down'}
+                  </div>
+                  <div className='preview-date'>
+                    Voted {new Date(thumbsPreview.dateCreated).toLocaleDateString()}
+                  </div>
+                </div>
+              ) : (
+                <p>No votes cast yet.</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -283,6 +331,11 @@ const Profile = () => {
           </div>
         </div>
       )}
+
+      <ThumbsList
+        isOpen={thumbsOpen}
+        onClose={() => setThumbsOpen(false)}
+      />
     </div>
   );
 };

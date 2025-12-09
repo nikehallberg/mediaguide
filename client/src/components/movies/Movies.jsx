@@ -209,7 +209,11 @@ const Movies = () => {
                     itemTitle={movie.title}
                   />
                   
-                  <LikeDislike id={movie.title} />
+                  <LikeDislike 
+                    id={movie.title} 
+                    itemType="movie" 
+                    itemTitle={movie.title} 
+                  />
 
                   <div className='card-actions'>
                     <WatchlistButton

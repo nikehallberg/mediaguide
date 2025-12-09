@@ -195,7 +195,11 @@ const Shows = () => {
                     itemTitle={show.title}
                   />
                   
-                  <LikeDislike id={show.title} />
+                  <LikeDislike 
+                    id={show.title} 
+                    itemType="show" 
+                    itemTitle={show.title} 
+                  />
 
                   <div className='card-actions'>
                     <WatchlistButton

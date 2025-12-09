@@ -183,7 +183,11 @@ const Songs = () => {
                     itemTitle={song.title}
                   />
                   
-                  <LikeDislike id={song.title} />
+                  <LikeDislike 
+                    id={song.title} 
+                    itemType="song" 
+                    itemTitle={song.title} 
+                  />
                   
                   <div className="card-actions">
                     <WatchlistButton

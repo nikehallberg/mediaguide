@@ -1,0 +1,283 @@
+/* Modal Overlay and Container */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.thumbs-modal {
+  max-width: 800px;
+  width: 90%;
+  max-height: 80vh;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #333;
+  background-color: #2a2a2a;
+}
+
+.modal-header h2 {
+  color: #fff;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background-color: #444;
+  color: #fff;
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: calc(80vh - 80px);
+}
+
+/* Loading and Error States */
+.loading-state, .error-state, .empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.loading-state p {
+  font-size: 1.1rem;
+}
+
+.error-state p {
+  color: #e74c3c;
+  font-size: 1.1rem;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.empty-state p:last-child {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* Votes Container */
+.votes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Summary Stats */
+.votes-summary {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #333;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.stat {
+  text-align: center;
+  padding: 15px;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  border: 1px solid #444;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4CAF50;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  display: block;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+/* Votes by Type */
+.votes-by-type {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.votes-section {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #333;
+}
+
+.section-title {
+  color: #fff;
+  margin: 0 0 15px 0;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-count {
+  color: #999;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+/* Votes List */
+.votes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vote-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  border: 1px solid #444;
+  transition: all 0.2s ease;
+}
+
+.vote-item:hover {
+  background-color: #333;
+  border-color: #555;
+}
+
+.vote-item.up {
+  border-left: 4px solid #4CAF50;
+}
+
+.vote-item.down {
+  border-left: 4px solid #f44336;
+}
+
+.vote-icon {
+  font-size: 1.5rem;
+  min-width: 40px;
+  text-align: center;
+}
+
+.vote-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.vote-title {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.vote-meta {
+  display: flex;
+  gap: 15px;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.vote-type {
+  color: #4CAF50;
+  text-transform: capitalize;
+}
+
+.vote-date {
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .thumbs-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+  
+  .modal-header {
+    padding: 15px;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .modal-body {
+    padding: 15px;
+  }
+  
+  .summary-stats {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .stat {
+    padding: 12px;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .vote-item {
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .vote-icon {
+    font-size: 1.3rem;
+    min-width: 35px;
+  }
+  
+  .vote-title {
+    font-size: 1rem;
+  }
+  
+  .vote-meta {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

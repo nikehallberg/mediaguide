@@ -11,6 +11,7 @@ import FilterBar, { LikeDislike } from "../shared/MediaShared";
 import { scrollToContainer, getSearchModes } from "../shared/mediaUtils";
 import WatchlistButton from "../watchList/WatchlistButton"; // reusable button
 import ReviewButton from "../reviews/ReviewButton"; // reusable review button
+import MediaRating from "../shared/MediaRating";
 
 // Filters books by selected genres
 function filterBooks(books, selectedGenres, searchTerm, searchMode) {
@@ -198,7 +199,19 @@ const Books = () => {
                 <div className="card-back">
                   <p>{book.about}</p>
                   <Rating name="half-rating-read" value={book.review} precision={0.5} readOnly />
-                  <LikeDislike id={book.title} />
+                  
+                  {/* Community Rating */}
+                  <MediaRating 
+                    itemType="book"
+                    itemId={book.title}
+                    itemTitle={book.title}
+                  />
+                  
+                  <LikeDislike 
+                    id={book.title} 
+                    itemType="book" 
+                    itemTitle={book.title} 
+                  />
                   
                   <div className="card-actions">
                     <WatchlistButton

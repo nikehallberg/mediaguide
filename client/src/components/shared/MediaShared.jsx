@@ -1,109 +1,152 @@
 import { useRef, useEffect, useState } from "react";
-export const LikeDislike = ({ id, onVote }) => {
-  // votes: map id -> 1 (like) | -1 (dislike) | 0/undefined (none)
-  const [votes, setVotes] = useState({});
-  const [counts, setCounts] = useState({});
-  const votesRef = useRef(votes);
-  const countsRef = useRef(counts);
+export const LikeDislike = ({ id, itemType = "movie", itemTitle, onVote }) => {
+  const [userVote, setUserVote] = useState(null); // 'up', 'down', or null
+  const [counts, setCounts] = useState({ thumbsUp: 0, thumbsDown: 0 });
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // keep refs in sync
-  useEffect(() => { votesRef.current = votes; }, [votes]);
-  useEffect(() => { countsRef.current = counts; }, [counts]);
-
-  // Persist/load votes+counts from localStorage
+  // Check if user is authenticated
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(`likeDislikeState:${id}`);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed && typeof parsed === "object") {
-          const storedVote = parsed.vote ?? undefined;
-          const storedCounts = typeof parsed.likes === 'number' || typeof parsed.dislikes === 'number'
-            ? { likes: parsed.likes || 0, dislikes: parsed.dislikes || 0 }
-            : parsed.counts;
-          // merge into refs/state maps so multiple items can coexist
-          if (typeof storedVote !== 'undefined') {
-            const newVotes = { ...votesRef.current, [id]: storedVote };
-            votesRef.current = newVotes;
-            setVotes(newVotes);
-          }
-          if (storedCounts) {
-            const newCounts = { ...countsRef.current, [id]: storedCounts };
-            countsRef.current = newCounts;
-            setCounts(newCounts);
-          }
-        }
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/me', { credentials: 'include' });
+        const data = await response.json();
+        setIsAuthenticated(!!data.user);
+      } catch (error) {
+        setIsAuthenticated(false);
       }
-    } catch (e) {
-      // ignore parse errors
-    }
+    };
+    checkAuth();
   }, []);
 
-  // Note: per-item persistence is handled in changeVote to avoid different component
-  // instances overwriting a single global localStorage object.
+  // Load initial data
+  useEffect(() => {
+    if (!id || !itemType) return;
+    
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        // Load vote counts (public)
+        const countsResponse = await fetch(`/api/thumbs/${itemType}/${encodeURIComponent(id)}`);
+        if (countsResponse.ok) {
+          const countsData = await countsResponse.json();
+          setCounts({
+            thumbsUp: countsData.thumbsUp,
+            thumbsDown: countsData.thumbsDown
+          });
+        }
 
-  const changeVote = (newVote) => {
-    const prevVote = votesRef.current[id] || 0;
-    const finalVote = prevVote === newVote ? 0 : newVote;
+        // Load user's vote (if authenticated)
+        if (isAuthenticated) {
+          const userResponse = await fetch(`/api/thumbs/${itemType}/${encodeURIComponent(id)}/user`, {
+            credentials: 'include'
+          });
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            setUserVote(userData.userVote);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading thumbs data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // compute new counts deterministically using the refs
-    const prevCounts = countsRef.current[id] || { likes: 0, dislikes: 0 };
-    let likes = prevCounts.likes;
-    let dislikes = prevCounts.dislikes;
+    loadData();
+  }, [id, itemType, isAuthenticated]);
 
-    if (prevVote === 1) likes = Math.max(0, likes - 1);
-    if (prevVote === -1) dislikes = Math.max(0, dislikes - 1);
-    if (finalVote === 1) likes = likes + 1;
-    if (finalVote === -1) dislikes = dislikes + 1;
-
-    const newVotes = { ...votesRef.current, [id]: finalVote };
-    const newCounts = { ...countsRef.current, [id]: { likes, dislikes } };
-
-    // update refs and states once
-    votesRef.current = newVotes;
-    countsRef.current = newCounts;
-    setVotes(newVotes);
-    setCounts(newCounts);
-
-    // notify parent (optional) with the final vote and updated counts for this id
-    try {
-      if (typeof onVote === "function") onVote(id, finalVote, { likes, dislikes });
-    } catch (e) {
-      // ignore handler errors
+  const changeVote = async (voteType) => {
+    if (!isAuthenticated) {
+      alert('Please log in to vote');
+      return;
     }
-    // persist only this item's state to avoid races between instances
+
     try {
-      const payload = { vote: finalVote, likes, dislikes };
-      localStorage.setItem(`likeDislikeState:${id}`, JSON.stringify(payload));
-    } catch (e) {
-      // ignore storage errors
+      const response = await fetch('/api/thumbs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          itemType,
+          itemId: id,
+          itemTitle: itemTitle || id,
+          voteType
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to vote');
+      }
+
+      const result = await response.json();
+      
+      // Update local state based on server response
+      setUserVote(result.currentVote);
+      
+      // Refresh counts from server
+      const countsResponse = await fetch(`/api/thumbs/${itemType}/${encodeURIComponent(id)}`);
+      if (countsResponse.ok) {
+        const countsData = await countsResponse.json();
+        setCounts({
+          thumbsUp: countsData.thumbsUp,
+          thumbsDown: countsData.thumbsDown
+        });
+      }
+
+      // Notify parent component if needed
+      if (typeof onVote === "function") {
+        onVote(id, result.currentVote, { 
+          thumbsUp: countsData.thumbsUp, 
+          thumbsDown: countsData.thumbsDown 
+        });
+      }
+
+    } catch (error) {
+      console.error('Error voting:', error);
+      alert('Failed to record vote. Please try again.');
     }
   };
 
-  const likeCount = counts[id]?.likes || 0;
-  const dislikeCount = counts[id]?.dislikes || 0;
-  const selected = votes[id] || 0;
+  if (loading) {
+    return (
+      <div className="like-dislike-container" style={{ display: "flex", gap: "1rem", justifyContent: "center", marginTop: "1rem" }}>
+        <span style={{ fontSize: "0.8rem", color: "#666" }}>Loading...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="like-dislike-container" style={{ display: "flex", gap: "1rem", justifyContent: "center", marginTop: "1rem" }}>
       <button
         type="button"
-        onClick={(e) => { e.stopPropagation(); changeVote(1); }}
-        className={`thumb-btn like-btn ${selected === 1 ? "selected" : ""}`}
-        aria-pressed={selected === 1}
+        onClick={(e) => { e.stopPropagation(); changeVote('up'); }}
+        className={`thumb-btn like-btn ${userVote === 'up' ? "selected" : ""}`}
+        aria-pressed={userVote === 'up'}
+        disabled={!isAuthenticated}
+        title={!isAuthenticated ? "Login required to vote" : ""}
       >
         <span aria-hidden>👍</span>
-        <span className="count"> {likeCount}</span>
+        <span className="count"> {counts.thumbsUp}</span>
       </button>
       <button
         type="button"
-        onClick={(e) => { e.stopPropagation(); changeVote(-1); }}
-        className={`thumb-btn dislike-btn ${selected === -1 ? "selected" : ""}`}
-        aria-pressed={selected === -1}
+        onClick={(e) => { e.stopPropagation(); changeVote('down'); }}
+        className={`thumb-btn dislike-btn ${userVote === 'down' ? "selected" : ""}`}
+        aria-pressed={userVote === 'down'}
+        disabled={!isAuthenticated}
+        title={!isAuthenticated ? "Login required to vote" : ""}
       >
         <span aria-hidden>👎</span>
-        <span className="count"> {dislikeCount}</span>
+        <span className="count"> {counts.thumbsDown}</span>
       </button>
+      {!isAuthenticated && (
+        <span style={{ fontSize: '0.8rem', color: '#666', alignSelf: 'center' }}>
+          Login to vote
+        </span>
+      )}
     </div>
   );
 };

@@ -25,8 +25,8 @@ const Profile = () => {
         const res = await fetch("/api/auth/me", { credentials: "include" });
         if (!mounted) return;
         if (!res.ok) {
-          const username = localStorage.getItem("loggedInUser") || "";
-          setUser({ username, email: "", dateJoined: null, _id: "" });
+          // User is not authenticated, clear user data
+          setUser({ username: "", email: "", dateJoined: null, _id: "" });
           setLoadingProfile(false);
           return;
         }
@@ -34,15 +34,15 @@ const Profile = () => {
         // backend returns { user }
         const u = data.user || data || {};
         setUser({
-          username: u.username || u.name || localStorage.getItem("loggedInUser") || "",
+          username: u.username || u.name || "",
           email: u.email || "",
           dateJoined: u.dateJoined || null,
           _id: u._id || ""
         });
       } catch (err) {
         console.error("Failed to load profile", err);
-        const username = localStorage.getItem("loggedInUser") || "";
-        setUser({ username, email: "", dateJoined: null, _id: "" });
+        // If there's an error, user is not authenticated
+        setUser({ username: "", email: "", dateJoined: null, _id: "" });
       } finally {
         if (mounted) setLoadingProfile(false);
       }
@@ -157,7 +157,10 @@ const Profile = () => {
   if (!user.username && !loadingProfile) {
     return (
       <div className='profile-container'>
-        <h1 className='profile-title'>Please log in to view your profile</h1>
+        <div className='login-prompt'>
+          <h1 className='profile-title'>Please log in to view your profile</h1>
+          <p>You need to be logged in to see your reviews, watchlist, and voting history.</p>
+        </div>
       </div>
     );
   }

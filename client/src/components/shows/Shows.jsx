@@ -227,10 +227,10 @@ const Shows = () => {
       </div>
 
       {!selectedGenres.length && filteredShows.length > SHOWS_PER_PAGE && (
-        <div className='show-more-area'>
+        <div className="pagination-container">
           {visibleCount < filteredShows.length && (
             <button
-              className='show-more-btn'
+              className="show-more-btn"
               onClick={() => setVisibleCount((prev) => prev + SHOWS_PER_PAGE)}
             >
               Show More
@@ -238,7 +238,7 @@ const Shows = () => {
           )}
           {visibleCount > SHOWS_PER_PAGE && (
             <button
-              className='show-more-btn show-less-btn'
+              className="show-more-btn show-less-btn"
               onClick={() =>
                 setVisibleCount((prev) =>
                   Math.max(SHOWS_PER_PAGE, prev - SHOWS_PER_PAGE)

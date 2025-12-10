@@ -215,7 +215,7 @@ const Songs = () => {
       </div>
       {/* Show More/Less buttons below the card grid */}
       {!selectedGenres.length && filteredSongs.length > SONGS_PER_PAGE && (
-        <div style={{ textAlign: "center", margin: "24px 0" }}>
+        <div className="pagination-container">
           {visibleCount < filteredSongs.length && (
             <button className="show-more-btn" onClick={() => setVisibleCount((prev) => prev + SONGS_PER_PAGE)}>
               Show More
@@ -223,8 +223,7 @@ const Songs = () => {
           )}
           {visibleCount > SONGS_PER_PAGE && (
             <button
-              className="show-more-btn"
-              style={{ marginLeft: "1rem", background: "linear-gradient(90deg, #f4e285, #f7c948)" }}
+              className="show-more-btn show-less-btn"
               onClick={() => setVisibleCount((prev) => Math.max(SONGS_PER_PAGE, prev - SONGS_PER_PAGE))}
             >
               Show Less

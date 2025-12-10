@@ -49,6 +49,35 @@
   transform: translateY(-2px) scale(1.02);
 }
 
+/* Pagination controls */
+.pagination-container {
+  text-align: center;
+  margin: 24px 0;
+}
+
+.show-more-btn {
+  font-size: 1rem;
+  border: none;
+  background: #fffbe6;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+}
+
+.show-more-btn:hover {
+  transform: translateY(-2px);
+}
+
+.show-more-btn:focus {
+  outline: 2px solid rgba(180,138,0,0.25);
+}
+
+.show-less-btn {
+  margin-left: 1rem;
+  background: linear-gradient(90deg, #f4e285, #f7c948);
+}
+
 /* Show More / Show Less button styles */
 .show-more-btn {
   background: linear-gradient(90deg, #f7c948, #f4e285);

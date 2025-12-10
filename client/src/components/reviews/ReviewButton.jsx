@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
+import { useAlert } from "../shared/AlertProvider";
+import ConfirmDialog from "../shared/ConfirmDialog";
 import "./Reviews.css";
 
 const API_ROOT = import.meta.env.VITE_API_URL || "";
@@ -17,6 +19,9 @@ const ReviewButton = ({
   const [existingId, setExistingId] = useState(null);
   const [rating, setRating] = useState(3);
   const [text, setText] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  
+  const { showError, showSuccess } = useAlert();
 
   useEffect(() => {
     if (!open) return;
@@ -101,11 +106,11 @@ const ReviewButton = ({
           console.warn("POST parse error", parseErr);
         }
         if (res.status === 401) {
-          alert("Please log in to save your review.");
+          showError("Please log in to save your review.");
           setLoading(false);
           return;
         }
-        alert(data.error || "Could not save your review.");
+        showError(data.error || "Could not save your review.");
         setLoading(false);
         return;
       }
@@ -120,10 +125,11 @@ const ReviewButton = ({
           review: { rating, text },
         });
 
+      showSuccess(existingId ? "Review updated successfully!" : "Review saved successfully!");
       setOpen(false);
     } catch (err) {
       console.error("[ReviewButton] Network error saving review", err);
-      alert("Network error while saving review.");
+      showError("Network error while saving review.");
     } finally {
       setLoading(false);
     }
@@ -135,7 +141,10 @@ const ReviewButton = ({
       setOpen(false);
       return;
     }
-    if (!confirm("Ta bort din review?")) return;
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
     setLoading(true);
     try {
       const url = `${API_ROOT}/api/reviews/${existingId}`;
@@ -153,7 +162,7 @@ const ReviewButton = ({
         } catch (parseErr) {
           console.warn("DELETE parse error", parseErr);
         }
-        alert(data.error || "Kunde inte ta bort review.");
+        showError(data.error || "Could not delete review.");
         setLoading(false);
         return;
       }
@@ -164,9 +173,10 @@ const ReviewButton = ({
       dispatchUpdate({ id: existingId, action: "deleted" });
       if (typeof onRemoved === "function")
         onRemoved({ id: existingId, key: itemKey });
+      showSuccess("Review deleted successfully!");
     } catch (err) {
       console.error("[ReviewButton] Network error deleting review", err);
-      alert("Nätverksfel vid borttagning.");
+      showError("Network error while deleting review.");
     } finally {
       setLoading(false);
     }
@@ -233,6 +243,16 @@ const ReviewButton = ({
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={confirmDelete}
+        title="Delete Review"
+        message="Are you sure you want to delete your review? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
     </>
   );
 };

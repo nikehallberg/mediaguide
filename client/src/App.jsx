@@ -9,6 +9,7 @@ import { Route, Routes } from "react-router-dom";
 import Register from "./components/register/Register";
 import { useState, useEffect } from "react";
 import { getMe, logout as logoutApi } from "./services/authService";
+import { AlertProvider } from "./components/shared/AlertProvider";
  
 const App = () => {
   const [user, setUser] = useState(null);
@@ -37,18 +38,20 @@ const App = () => {
   }
  
   return (
-    <div>
-      <Navbar user={user} onLogout={handleLogout} onLogin={handleLogin} />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/books' element={<Books />} />
-        <Route path='/movies' element={<Movies />} />
-        <Route path='/shows' element={<Shows />} />
-        <Route path='/songs' element={<Songs />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/profile' element={<Profile />} />
-      </Routes>
-    </div>
+    <AlertProvider>
+      <div>
+        <Navbar user={user} onLogout={handleLogout} onLogin={handleLogin} />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/books' element={<Books />} />
+          <Route path='/movies' element={<Movies />} />
+          <Route path='/shows' element={<Shows />} />
+          <Route path='/songs' element={<Songs />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/profile' element={<Profile />} />
+        </Routes>
+      </div>
+    </AlertProvider>
   );
 };
  

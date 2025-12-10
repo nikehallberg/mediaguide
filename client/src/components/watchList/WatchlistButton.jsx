@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useAlert } from "../shared/AlertProvider";
 import "./Watchlist.css";
 
 /**
@@ -25,6 +26,8 @@ const WatchlistButton = ({
 }) => {
   const [id, setId] = useState(initialId || null);
   const [loading, setLoading] = useState(false);
+  
+  const { showError, showSuccess } = useAlert();
 
   // sync prop changes
   useEffect(() => {
@@ -45,14 +48,15 @@ const WatchlistButton = ({
         });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          alert(err.error || "Could not remove from watchlist");
+          showError(err.error || "Could not remove from watchlist");
           return;
         }
         setId(null);
+        showSuccess("Item removed from watchlist!");
         if (typeof onRemove === "function") onRemove({ id, key: itemKey });
       } catch (err) {
         console.error("Network error removing watchlist item", err);
-        alert("Network error while removing item");
+        showError("Network error while removing item");
       } finally {
         setLoading(false);
       }
@@ -73,10 +77,10 @@ const WatchlistButton = ({
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
           if (res.status === 401) {
-            alert("Please log in to add items to your watchlist.");
+            showError("Please log in to add items to your watchlist.");
             return;
           }
-          alert(data.error || "Could not add to watchlist");
+          showError(data.error || "Could not add to watchlist");
           return;
         }
         const data = await res.json().catch(() => ({}));
@@ -86,11 +90,12 @@ const WatchlistButton = ({
           (data.item && (data.item._id || data.item.id)) ||
           null;
         setId(newId || true);
+        showSuccess("Item added to watchlist!");
         if (typeof onAdd === "function")
           onAdd({ id: newId || true, key: itemKey });
       } catch (err) {
         console.error("Network error adding watchlist item", err);
-        alert("Network error while adding item");
+        showError("Network error while adding item");
       } finally {
         setLoading(false);
       }

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useAlert } from "../shared/AlertProvider";
+import ConfirmDialog from "../shared/ConfirmDialog";
 import "./Watchlist.css";
 import "./../reviews/Reviews.css"; // reuse modal styles
 import "./../shared/MediaShared.css";
@@ -18,6 +20,10 @@ const WatchlistPanel = ({ open, onClose, onRemoved }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  
+  const { showError, showSuccess } = useAlert();
 
   const load = async () => {
     setLoading(true);
@@ -66,7 +72,13 @@ const WatchlistPanel = ({ open, onClose, onRemoved }) => {
         });
       return;
     }
-    if (!confirm("Ta bort detta från din watchlist?")) return;
+    setItemToDelete(item);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmRemove = async () => {
+    if (!itemToDelete) return;
+    const id = itemToDelete._id || itemToDelete.id;
     try {
       const res = await fetch(`/api/watchlist/${id}`, {
         method: "DELETE",
@@ -74,15 +86,16 @@ const WatchlistPanel = ({ open, onClose, onRemoved }) => {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        alert(data.error || "Kunde inte ta bort från watchlist.");
+        showError(data.error || "Could not remove from watchlist.");
         return;
       }
       setItems((prev) => prev.filter((it) => (it._id || it.id) !== id));
+      showSuccess("Item removed from watchlist!");
       if (typeof onRemoved === "function")
-        onRemoved({ id, key: item.itemId || item.itemTitle || item.title });
+        onRemoved({ id, key: itemToDelete.itemId || itemToDelete.itemTitle || itemToDelete.title });
     } catch (err) {
       console.error("Network error removing watchlist item", err);
-      alert("Nätverksfel vid borttagning.");
+      showError("Network error while removing item.");
     }
   };
 
@@ -133,6 +146,23 @@ const WatchlistPanel = ({ open, onClose, onRemoved }) => {
           </button>
         </div>
       </div>
+      
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => {
+          setShowDeleteConfirm(false);
+          setItemToDelete(null);
+        }}
+        onConfirm={() => {
+          confirmRemove();
+          setShowDeleteConfirm(false);
+          setItemToDelete(null);
+        }}
+        title="Remove from Watchlist"
+        message={`Are you sure you want to remove "${itemToDelete?.itemTitle || itemToDelete?.title || itemToDelete?.itemId || 'this item'}" from your watchlist?`}
+        confirmText="Remove"
+        cancelText="Cancel"
+      />
     </div>
   );
 };

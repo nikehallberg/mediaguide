@@ -1,4 +1,4 @@
-import Navbar from "./components/navbar/Navbar";
+import Navbar from "./components/navBar/Navbar";
 import Home from "./components/home/Home";
 import Books from "./components/books/Books";
 import Movies from "./components/movies/Movies";
@@ -10,6 +10,7 @@ import Register from "./components/register/Register";
 import { useState, useEffect } from "react";
 import { getMe, logout as logoutApi } from "./services/authService";
 import { AlertProvider } from "./components/shared/AlertProvider";
+import { ThemeProvider } from "./contexts/ThemeContext";
  
 const App = () => {
   const [user, setUser] = useState(null);
@@ -77,20 +78,22 @@ const App = () => {
   }
  
   return (
-    <AlertProvider>
-      <div>
-        <Navbar user={user} onLogout={handleLogout} onLogin={handleLogin} />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/books' element={<Books />} />
-          <Route path='/movies' element={<Movies />} />
-          <Route path='/shows' element={<Shows />} />
-          <Route path='/songs' element={<Songs />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/profile' element={<Profile />} />
-        </Routes>
-      </div>
-    </AlertProvider>
+    <ThemeProvider>
+      <AlertProvider>
+        <div>
+          <Navbar user={user} onLogout={handleLogout} onLogin={handleLogin} />
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/books' element={<Books />} />
+            <Route path='/movies' element={<Movies />} />
+            <Route path='/shows' element={<Shows />} />
+            <Route path='/songs' element={<Songs />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/profile' element={<Profile />} />
+          </Routes>
+        </div>
+      </AlertProvider>
+    </ThemeProvider>
   );
 };
  

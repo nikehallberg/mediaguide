@@ -17,3 +17,4 @@ mongodb data explorer (se dom användare som finns registrerad på hemsidan)
 
 
 fixa så att när token går ut så syns inte användarnamn, man blir utloggad
+

@@ -5,27 +5,14 @@ import Logo3 from "../../assets/logo3.png";
 import { useState, useRef, useEffect } from "react";
 import Login from "../login/Login";
 import Register from "../register/Register";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Navbar = ({ user, onLogout, onLogin }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored === "dark") {
-      document.documentElement.classList.add("dark-theme");
-      setIsDark(true);
-    } else if (stored === "light") {
-      document.documentElement.classList.remove("dark-theme");
-      setIsDark(false);
-    } else if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
-      document.documentElement.classList.add("dark-theme");
-      setIsDark(true);
-    }
-  }, []);
+  const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
     function handleResize() {
@@ -64,12 +51,7 @@ const Navbar = ({ user, onLogout, onLogin }) => {
           className='theme-toggle'
           aria-label='Toggle dark mode'
           title='Toggle dark mode'
-          onClick={() => {
-            const newDark =
-              document.documentElement.classList.toggle("dark-theme");
-            setIsDark(newDark);
-            localStorage.setItem("theme", newDark ? "dark" : "light");
-          }}
+          onClick={toggleTheme}
         >
           {isDark ? (
             <svg

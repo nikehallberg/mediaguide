@@ -308,53 +308,51 @@
   letter-spacing: -0.025em;
 }
 
-/* Dark mode tweaks */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --profile-bg: #f8fafc;
-    --card-bg: #ffffff;
-    --box-bg: #fefefe;
-    --box-border: #e5e7eb;
-    --border-color: #e5e7eb;
-    --text-primary: #1f2937;
-    --text-secondary: #6b7280;
-    --muted: #6b7280;
-    --accent: #4f46e5;
-    --accent-light: #818cf8;
-    --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.04);
-  }
-  
-  .profile-container {
-    background: var(--card-bg);
-    border-color: var(--border-color);
-  }
-  
-  .profile-info-item {
-    background: var(--card-bg);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-  }
-  
-  .box {
-    background: var(--box-bg);
-    border-color: var(--box-border);
-  }
-  
-  .watchlist-item {
-    background: var(--card-bg);
-    border-color: var(--border-color);
-  }
-  
-  .show-more-btn {
-    background: linear-gradient(135deg, var(--card-bg), #f8fafc);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-  }
-  
-  .show-more-btn:hover {
-    background: linear-gradient(135deg, #f1f5f9, var(--card-bg));
-    border-color: var(--accent);
-    color: var(--accent);
-  }
+/* Dark mode styles */
+.dark-theme {
+  --profile-bg: #1f2937;
+  --card-bg: #374151;
+  --box-bg: #374151;
+  --box-border: #4b5563;
+  --border-color: #4b5563;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --muted: #9ca3af;
+  --accent: #818cf8;
+  --accent-light: #c4b5fd;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dark-theme .profile-container {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-theme .profile-info-item {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.dark-theme .box {
+  background: var(--box-bg);
+  border-color: var(--box-border);
+}
+
+.dark-theme .watchlist-item {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-theme .show-more-btn {
+  background: linear-gradient(135deg, var(--card-bg), #4b5563);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.dark-theme .show-more-btn:hover {
+  background: linear-gradient(135deg, #4b5563, var(--card-bg));
+  border-color: var(--accent);
+  color: var(--accent);
 }

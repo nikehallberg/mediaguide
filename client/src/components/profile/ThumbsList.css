@@ -1,3 +1,29 @@
+:root {
+  --thumbs-bg: #ffffff;
+  --thumbs-overlay: rgba(0, 0, 0, 0.7);
+  --thumbs-modal-bg: #ffffff;
+  --thumbs-header-bg: #f8fafc;
+  --thumbs-border: #e5e7eb;
+  --thumbs-text-primary: #1f2937;
+  --thumbs-text-secondary: #6b7280;
+  --thumbs-accent: #4CAF50;
+  --thumbs-item-bg: #f9fafb;
+  --thumbs-hover-bg: #f3f4f6;
+}
+
+.dark-theme {
+  --thumbs-bg: #1a1a1a;
+  --thumbs-overlay: rgba(0, 0, 0, 0.8);
+  --thumbs-modal-bg: #1a1a1a;
+  --thumbs-header-bg: #2a2a2a;
+  --thumbs-border: #333;
+  --thumbs-text-primary: #fff;
+  --thumbs-text-secondary: #999;
+  --thumbs-accent: #4CAF50;
+  --thumbs-item-bg: #2a2a2a;
+  --thumbs-hover-bg: #333;
+}
+
 /* Modal Overlay and Container */
 .modal-overlay {
   position: fixed;
@@ -5,7 +31,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: var(--thumbs-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,10 +42,10 @@
   max-width: 800px;
   width: 90%;
   max-height: 80vh;
-  background-color: #1a1a1a;
+  background-color: var(--thumbs-modal-bg);
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid #333;
+  border: 1px solid var(--thumbs-border);
 }
 
 /* Modal Header */
@@ -28,12 +54,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid #333;
-  background-color: #2a2a2a;
+  border-bottom: 1px solid var(--thumbs-border);
+  background-color: var(--thumbs-header-bg);
 }
 
 .modal-header h2 {
-  color: #fff;
+  color: var(--thumbs-text-primary);
   margin: 0;
   font-size: 1.5rem;
 }
@@ -41,7 +67,7 @@
 .close-btn {
   background: none;
   border: none;
-  color: #999;
+  color: var(--thumbs-text-secondary);
   font-size: 2rem;
   cursor: pointer;
   padding: 0;
@@ -55,8 +81,8 @@
 }
 
 .close-btn:hover {
-  background-color: #444;
-  color: #fff;
+  background-color: var(--thumbs-hover-bg);
+  color: var(--thumbs-text-primary);
 }
 
 /* Modal Body */
@@ -70,7 +96,7 @@
 .loading-state, .error-state, .empty-state {
   text-align: center;
   padding: 40px 20px;
-  color: #999;
+  color: var(--thumbs-text-secondary);
 }
 
 .loading-state p {
@@ -88,7 +114,7 @@
 }
 
 .empty-state p:last-child {
-  color: #666;
+  color: var(--thumbs-text-secondary);
   font-size: 0.95rem;
 }
 
@@ -101,10 +127,10 @@
 
 /* Summary Stats */
 .votes-summary {
-  background-color: #2a2a2a;
+  background-color: var(--thumbs-header-bg);
   border-radius: 8px;
   padding: 20px;
-  border: 1px solid #333;
+  border: 1px solid var(--thumbs-border);
 }
 
 .summary-stats {
@@ -116,22 +142,22 @@
 .stat {
   text-align: center;
   padding: 15px;
-  background-color: #1a1a1a;
+  background-color: var(--thumbs-item-bg);
   border-radius: 8px;
-  border: 1px solid #444;
+  border: 1px solid var(--thumbs-border);
 }
 
 .stat-number {
   display: block;
   font-size: 2rem;
   font-weight: bold;
-  color: #4CAF50;
+  color: var(--thumbs-accent);
   margin-bottom: 5px;
 }
 
 .stat-label {
   display: block;
-  color: #999;
+  color: var(--thumbs-text-secondary);
   font-size: 0.9rem;
 }
 
@@ -143,14 +169,14 @@
 }
 
 .votes-section {
-  background-color: #2a2a2a;
+  background-color: var(--thumbs-header-bg);
   border-radius: 8px;
   padding: 20px;
-  border: 1px solid #333;
+  border: 1px solid var(--thumbs-border);
 }
 
 .section-title {
-  color: #fff;
+  color: var(--thumbs-text-primary);
   margin: 0 0 15px 0;
   font-size: 1.3rem;
   display: flex;
@@ -159,7 +185,7 @@
 }
 
 .section-count {
-  color: #999;
+  color: var(--thumbs-text-secondary);
   font-size: 1rem;
   font-weight: normal;
 }
@@ -176,15 +202,15 @@
   align-items: center;
   gap: 15px;
   padding: 15px;
-  background-color: #1a1a1a;
+  background-color: var(--thumbs-item-bg);
   border-radius: 8px;
-  border: 1px solid #444;
+  border: 1px solid var(--thumbs-border);
   transition: all 0.2s ease;
 }
 
 .vote-item:hover {
-  background-color: #333;
-  border-color: #555;
+  background-color: var(--thumbs-hover-bg);
+  border-color: var(--thumbs-text-secondary);
 }
 
 .vote-item.up {
@@ -209,7 +235,7 @@
 }
 
 .vote-title {
-  color: #fff;
+  color: var(--thumbs-text-primary);
   font-size: 1.1rem;
   font-weight: 500;
 }
@@ -222,12 +248,12 @@
 }
 
 .vote-type {
-  color: #4CAF50;
+  color: var(--thumbs-accent);
   text-transform: capitalize;
 }
 
 .vote-date {
-  color: #666;
+  color: var(--thumbs-text-secondary);
 }
 
 /* Responsive Design */

@@ -1,0 +1,167 @@
+/* CSS Custom Properties for Light/Dark Theme */
+:root {
+  /* Light theme colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  
+  --border-color: #e9ecef;
+  --border-light: #f1f3f4;
+  
+  --card-background: #ffffff;
+  --header-background: #ffffff;
+  --hover-background: #f8f9fa;
+  
+  --primary-color: #007bff;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  
+  --success-light: #d4edda;
+  --danger-light: #f8d7da;
+  --warning-light: #fff3cd;
+  
+  --badge-background: #e9ecef;
+  --badge-text: #495057;
+  
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark theme colors - using body.dark-theme to match your existing implementation */
+body.dark-theme {
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --bg-tertiary: #4a5568;
+  
+  --text-primary: #e2e8f0;
+  --text-secondary: #a0aec0;
+  --text-muted: #718096;
+  
+  --border-color: #4a5568;
+  --border-light: #2d3748;
+  
+  --card-background: #2d3748;
+  --header-background: #1a202c;
+  --hover-background: #2d3748;
+  
+  --primary-color: #63b3ed;
+  --success-color: #68d391;
+  --danger-color: #fc8181;
+  --warning-color: #f6e05e;
+  
+  --success-light: rgba(104, 211, 145, 0.2);
+  --danger-light: rgba(252, 129, 129, 0.2);
+  --warning-light: rgba(246, 224, 94, 0.2);
+  
+  --badge-background: #4a5568;
+  --badge-text: #e2e8f0;
+  
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Auto dark mode support (respects system preference) */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-theme) {
+    --bg-primary: #1a202c;
+    --bg-secondary: #2d3748;
+    --bg-tertiary: #4a5568;
+    
+    --text-primary: #e2e8f0;
+    --text-secondary: #a0aec0;
+    --text-muted: #718096;
+    
+    --border-color: #4a5568;
+    --border-light: #2d3748;
+    
+    --card-background: #2d3748;
+    --header-background: #1a202c;
+    --hover-background: #2d3748;
+    
+    --primary-color: #63b3ed;
+    --success-color: #68d391;
+    --danger-color: #fc8181;
+    --warning-color: #f6e05e;
+    
+    --success-light: rgba(104, 211, 145, 0.2);
+    --danger-light: rgba(252, 129, 129, 0.2);
+    --warning-light: rgba(246, 224, 94, 0.2);
+    
+    --badge-background: #4a5568;
+    --badge-text: #e2e8f0;
+    
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Base themed components */
+.themed-modal {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+}
+
+.themed-card {
+  background: var(--card-background);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.themed-header {
+  background: var(--header-background);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.themed-text-primary {
+  color: var(--text-primary);
+}
+
+.themed-text-secondary {
+  color: var(--text-secondary);
+}
+
+.themed-text-muted {
+  color: var(--text-muted);
+}
+
+.themed-border {
+  border-color: var(--border-color);
+}
+
+.themed-hover:hover {
+  background: var(--hover-background);
+}
+
+.themed-badge {
+  background: var(--badge-background);
+  color: var(--badge-text);
+  padding: 0.125rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.themed-success {
+  color: var(--success-color);
+}
+
+.themed-danger {
+  color: var(--danger-color);
+}
+
+.themed-success-bg {
+  background: var(--success-light);
+}
+
+.themed-danger-bg {
+  background: var(--danger-light);
+}

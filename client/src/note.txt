@@ -14,3 +14,6 @@ logo3 = #212121
 
 node index.js (starta i server för att koppla client & server att båda vara aktiv, npm run dev i client)
 mongodb data explorer (se dom användare som finns registrerad på hemsidan)
+
+
+fixa så att när token går ut så syns inte användarnamn, man blir utloggad

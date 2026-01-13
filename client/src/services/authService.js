@@ -25,6 +25,50 @@ const isSessionExpired = () => {
   return timeSinceActivity > THIRTY_MINUTES;
 };
 
+// Helper function to handle logout on token expiration
+const handleTokenExpiration = async () => {
+  // Clear all local auth data
+  localStorage.removeItem('lastActivity');
+  localStorage.removeItem('currentUser');
+  
+  // Try to logout from server as well
+  try {
+    await fetch(`${API}/logout`, { method: "POST", credentials: "include" });
+  } catch (err) {
+    // Ignore server errors during cleanup
+  }
+  
+  // Dispatch expiration event to notify the app
+  window.dispatchEvent(new CustomEvent('auth-expired'));
+};
+
+// Universal helper to check for 401 responses and handle token expiration
+export const checkAuthResponse = async (response) => {
+  if (response && response.status === 401) {
+    await handleTokenExpiration();
+    return true; // Indicates token was expired
+  }
+  return false; // Token is still valid
+};
+
+// Enhanced fetch wrapper that automatically handles auth failures
+export const authFetch = async (url, options = {}) => {
+  try {
+    const response = await fetch(url, {
+      credentials: 'include',
+      ...options
+    });
+    
+    // Check if token expired and handle automatically
+    await checkAuthResponse(response);
+    
+    return response;
+  } catch (error) {
+    // Re-throw network errors
+    throw error;
+  }
+};
+
 // Set up activity listeners to track user interaction
 const setupActivityTracking = () => {
   const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
@@ -208,6 +252,9 @@ export const getMe = async () => {
       // Ignore server errors during cleanup
     }
     
+    // Dispatch expiration event
+    window.dispatchEvent(new CustomEvent('auth-expired'));
+    
     return { user: null };
   }
   
@@ -216,15 +263,44 @@ export const getMe = async () => {
   
   try {
     const res = await fetch(`${API}/me`, { credentials: "include" });
+    
+    // Check if server returned 401 (token expired/invalid)
+    if (res.status === 401) {
+      // Clear all auth data
+      localStorage.removeItem('lastActivity');
+      localStorage.removeItem('currentUser');
+      
+      // Try to logout from server as well
+      try {
+        await fetch(`${API}/logout`, { method: "POST", credentials: "include" });
+      } catch (err) {
+        // Ignore server errors during cleanup
+      }
+      
+      // Dispatch expiration event
+      window.dispatchEvent(new CustomEvent('auth-expired'));
+      
+      return { user: null };
+    }
+    
     const data = await res.json();
     
     // If server says no user but we have localStorage data, respect server
     if (!data.user) {
       localStorage.removeItem('currentUser');
+      
+      // Dispatch logout event if we had a user before
+      const hadUser = localStorage.getItem('currentUser');
+      if (hadUser) {
+        window.dispatchEvent(new CustomEvent('auth-logout'));
+      }
     }
     
     return data;
   } catch (err) {
+    // Network error or other issues
+    console.warn('Auth check failed:', err.message);
+    
     // fallback: return the currentUser from localStorage if present and not expired
     const user = JSON.parse(localStorage.getItem("currentUser") || "null");
     return { user };

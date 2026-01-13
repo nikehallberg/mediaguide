@@ -4,6 +4,7 @@ import "../shared/MediaShared.css";
 import ReviewList from "../reviews/ReviewList";
 import WatchlistPanel from "../watchList/WatchlistPanel";
 import ThumbsList from "./ThumbsList";
+import { authFetch } from "../../services/authService";
 
 const Profile = () => {
   const [user, setUser] = useState({ username: "", email: "", dateJoined: null, _id: "" });
@@ -22,7 +23,7 @@ const Profile = () => {
       setLoadingProfile(true);
       try {
         // backend provides /api/auth/me
-        const res = await fetch("/api/auth/me", { credentials: "include" });
+        const res = await authFetch("/api/auth/me");
         if (!mounted) return;
         if (!res.ok) {
           // User is not authenticated, clear user data

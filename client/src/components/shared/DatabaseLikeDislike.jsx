@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import { authFetch } from "../../services/authService";
 
 export const LikeDislike = ({ id, itemType = "movie", itemTitle, onVote }) => {
   const [userVote, setUserVote] = useState(null); // 'up', 'down', or null
@@ -10,7 +11,7 @@ export const LikeDislike = ({ id, itemType = "movie", itemTitle, onVote }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/auth/me', { credentials: 'include' });
+        const response = await authFetch('/api/auth/me');
         const data = await response.json();
         setIsAuthenticated(!!data.user);
       } catch (error) {
@@ -39,12 +40,14 @@ export const LikeDislike = ({ id, itemType = "movie", itemTitle, onVote }) => {
 
         // Load user's vote (if authenticated)
         if (isAuthenticated) {
-          const userResponse = await fetch(`/api/thumbs/${itemType}/${encodeURIComponent(id)}/user`, {
-            credentials: 'include'
-          });
+          const userResponse = await authFetch(`/api/thumbs/${itemType}/${encodeURIComponent(id)}/user`);
           if (userResponse.ok) {
             const userData = await userResponse.json();
             setUserVote(userData.userVote);
+          } else if (userResponse.status === 401) {
+            // Token expired, user is no longer authenticated
+            setIsAuthenticated(false);
+            setUserVote(null);
           }
         }
       } catch (error) {
@@ -64,12 +67,11 @@ export const LikeDislike = ({ id, itemType = "movie", itemTitle, onVote }) => {
     }
 
     try {
-      const response = await fetch('/api/thumbs', {
+      const response = await authFetch('/api/thumbs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         body: JSON.stringify({
           itemType,
           itemId: id,
@@ -79,6 +81,13 @@ export const LikeDislike = ({ id, itemType = "movie", itemTitle, onVote }) => {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          // Token expired, user is no longer authenticated
+          setIsAuthenticated(false);
+          setUserVote(null);
+          alert('Your session has expired. Please log in again.');
+          return;
+        }
         throw new Error('Failed to vote');
       }
 

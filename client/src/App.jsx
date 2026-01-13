@@ -15,13 +15,52 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
  
-  useEffect(() => {
-    const checkAuth = async () => {
+  // Function to handle authentication check
+  const checkAuth = async () => {
+    try {
       const { user } = await getMe();
       setUser(user);
-      setLoading(false);
-    };
+      if (loading) setLoading(false);
+    } catch (error) {
+      // If auth check fails, ensure user is logged out
+      setUser(null);
+      if (loading) setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     checkAuth();
+    
+    // Set up periodic auth validation every 5 minutes
+    const authCheckInterval = setInterval(checkAuth, 5 * 60 * 1000);
+    
+    // Listen for auth events from other parts of the app
+    const handleAuthEvent = (event) => {
+      if (event.type === 'auth-logout' || event.type === 'auth-expired') {
+        setUser(null);
+        // Optional: Show a message to user about session expiration
+        if (event.type === 'auth-expired') {
+          console.log('Session expired - user logged out');
+          // You could show a toast notification here if you want
+        }
+      } else if (event.type === 'auth-login' || event.type === 'auth-register') {
+        setUser(event.detail);
+      }
+    };
+    
+    // Set up event listeners for authentication changes
+    window.addEventListener('auth-login', handleAuthEvent);
+    window.addEventListener('auth-register', handleAuthEvent);
+    window.addEventListener('auth-logout', handleAuthEvent);
+    window.addEventListener('auth-expired', handleAuthEvent);
+    
+    return () => {
+      clearInterval(authCheckInterval);
+      window.removeEventListener('auth-login', handleAuthEvent);
+      window.removeEventListener('auth-register', handleAuthEvent);
+      window.removeEventListener('auth-logout', handleAuthEvent);
+      window.removeEventListener('auth-expired', handleAuthEvent);
+    };
   }, []);
  
   const handleLogin = (userData) => {

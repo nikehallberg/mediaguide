@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import { authFetch } from "../../services/authService";
 export const LikeDislike = ({ id, itemType = "movie", itemTitle, onVote }) => {
   const [userVote, setUserVote] = useState(null); // 'up', 'down', or null
   const [counts, setCounts] = useState({ thumbsUp: 0, thumbsDown: 0 });
@@ -9,7 +10,7 @@ export const LikeDislike = ({ id, itemType = "movie", itemTitle, onVote }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/auth/me', { credentials: 'include' });
+        const response = await authFetch('/api/auth/me');
         const data = await response.json();
         setIsAuthenticated(!!data.user);
       } catch (error) {
@@ -63,12 +64,11 @@ export const LikeDislike = ({ id, itemType = "movie", itemTitle, onVote }) => {
     }
 
     try {
-      const response = await fetch('/api/thumbs', {
+      const response = await authFetch('/api/thumbs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         body: JSON.stringify({
           itemType,
           itemId: id,
@@ -78,6 +78,13 @@ export const LikeDislike = ({ id, itemType = "movie", itemTitle, onVote }) => {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          // Token expired, user is no longer authenticated
+          setIsAuthenticated(false);
+          setUserVote(null);
+          alert('Your session has expired. Please log in again.');
+          return;
+        }
         throw new Error('Failed to vote');
       }
 

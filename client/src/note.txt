@@ -5,10 +5,6 @@ längre mål
 2. read reviews for this item
 4. api, integrera med imdb
 
-
-fixa reset password, skickas till mail
-
-
 logo3 = #212121
 
 
@@ -16,5 +12,9 @@ node index.js (starta i server för att koppla client & server att båda vara ak
 mongodb data explorer (se dom användare som finns registrerad på hemsidan)
 
 
-fixa så att när token går ut så syns inte användarnamn, man blir utloggad
 
+
+fixa så att när token går ut så syns inte användarnamn, man blir utloggad
+fixa bakgrundsfärg på reviews, watchlist så deet matchar med darkmode/lightmode
+dropdown för watchlist, reviews, votes, för att visa att det finns flera att se, 
+datejoined kalendern uppdatera eftersom tiden går
